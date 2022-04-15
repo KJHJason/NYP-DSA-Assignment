@@ -43,6 +43,18 @@ class HotelDatabase:
         self.__db = []
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
+    
+    def get_record(self, index):
+        """
+        Return the record at the specified index
+        
+        Requires 1 argument:
+        - index (int)
+        """
+        try:
+            return self.__db[index]
+        except IndexError:
+            return -1
 
     def add_record(self, packageName, customerName, paxNum, packageCostPerPax):
         """
