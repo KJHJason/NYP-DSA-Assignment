@@ -344,7 +344,17 @@ class HotelDatabase:
         newArr = self.merge(leftHalf, rightHalf, descendingFlag)
         return newArr
 
-    def countingSort(self, place):
+    def counting_sort(self, place):
+        """
+        Counting sort for radix sort
+        
+        Best time complexity: O(n+k)
+        Worst time complexity: O(n+k)
+        Average time complexity: O(n+k)
+        
+        Space complexity: O(n+k)
+        Where n is the number of elements and k is the range of the elements in the array
+        """
         n = len(self.__db)
         outputArr = [0] * n
         countArr = [0] * 10
@@ -369,7 +379,7 @@ class HotelDatabase:
         for i in range(0, n):
             self.__db[i] = outputArr[i]
     
-    def radixSort(self, descendingFlag = False):
+    def radix_sort(self, descendingFlag = False):
         """
         Do a radix sort on the database by cost per pax
         
@@ -387,7 +397,7 @@ class HotelDatabase:
         # place is 10^i where i is current digit number
         place = 1
         while (maxCost // place > 0):
-            self.countingSort(place)
+            self.counting_sort(place)
             place *= 10
             
         if (descendingFlag):
