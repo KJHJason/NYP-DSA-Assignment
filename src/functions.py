@@ -1,6 +1,5 @@
 try:
-    from colorama import Fore as F
-    from colorama import Style as S
+    import colorama
     import dill, pathlib
 except (ModuleNotFoundError, ImportError):
     print("Error importing third-party libraries needed for functions.py to work properly...")
@@ -8,18 +7,22 @@ except (ModuleNotFoundError, ImportError):
     input()
     raise SystemExit
 
-try:
-    from data import HotelDatabase
-except (ModuleNotFoundError, ImportError):
-    print("Error importing data.py needed for functions.py to work properly... ")
-    print("Please press ENTER to exit...")
-    input()
-    raise SystemExit
+S = colorama.Style
+F = colorama.Fore
 
 def read_db_file():
     """Function to load the database file"""
+    try:
+        import data
+    except (ModuleNotFoundError, ImportError):
+        print()
+        print("Error importing data.py needed for functions.py to work properly... ")
+        print("Please press ENTER to exit...")
+        input()
+        raise SystemExit
+
     filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.db")
-    db = HotelDatabase()
+    db = data.HotelDatabase()
     if (filePath.is_file()):
         with open(filePath, "rb") as f:
             db = dill.load(f)
@@ -141,11 +144,13 @@ def get_input(**kwargs):
     warning = kwargs.get("warning")
 
     if (prints):
+        print()
         if (isinstance(prints, tuple)):
             for line in prints:
                 print(line)
         else: 
             print(prints)
+        print()
 
     while True:
         userInput = input(prompt).lower().strip()

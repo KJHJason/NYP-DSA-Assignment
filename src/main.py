@@ -2,7 +2,6 @@ from sys import exit as sysExit
 
 try:
     from colorama import init as coloramaInit
-    from colorama import Fore as F
 except (ModuleNotFoundError, ImportError):
     print("Error importing third-party libraries needed for this program to work properly...")
     print("Please press ENTER to exit...")
@@ -94,5 +93,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         # shutdown(1)
         pass
+    except SystemExit:
+        shutdown(1)
     finally:
         sysExit(0)

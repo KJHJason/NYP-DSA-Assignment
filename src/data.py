@@ -1,6 +1,4 @@
-from turtle import left
-from regex import R
-
+import functions
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -44,6 +42,7 @@ class HotelDatabase:
         """
         self.__db = []
         self.__descending_order = False
+        self.__sort_order = "Not Sorted"
 
     def add_record(self, packageName, customerName, paxNum, packageCostPerPax):
         """
@@ -61,19 +60,52 @@ class HotelDatabase:
         """
         Do a binary search on the database for the package name
         """
-        return self.binary_search(packageName.title())
+        if (self.__sort_order != "Package Name"):
+            alertMsg = (
+                "Note: In order to search for a package, you must first sort the database by package name for a faster search time...",
+                "Otherwise, you can still search for a package without sorting the database by the package name but with the cost of a longer searching time"
+            )
+            sortInput = functions.get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
+            if (sortInput == "y"): 
+                reverseOrder = functions.get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+                if (reverseOrder == "y"):
+                    self.heap_sort(1)
+                else:
+                    self.heap_sort()
+
+                return self.binary_search(packageName.title())
+            else:
+                return self.linear_search(packageName.title(), "package")
 
     def search_for_customer(self, customerName):
         """
         Do a linear search on the database for the customer name
         """
-        return self.linear_search(customerName.title())
+        return self.linear_search(customerName.title(), "customer")
     
-    def sort_by_cost(self, descendingFlag = False):
+    def search_for_range_of_cost(self, low, high):
         """
-        Do a merge sort on the database by package cost per pax
+        Do a search on the database for the range of cost specified by the user.
+        
+        Requires 2 arguments:
+        - low (int)
+        - high (int)
         """
-        self.__db = self.merge_sort(self.__db, descendingFlag)
+        if (self.__sort_order != "Package Cost Per Pax"):
+            alertMsg = (
+                "Note: In order to search for a range of cost, you must first sort the database by package cost per pax for a faster search time...",
+                "Otherwise, you can still search for a range of cost without sorting the database by the package cost per pax but with the cost of a longer searching time"
+            )
+            sortInput = functions.get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
+            if (sortInput == "y"):
+                reverseOrder = functions.get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+                if (reverseOrder == "y"):
+                    self.merge_sort(self.__db, 1)
+                else:
+                    self.merge_sort(self.__db)
+                return self.ternary_search(low, high)
+            else:
+                return self.linear_search_range_of_cost(low, high)
 
     def empty(self):
         """
@@ -81,9 +113,33 @@ class HotelDatabase:
         """
         return True if not self.__db else False
 
-    def linear_search(self, customerName):
+    def linear_search_range_of_cost(self, low, high):
+        """
+        Do a linear search on the database for the range of cost specified by the user.
+        
+        Requires 2 arguments:
+        - low (int)
+        - high (int)
+        
+        Best time complexity: O(1)
+        Worst time complexity: O(n)
+        Average time complexity: O(n)
+        
+        Space complexity: O(1)
+        """
+        arr = []
+        for record in self.__db:
+            if (record.get_package_cost_per_pax() >= low and record.get_package_cost_per_pax() <= high):
+                arr.append(record)
+        return arr
+
+    def linear_search(self, target, typeOfSearch):
         """
         Do a linear search on the database for the customer name
+        
+        Requires 2 arguments:
+        - target (string)
+        - typeOfSearch (string)
         
         Best time complexity: O(1)
         Worst time complexity: O(n)
@@ -92,13 +148,18 @@ class HotelDatabase:
         Space complexity: O(1)
         """
         for record in self.__db:
-            if (record.get_customer_name() == customerName):
+            if (typeOfSearch == "customer" and record.get_customer_name() == target):
+                return record
+            elif (typeOfSearch == "package" and record.get_package_name() == target):
                 return record
         return -1
 
     def binary_search(self, packageName):
         """
         Do a binary search on the database for the package name
+        
+        Requires 1 argument:
+        - packageName (string)
         
         Best time complexity: O(1)
         Worst time complexity: O(log(n))
@@ -136,6 +197,9 @@ class HotelDatabase:
         """
         Do a bubble sort on the database by customer name
         
+        Optional argument:
+        - descendingFlag (bool)
+        
         Best time complexity: O(n)
         Worst time complexity: O(n^2)
         Average time complexity: O(n^2)
@@ -160,9 +224,14 @@ class HotelDatabase:
             if (not flag):
                 break # break when the array is already sorted
 
+        self.__sort_order = "Customer Name"
+
     def selection_sort(self, descendingFlag = False):
         """
         Do a selection sort by package name
+        
+        Optional argument:
+        - descendingFlag (bool)
         
         Best time complexity: O(n^2)
         Worst time complexity: O(n^2)
@@ -190,9 +259,14 @@ class HotelDatabase:
                 # swap the found minimum/maximum element with the element at index i if the smallest/biggest elemment is not in its proper position
                 self.__db[i], self.__db[index] = self.__db[index], self.__db[i]
 
+        self.__sort_order = "Package Name"
+
     def insertion_sort(self, descendingFlag = False):
         """
         Do a insertion sort by package cost
+        
+        Optional argument:
+        - descendingFlag (bool)
         
         Best time complexity: O(n)
         Worst time complexity: O(n^2)
@@ -218,6 +292,8 @@ class HotelDatabase:
                     j -= 1
 
             self.__db[j + 1] = el
+
+        self.__sort_order = "Package Cost"
 
     def heapify(self, n, i, descendingFlag): 
         """
@@ -265,6 +341,9 @@ class HotelDatabase:
         """
         Do a heap sort on the database by package name
         
+        Optional argument:
+        - descendingFlag (bool)
+        
         Best time complexity: O(n log(n))
         Worst time complexity: O(n log(n))
         Average time complexity: O(n log(n))
@@ -282,6 +361,8 @@ class HotelDatabase:
         for i in range(n - 1, -1, -1): 
             self.__db[i], self.__db[0] = self.__db[0], self.__db[i] # swap the first element with the last node from the heap
             self.heapify(i, 0, descendingFlag) # call heapify on the reduced list
+        
+        self.__sort_order = "Package Name"
 
     def merge(self, leftArr, rightArr, descendingFlag):
         """
@@ -325,6 +406,12 @@ class HotelDatabase:
         """
         Do a merge sort on the database by cost per pax
         
+        Requires 1 argument:
+        - arr (list)
+        
+        Optional argument:
+        - descendingFlag (bool)
+        
         Best time complexity: O(n log(n))
         Worst time complexity: O(n log(n))
         Average time complexity: O(n log(n))
@@ -334,7 +421,8 @@ class HotelDatabase:
         arrLen = len(arr)
         if (arrLen <= 1): 
             return arr # return if the array has only one element
-        
+
+        self.__sort_order = "Cost Per Pax"
         self.__descending_order = descendingFlag
         
         mid = arrLen // 2
@@ -347,6 +435,9 @@ class HotelDatabase:
     def counting_sort(self, place):
         """
         Counting sort for radix sort
+        
+        Requires 1 argument:
+        - place (int)
         
         Best time complexity: O(n+k)
         Worst time complexity: O(n+k)
@@ -361,7 +452,7 @@ class HotelDatabase:
 
         # Calculate count of elements
         for i in range(0, n):
-            index = (self.__db[i].get_package_cost_per_pax() * 100) // place
+            index = self.__db[i].get_pax_num() // place
             countArr[index % 10] += 1
 
         # Calculate cumulative count
@@ -371,7 +462,7 @@ class HotelDatabase:
         # Place the elements in sorted order
         i = n - 1
         while i >= 0:
-            index = (self.__db[i].get_package_cost_per_pax() * 100) // place
+            index = self.__db[i].get_pax_num() // place
             outputArr[countArr[index % 10] - 1] = self.__db[i]
             countArr[index % 10] -= 1
             i -= 1
@@ -381,7 +472,10 @@ class HotelDatabase:
     
     def radix_sort(self, descendingFlag = False):
         """
-        Do a radix sort on the database by cost per pax
+        Do a radix sort on the database by number of pax
+
+        Optional argument:
+        - descendingFlag (bool)
         
         Best time complexity: O(nk)
         Worst time complexity: O(nk)
@@ -391,7 +485,7 @@ class HotelDatabase:
         Where n is the number of keys and k is the range of keys
         """
         # Find the maximum number to know number of digits
-        maxCost = max(self.__db, key=lambda x: x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100
+        maxCost = max(self.__db, key=lambda x: x.get_pax_num()).get_pax_num()
 
         # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
         # place is 10^i where i is current digit number
@@ -402,6 +496,8 @@ class HotelDatabase:
             
         if (descendingFlag):
             self.__db = self.__db[::-1]
+
+        self.__sort_order = "Number of Pax"
 
     def __str__(self):
         for record in self.__db:
@@ -415,5 +511,4 @@ for i in range(25):
 h.add_record(f"Deluxe package", f"J", 1, 1000)
 h.add_record(f"Deluxe package", f"Xed", 1, 10000)
 h.add_record(f"Deluxe package", f"Apples", 1, 100000)
-h.radixSort()
-print(h)
+print(h.search_for_range_of_cost(0, 20))
