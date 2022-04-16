@@ -1,14 +1,12 @@
 try:
-    import colorama
+    from colorama import Fore as F
+    from colorama import Style as S
     import dill, pathlib
 except (ModuleNotFoundError, ImportError):
     print("Error importing third-party libraries needed for functions.py to work properly...")
     print("Please press ENTER to exit...")
     input()
     raise SystemExit
-
-S = colorama.Style
-F = colorama.Fore
 
 def read_db_file():
     """Function to load the database file"""
@@ -115,7 +113,7 @@ def print_sub_menu(typeOfMenu):
     else:
         raise Exception(f"Unknown type of sub-menu argument, {typeOfMenu}...")
 
-def get_input(**kwargs):
+def get_input(**options):
     """
     Returns user's input based on the defined command paramater without 
     letting the user enter anything else besides the defined command parameter.
@@ -132,16 +130,17 @@ def get_input(**kwargs):
     - prints: None, will not print out any messages
     - warning: None, will not display any error messages
     """
-    prints = kwargs.get("prints")
+    prints = options.get("prints")
 
-    prompt = kwargs.get("prompt")
-    if (prompt == None): prompt = ""
+    prompt = options.get("prompt")
+    if (not prompt): 
+        prompt = ""
 
-    commands = kwargs.get("command")
+    commands = options.get("command")
     if (not commands): 
         raise Exception("command parameter must be defined in the function, get_input_from_user")
 
-    warning = kwargs.get("warning")
+    warning = options.get("warning")
 
     if (prints):
         print()
@@ -162,6 +161,7 @@ def get_input(**kwargs):
             else: 
                 commandToPrint = " or ".join(commands)
                 print(f"{F.LIGHTRED_EX}Error: Invalid input. Please enter {commandToPrint}.")
+            print(f"{S.RESET_ALL}")
 
 def shutdown(*args):
     """Print some messages before shutting down the program"""

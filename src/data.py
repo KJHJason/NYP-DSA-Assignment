@@ -26,14 +26,6 @@ class RecordData:
         self.__packageCostPerPax = packageCostPerPax
     def get_package_cost_per_pax(self):
         return self.__packageCostPerPax
-    
-    def __str__(self):
-        return f"""
-Package Name: {self.__packageName} 
-Customer Name: {self.__customerName}
-Number of Pax: {self.__paxNum}
-Cost per Pax: {self.__packageCostPerPax}
-"""
 
 class HotelDatabase:
     def __init__(self):
@@ -43,7 +35,13 @@ class HotelDatabase:
         self.__db = []
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
-    
+
+        customerNameHeaderOffset = len("Customer Name")
+        packageNameHeaderOffset = len("Package Name")
+        paxNumHeaderOffset = len("Number of Pax")
+        packageCostPerPaxHeaderOffset = len("Cost Per Pax")
+        self.__table_len = [customerNameHeaderOffset, packageNameHeaderOffset, paxNumHeaderOffset, packageCostPerPaxHeaderOffset]
+
     def get_record(self, index):
         """
         Return the record at the specified index
@@ -66,6 +64,17 @@ class HotelDatabase:
         3. Number of Pax (int)
         4. Package Cost per Pax (int)
         """
+        packageCostPerPax = float(packageCostPerPax)
+        formattedPackageCostPerPax = "${:.2f}".format(round(packageCostPerPax, 2))
+        if (len(customerName) > self.__table_len[0]):
+            self.__table_len[0] = len(customerName)
+        if (len(packageName) > self.__table_len[1]):
+            self.__table_len[1] = len(packageName)
+        if (len(formattedPackageCostPerPax) > self.__table_len[2]):
+            self.__table_len[2] = len(formattedPackageCostPerPax)
+        if (len(str(paxNum)) > self.__table_len[3]):
+            self.__table_len[3] = len(str(paxNum))
+
         self.__db.append(RecordData(packageName, customerName, paxNum, packageCostPerPax))
 
     def search_for_package(self, packageName):
@@ -112,12 +121,45 @@ class HotelDatabase:
             if (sortInput == "y"):
                 reverseOrder = functions.get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.merge_sort(self.__db, 1)
+                    self.__db = self.merge_sort(self.__db, 1)
+                    self.__descending_order = 1
                 else:
-                    self.merge_sort(self.__db)
-                return self.ternary_search(low, high)
+                    self.__db = self.merge_sort(self.__db)
+                    self.__descending_order = 0
+
+                self.__sort_order = "Cost Per Pax"
+                indexOne, indexTwo = self.binary_search(low, high)
+                self.print_from_index(indexOne, indexTwo)
             else:
-                return self.linear_search_range_of_cost(low, high)
+                self.print_from_array(self.linear_search_range_of_cost(low, high))
+
+    def lowerIndex(self, i, lowerRange):
+        """
+        Search for any records within the lowerRange of the cost specified by the user starting from the index found from the search
+        
+        Best time complexity: O(n)
+        Worst time complexity: O(n)
+        Average time complexity: O(n)
+        
+        Space complexity: O(1)
+        """
+        while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() >= lowerRange):
+            i -= 1
+        return i
+
+    def upperIndex(self, i, upperRange):
+        """
+        Search for any records within the upperRange of the cost specified by the user starting from the index found from the search
+        
+        Best time complexity: O(n)
+        Worst time complexity: O(n)
+        Average time complexity: O(n)
+        
+        Space complexity: O(1)
+        """
+        while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() <= upperRange):
+            i += 1
+        return i
 
     def empty(self):
         """
@@ -421,9 +463,6 @@ class HotelDatabase:
         Requires 1 argument:
         - arr (list)
         
-        Optional argument:
-        - descendingFlag (bool)
-        
         Best time complexity: O(n log(n))
         Worst time complexity: O(n log(n))
         Average time complexity: O(n log(n))
@@ -434,9 +473,6 @@ class HotelDatabase:
         if (arrLen <= 1): 
             return arr # return if the array has only one element
 
-        self.__sort_order = "Cost Per Pax"
-        self.__descending_order = descendingFlag
-        
         mid = arrLen // 2
         leftHalf = self.merge_sort(arr[:mid])
         rightHalf = self.merge_sort(arr[mid:])
@@ -481,7 +517,7 @@ class HotelDatabase:
 
         for i in range(0, n):
             self.__db[i] = outputArr[i]
-    
+
     def radix_sort(self, descendingFlag = False):
         """
         Do a radix sort on the database by number of pax
@@ -511,16 +547,81 @@ class HotelDatabase:
 
         self.__sort_order = "Number of Pax"
 
+    def print_from_array(self, recordArr):
+        header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+
+        print("-" * len(header))
+        print(header)
+        print("-" * len(header))
+
+        for record in recordArr:
+            print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+            print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
+            print(f"${round(record.get_package_cost_per_pax(), 2):.2f}".ljust(self.__table_len[2]), end=" | ")
+            print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])}  |")
+
+        print("-" * len(header))
+
+    def print_from_index(self, startIndex, endIndex):
+        header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+
+        print("-" * len(header))
+        print(header)
+        print("-" * len(header))
+
+        if (not self.__descending_order):
+            for i in range(startIndex, endIndex + 1):
+                print(f"| {self.__db[i].get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                print(f"{self.__db[i].get_package_name().ljust(self.__table_len[1])}", end=" | ")
+                print(f"${round(self.__db[i].get_package_cost_per_pax(), 2):.2f}".ljust(self.__table_len[2]), end=" | ")
+                print(f"{str(self.__db[i].get_pax_num()).ljust(self.__table_len[3])}  |")
+        else:
+            for i in range(endIndex, startIndex - 1, -1):
+                print(f"| {self.__db[i].get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                print(f"{self.__db[i].get_package_name().ljust(self.__table_len[1])}", end=" | ")
+                print(f"${round(self.__db[i].get_package_cost_per_pax(), 2):.2f}".ljust(self.__table_len[2]), end=" | ")
+                print(f"{str(self.__db[i].get_pax_num()).ljust(self.__table_len[3])}  |")
+        print("-" * len(header))
+
     def __str__(self):
-        for record in self.__db:
-            print(record)
+        header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+
+        print("-" * len(header))
+        print(header)
+        print("-" * len(header))
+
+        counter = 0
+        rowsToPrint = 10
+        while (counter < len(self.__db)):
+            
+            for i in range(counter, counter + rowsToPrint):
+                record = self.__db[i]
+                print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
+                print(f"${round(record.get_package_cost_per_pax(), 2):.2f}".ljust(self.__table_len[2]), end=" | ")
+                print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])}  |")
+
+                counter += 1
+                if (counter >= len(self.__db)):
+                    break
+
+            print("-" * len(header))
+            
+            if (counter < len(self.__db)):
+                continuePrompt = functions.get_input(prompt="Press enter to continue or type 'q' to exit: ", command=("", "q"))
+                
+                if (continuePrompt == "q"): break
+                else:
+                    for i in range(rowsToPrint + 2):
+                        print("\033[1A\x1b[2K", end="") # move up cursor and delete whole line
+                        # this may not work in some versions of Windows but running it in powershell will likely works fine
+            else:
+                print("End of database...")
         return ""
 
 h = HotelDatabase()
-for i in range(25):
-    h.add_record(f"Package {i}", f"Customer {i}", i, i)
+from random import randint
+for i in range(205):
+    h.add_record(f"Package {i}", f"Customer {i}", randint(1, 5), randint(60, 10000))
 
-h.add_record(f"Deluxe package", f"J", 1, 1000)
-h.add_record(f"Deluxe package", f"Xed", 1, 10000)
-h.add_record(f"Deluxe package", f"Apples", 1, 100000)
-print(h.search_for_range_of_cost(0, 20))
+h.search_for_range_of_cost(0, 10000)
