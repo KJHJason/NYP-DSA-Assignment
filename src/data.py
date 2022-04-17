@@ -105,7 +105,7 @@ class RecordData:
         while (1):
             print()
             print(f"Current number of pax: {self.__paxNum}")
-            newPaxNum = input("Enter a new number of pax (x to cancel): ").strip()
+            newPaxNum = input("Enter a new number of pax (x to cancel): ").strip().lower()
             if (newPaxNum == ""):
                 print(f"{F.LIGHTRED_EX}Number of pax cannot be empty!{S.RESET_ALL}")
             elif (newPaxNum == "x"):
@@ -128,7 +128,7 @@ class RecordData:
         while (1):
             print()
             print(f"Current package cost per pax: {format_price(self.__packageCostPerPax)}")
-            newPackageCostPerPax = input("Enter a new package cost per pax (x to cancel): $").strip()
+            newPackageCostPerPax = input("Enter a new package cost per pax (x to cancel): $").strip().lower()
             if (newPackageCostPerPax == ""):
                 print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty!{S.RESET_ALL}")
             elif (newPackageCostPerPax == "x"):
