@@ -26,23 +26,23 @@ def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageC
     """
     header = "Record Data Displayed Below:"
     maxLen = len(header)
-    
+
     packageName = f"Package Name: {packageNameInput}"
     if (len(packageName) > maxLen):
         maxLen = len(packageName)
-    
+
     customerName = f"Customer Name: {customerNameInput}"
     if (len(customerName) > maxLen):
         maxLen = len(customerName)
-        
+
     paxNum = f"Number of Pax: {paxNumInput}"
     if (len(paxNum) > maxLen):
         maxLen = len(paxNum)
-        
+
     packageCostPerPax = f"Package Cost Per Pax: {format_price(packageCostPerPaxInput)}"
     if (len(packageCostPerPax) > maxLen):
         maxLen = len(packageCostPerPax)
-    
+
     print()
     print("-" * maxLen)
     print(header)
@@ -60,7 +60,7 @@ class RecordData:
         self.__customerName = customerName.title()
         self.__paxNum = int(paxNum)
         self.__packageCostPerPax = float(packageCostPerPax)
-    
+
     def set_package_name(self, packageName):
         self.__packageName = packageName.title()
     def update_package_name(self):
@@ -79,7 +79,7 @@ class RecordData:
                     return
     def get_package_name(self):
         return self.__packageName
-    
+
     def set_customer_name(self, customerName):
         self.__customerName = customerName.title()
     def update_customer_name(self):
@@ -98,7 +98,7 @@ class RecordData:
                     return
     def get_customer_name(self):
         return self.__customerName
-    
+
     def set_pax_num(self, paxNum):
         self.__paxNum = int(paxNum)
     def update_pax_num(self):
@@ -121,7 +121,7 @@ class RecordData:
                     print(f"{F.LIGHTRED_EX}Number of pax must be an number!{S.RESET_ALL}")
     def get_pax_num(self):
         return self.__paxNum
-    
+
     def set_package_cost_per_pax(self, packageCostPerPax):
         self.__packageCostPerPax = float(packageCostPerPax)
     def update_package_cost_per_pax(self):
@@ -144,9 +144,9 @@ class RecordData:
                     print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!{S.RESET_ALL}")
     def get_package_cost_per_pax(self):
         return self.__packageCostPerPax
-    
+
     def __str__(self):
-        return (print_record_data(self.__packageName, self.__customerName, self.__paxNum, self.__packageCostPerPax))
+        return print_record_data(self.__packageName, self.__customerName, self.__paxNum, self.__packageCostPerPax)
 
 class HotelDatabase:
     def __init__(self):
