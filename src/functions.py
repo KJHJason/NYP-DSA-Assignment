@@ -151,7 +151,7 @@ def get_input(**options):
             print(prints)
         print()
 
-    while True:
+    while (1):
         userInput = input(prompt).lower().strip()
         if (userInput in commands): 
             return userInput
@@ -159,8 +159,13 @@ def get_input(**options):
             if (warning): 
                 print(f"{F.LIGHTRED_EX}Error: {warning}")
             else: 
-                commandToPrint = " or ".join(commands)
-                print(f"{F.LIGHTRED_EX}Error: Invalid input. Please enter {commandToPrint}.")
+                commandToPrint = (s for s in commands if s != "")
+                
+                instruction = "enter"
+                if ("" in commands):
+                    instruction = "press Enter or"
+
+                print(f"{F.LIGHTRED_EX}Error: Invalid input. Please {instruction} {' or '.join(commandToPrint)}.")
             print(f"{S.RESET_ALL}")
 
 def shutdown(*args):
