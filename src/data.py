@@ -1,5 +1,7 @@
+# import local python files
 import functions
 
+# import third party libraries
 from colorama import Fore as F
 from colorama import Style as S
 
@@ -12,14 +14,56 @@ def format_price(price):
     """
     return f"${round(float(price), 2):.2f}"
 
+def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageCostPerPaxInput):
+    """
+    Function to print the record data in a readable format.
+    
+    Requires 4 arguments:
+    - packageNameInput (str): The package name
+    - customerNameInput (str): The customer name
+    - paxNumInput (int): The number of pax
+    - packageCostPerPaxInput (int/float): The package cost per pax
+    """
+    header = "Record Data Displayed Below:"
+    maxLen = len(header)
+    
+    packageName = f"Package Name: {packageNameInput}"
+    if (len(packageName) > maxLen):
+        maxLen = len(packageName)
+    
+    customerName = f"Customer Name: {customerNameInput}"
+    if (len(customerName) > maxLen):
+        maxLen = len(customerName)
+        
+    paxNum = f"Number of Pax: {paxNumInput}"
+    if (len(paxNum) > maxLen):
+        maxLen = len(paxNum)
+        
+    packageCostPerPax = f"Package Cost Per Pax: {format_price(packageCostPerPaxInput)}"
+    if (len(packageCostPerPax) > maxLen):
+        maxLen = len(packageCostPerPax)
+    
+    print()
+    print("-" * maxLen)
+    print(header)
+    print()
+    print(packageName)
+    print(customerName)
+    print(paxNum)
+    print(packageCostPerPax)
+    print("-" * maxLen)
+    return ""
+
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
         self.__packageName = packageName.title()
         self.__customerName = customerName.title()
-        self.__paxNum = paxNum
-        self.__packageCostPerPax = packageCostPerPax
+        self.__paxNum = int(paxNum)
+        self.__packageCostPerPax = float(packageCostPerPax)
     
-    def set_package_name(self):
+    def set_package_name(self, packageName):
+        self.__packageName = packageName.title()
+    def update_package_name(self):
         while (1):
             print()
             print(f"Current package name: {self.__packageName}")
@@ -36,7 +80,9 @@ class RecordData:
     def get_package_name(self):
         return self.__packageName
     
-    def set_customer_name(self):
+    def set_customer_name(self, customerName):
+        self.__customerName = customerName.title()
+    def update_customer_name(self):
         while (1):
             print()
             print(f"Current customer name: {self.__customerName}")
@@ -53,7 +99,9 @@ class RecordData:
     def get_customer_name(self):
         return self.__customerName
     
-    def set_pax_num(self):
+    def set_pax_num(self, paxNum):
+        self.__paxNum = int(paxNum)
+    def update_pax_num(self):
         while (1):
             print()
             print(f"Current number of pax: {self.__paxNum}")
@@ -74,7 +122,9 @@ class RecordData:
     def get_pax_num(self):
         return self.__paxNum
     
-    def set_package_cost_per_pax(self):
+    def set_package_cost_per_pax(self, packageCostPerPax):
+        self.__packageCostPerPax = float(packageCostPerPax)
+    def update_package_cost_per_pax(self):
         while (1):
             print()
             print(f"Current package cost per pax: {format_price(self.__packageCostPerPax)}")
@@ -96,58 +146,18 @@ class RecordData:
         return self.__packageCostPerPax
     
     def __str__(self):
-        header = "Record Data Displayed Below:"
-        maxLen = len(header)
-        
-        packageName = f"Package Name: {self.__packageName}"
-        if (len(packageName) > maxLen):
-            maxLen = len(packageName)
-        
-        customerName = f"Customer Name: {self.__customerName}"
-        if (len(customerName) > maxLen):
-            maxLen = len(customerName)
-            
-        paxNum = f"Number of Pax: {self.__paxNum}"
-        if (len(paxNum) > maxLen):
-            maxLen = len(paxNum)
-            
-        packageCostPerPax = f"Package Cost Per Pax: {format_price(self.__packageCostPerPax)}"
-        if (len(packageCostPerPax) > maxLen):
-            maxLen = len(packageCostPerPax)
-        
-        print()
-        print("-" * maxLen)
-        print(header)
-        print()
-        print(packageName)
-        print(customerName)
-        print(paxNum)
-        print(packageCostPerPax)
-        print("-" * maxLen)
-        return ""
+        return (print_record_data(self.__packageName, self.__customerName, self.__paxNum, self.__packageCostPerPax))
 
 class HotelDatabase:
     def __init__(self):
         """
-        Constructor for the Hotel Database which will create an empty list and set the descending order flag to False
+        Constructor for the Hotel Database which will create an empty array and set the descending order flag to False
         """
         self.__db = []
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
         self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
         self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), len(self.__table_headers[2]), len(self.__table_headers[3])]
-
-    def get_record(self, index):
-        """
-        Return the record at the specified index
-        
-        Requires 1 argument:
-        - index (int)
-        """
-        try:
-            return self.__db[index]
-        except IndexError:
-            return -1
 
     def add_record(self, packageName, customerName, paxNum, packageCostPerPax):
         """
@@ -159,26 +169,149 @@ class HotelDatabase:
         3. Number of Pax (int)
         4. Package Cost per Pax (int)
         """
-        formattedPackageCostPerPax = format_price(packageCostPerPax)
         if (len(customerName) > self.__table_len[0]):
             self.__table_len[0] = len(customerName)
+
         if (len(packageName) > self.__table_len[1]):
             self.__table_len[1] = len(packageName)
+            
+        formattedPackageCostPerPax = format_price(packageCostPerPax)
         if (len(formattedPackageCostPerPax) > self.__table_len[2]):
             self.__table_len[2] = len(formattedPackageCostPerPax)
+
         if (len(str(paxNum)) > self.__table_len[3]):
             self.__table_len[3] = len(str(paxNum))
 
+        self.__sort_order = "Not Sorted"
         self.__db.append(RecordData(packageName, customerName, paxNum, packageCostPerPax))
+
+    def edit_record(self, record):
+        """
+        Edit a record's data
+        
+        Requires 1 argument:
+        - record (RecordData)
+        """
+        header = "Select the field you want to edit:"
+        menu = f"""{'-' * len(header)}
+{header}
+1. Package Name
+2. Customer Name
+3. Number of Pax
+4. Package Cost per Pax
+5. Display Record Data
+A. All Fields
+X. Exit
+{'-' * len(header)}"""
+        while (1):
+            whichToEdit = functions.get_input(prompt="Which field do you want to edit?: ", command=("1", "2", "3", "4", "5", "a", "x"), prints=menu)
+            if (whichToEdit == "1"):
+                record.update_package_name()
+            elif (whichToEdit == "2"):
+                record.update_customer_name()
+            elif (whichToEdit == "3"):
+                record.update_pax_num()
+            elif (whichToEdit == "4"):
+                record.update_package_cost_per_pax()
+            elif (whichToEdit == "5"):
+                print(record, end="")
+            elif (whichToEdit == "a"):
+                record.update_package_name()
+                print()
+                record.update_customer_name()
+                print()
+                record.update_pax_num()
+                print()
+                record.update_package_cost_per_pax()
+            elif (whichToEdit == "x"):
+                break
+            else:
+                print(f"{F.LIGHTRED_EX}Invalid input...{S.RESET_ALL}")
+
+    def sort_by_customer_name(self, descendingFlag = False):
+        """
+        Do a bubble sort on the database by customer name to satisfy the basic function c.2. criteria
+        
+        Optional parameter:
+        - descendingFlag (bool)
+        """
+        if (len(self.__db) > 1):
+            if (isinstance(descendingFlag, str)):
+                if (descendingFlag == "y"): 
+                    descendingFlag = 1
+                else:
+                    descendingFlag = 0
+            self.bubble_sort(descendingFlag)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!{S.RESET_ALL}")
+        elif (len(self.__db) == 1):
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+        else:
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+
+    def sort_by_package_name(self, descendingFlag = False):
+        """
+        Do a selection sort on the database by package name to satisfy the basic function c.3. criteria
+        
+        Optional parameter:
+        - descendingFlag (bool)
+        """
+        if (len(self.__db) > 1):
+            if (isinstance(descendingFlag, str)):
+                if (descendingFlag == "y"): 
+                    descendingFlag = 1
+                else:
+                    descendingFlag = 0
+            self.selection_sort(descendingFlag)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!{S.RESET_ALL}")
+        elif (len(self.__db) == 1):
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+        else:
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+
+    def sort_by_package_cost(self, descendingFlag = False):
+        """
+        Do a insertion sort on the database by package cost to satisfy the basic function c.4. criteria
+        
+        Optional parameter:
+        - descendingFlag (bool)
+        """
+        if (len(self.__db) > 1):
+            if (isinstance(descendingFlag, str)):
+                if (descendingFlag == "y"): 
+                    descendingFlag = 1
+                else:
+                    descendingFlag = 0
+            self.insertion_sort(descendingFlag)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!{S.RESET_ALL}")
+        elif (len(self.__db) == 1):
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+        else:
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+
+    def search_for_customer(self, customerName):
+        """
+        Do a linear search on the database for the customer name to satisfy the basic function c.5. criteria
+        
+        Requires 1 argument:
+        - customerName (string)
+        """
+        data = self.linear_search(customerName.title(), "customer")
+        if (data == -1):
+            print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!{S.RESET_ALL}")
+            return
+        print(data)
+        editInput = functions.get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
+        if (editInput == "y"):
+            self.edit_record(data)
 
     def search_for_package(self, packageName):
         """
-        Do a binary search or a linear search on the database for the package name
+        Do a binary search or a linear search on the database for the package name to satisfy the basic function c.6. criteria
         
         Requires 1 argument:
         - packageName (string)
         """
-        if (self.__sort_order != "Package Name"):
+        if (self.__sort_order != "Package Name" and len(self.__db) > 1):
             alertMsg = (
                 "Note: In order to search for a package, you must first sort the database by package name for a faster search time...",
                 "Otherwise, you can still search for a package without sorting the database by the package name but with the cost of a longer searching time"
@@ -210,78 +343,19 @@ class HotelDatabase:
                 editInput = functions.get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
                 if (editInput == "y"):
                     self.edit_record(record)
-
-    def edit_record(self, record):
-        """
-        Edit a record's data
-        
-        Requires 1 argument:
-        - record (RecordData)
-        """
-        header = "Select the field you want to edit:"
-        menu = f"""{'-' * len(header)}
-{header}
-1. Package Name
-2. Customer Name
-3. Number of Pax
-4. Package Cost per Pax
-5. Display Record Data
-A. All Fields
-X. Exit
-{'-' * len(header)}"""
-        while (1):
-            whichToEdit = functions.get_input(prompt="Which field do you want to edit?: ", command=("1", "2", "3", "4", "5", "a", "x"), prints=menu)
-            if (whichToEdit == "1"):
-                record.set_package_name()
-            elif (whichToEdit == "2"):
-                record.set_customer_name()
-            elif (whichToEdit == "3"):
-                record.set_pax_num()
-            elif (whichToEdit == "4"):
-                record.set_package_cost_per_pax()
-            elif (whichToEdit == "5"):
-                print(record, end="")
-            elif (whichToEdit == "a"):
-                record.set_package_name()
-                print()
-                record.set_customer_name()
-                print()
-                record.set_pax_num()
-                print()
-                record.set_package_cost_per_pax()
-            elif (whichToEdit == "x"):
-                break
-            else:
-                print(f"{F.LIGHTRED_EX}Invalid input...{S.RESET_ALL}")
-
-    def search_for_customer(self, customerName):
-        """
-        Do a linear search on the database for the customer name
-        
-        Requires 1 argument:
-        - customerName (string)
-        """
-        data = self.linear_search(customerName.title(), "customer")
-        if (data == -1):
-            print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!{S.RESET_ALL}")
-            return
-        print(data)
-        editInput = functions.get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
-        if (editInput == "y"):
-            self.edit_record(data)
     
     def search_for_range_of_cost(self, low, high):
         """
-        Do a binary search or a linear search on the database for the range of cost specified by the user.
+        Do a binary search or a linear search on the database for the range of cost specified by the user to satisfy the basic function c.7. criteria
         
         Requires 2 arguments:
         - low (int)
         - high (int)
         """
-        if (self.__sort_order != "Cost Per Pax"):
+        if (self.__sort_order != "Cost Per Pax" and len(self.__db) > 1):
             alertMsg = (
                 "Note: In order to search for a range of cost, you must first sort the database by package cost per pax for a faster search time...",
-                "Otherwise, you can still search for a range of cost without sorting the database by the package cost per pax but with the cost of a longer searching time"
+                "Otherwise, you can still search for a range of cost without sorting the database by the package cost per pax but with the cost of a longer searching time."
             )
             sortInput = functions.get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"):
@@ -326,7 +400,7 @@ X. Exit
             while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() >= lowerRange):
                 i -= 1
         else:
-            while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() <= lowerRange):
+            while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() >= lowerRange):
                 i += 1
         return i
 
@@ -348,7 +422,7 @@ X. Exit
             while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() <= upperRange):
                 i += 1
         else:
-            while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() >= upperRange):
+            while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() <= upperRange):
                 i -= 1
         return i
 
@@ -374,7 +448,7 @@ X. Exit
             # return mid if the range is found in the subarray
             if (self.__db[mid].get_package_cost_per_pax() >= lowRange and self.__db[mid].get_package_cost_per_pax() <= highRange):
                 if (self.__descending_order):
-                    return self.upperIndex(mid, lowRange), self.lowerIndex(mid, highRange)
+                    return self.upperIndex(mid, highRange), self.lowerIndex(mid, lowRange)
                 else:
                     return self.lowerIndex(mid, lowRange), self.upperIndex(mid, highRange)
 
@@ -781,54 +855,72 @@ X. Exit
         self.__sort_order = "Number of Pax"
 
     def print_from_array(self, arr):
-        header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+        """
+        Print records from the given array (to satisfy the basic function c.1. criteria)
+        
+        Requires 1 argument:
+        - arr (list)
+        """
+        print()
+        if (len(arr) > 0):
+            header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
 
-        counter = 0
-        rowsToPrint = 10
-        while (1):
-            print("-" * len(header))
-            print(header)
-            print("-" * len(header))
+            counter = 0
+            rowsToPrint = 10
+            while (1):
+                print("-" * len(header))
+                print(header)
+                print("-" * len(header))
 
-            if (counter < -len(arr)):
-                counter = 0
-            elif (counter >= len(arr)):
-                counter = 0
+                if (counter < -len(arr)):
+                    counter = 0
+                elif (counter >= len(arr)):
+                    counter = 0
 
-            for i in range(counter, counter + rowsToPrint):
-                record = arr[i]
-                print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
-                print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
-                print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
-                print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
+                for i in range(counter, counter + rowsToPrint):
+                    record = arr[i]
+                    print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                    print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
+                    print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
+                    print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
 
-                counter += 1
-                if (counter >= len(arr)):
-                    break
+                    counter += 1
+                    if (counter >= len(arr)):
+                        break
 
-            print("-" * len(header))
+                print("-" * len(header))
 
-            if (len(arr) > 10):
-                continuePrompt = input("Press any keys to go to the next page or type \"b\" or \"q\" to go back or stop respectively: ").strip().lower()
-                
-                if (continuePrompt == "q"): 
-                    break
+                if (len(arr) > 10):
+                    continuePrompt = input("Press any keys to go to the next page or type \"b\" or \"q\" to go back or stop respectively: ").strip().lower()
+                    
+                    if (continuePrompt == "q"): 
+                        break
+                    else:
+                        if (continuePrompt == "b"):
+                            counter -= (rowsToPrint * 2)
+
+                        for i in range(rowsToPrint + 6):
+                            print("\033[1A\x1b[2K", end="") # move up cursor and delete whole line
+                            # this may not work in some versions of Windows cmd but running it in powershell will likely works fine
                 else:
-                    if (continuePrompt == "b"):
-                        counter -= (rowsToPrint * 2)
-
-                    for i in range(rowsToPrint + 6):
-                        print("\033[1A\x1b[2K", end="") # move up cursor and delete whole line
-                        # this may not work in some versions of Windows cmd but running it in powershell will likely works fine
-            else:
-                break
+                    break
+        else:
+            print("No records found")
 
     def print_from_index(self, startIndex, endIndex):
+        """
+        Print the records from the database from the startIndex to the endIndex
+        
+        Requires 2 arguments:
+        - startIndex (int)
+        - endIndex (int)
+        """
         header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
 
         counter = startIndex
         rowsToPrint = 10
         lenToPrint = endIndex - startIndex + 1
+        print()
         while (1):
             print("-" * len(header))
             print(header)
@@ -867,13 +959,19 @@ X. Exit
             else:
                 break
 
+    def __len__(self):
+        return len(self.__db)
+
     def __str__(self):
         self.print_from_array(self.__db)
         return ""
 
-h = HotelDatabase()
-from random import randint
-for i in range(205):
-    h.add_record(f"Package {i}", f"Customer {i}", randint(1, 5), randint(60, 10000))
+if __name__ == "__main__":
+    h = HotelDatabase()
+    from random import randint
+    for i in range(205):
+        h.add_record(f"Package {i}", f"Customer {i}", randint(1, 5), randint(60, 10000))
+        
+    h.add_record("Package 1000", "Customer 10000", 1, 100)
 
-h.search_for_range_of_cost(1000, 5000)
+    h.search_for_range_of_cost(100, 50000)

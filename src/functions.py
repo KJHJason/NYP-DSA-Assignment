@@ -1,23 +1,26 @@
-try:
-    from colorama import Fore as F
-    from colorama import Style as S
-    import dill, pathlib
-except (ModuleNotFoundError, ImportError):
-    print("Error importing third-party libraries needed for functions.py to work properly...")
-    print("Please press ENTER to exit...")
-    input()
-    raise SystemExit
+# import third-party libraries
+from cgitb import reset
+from colorama import Fore as F
+from colorama import Style as S
+import dill
+
+# import standard libraries
+import re, pathlib
+
+def reset_colour(*nl):
+    """
+    Function to reset colorama foreground, background colors and styles.
+    
+    Param:
+    - nl (bool): If True, will print a new line after resetting colorama.
+    """
+    if (nl): end = "\n"
+    else: end = ""
+    print(f"{S.RESET_ALL}", end=end)
 
 def read_db_file():
     """Function to load the database file"""
-    try:
-        import data
-    except (ModuleNotFoundError, ImportError):
-        print()
-        print("Error importing data.py needed for functions.py to work properly... ")
-        print("Please press ENTER to exit...")
-        input()
-        raise SystemExit
+    import data
 
     filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.db")
     db = data.HotelDatabase()
@@ -31,37 +34,29 @@ def save_db_file(db):
     filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.db")
     with open(filePath, "wb") as f:
         dill.dump(db, f)
+    print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
+    reset_colour()
 
-def reset_colour(*nl):
-    """
-    Function to reset colorama foreground, background colors and styles.
-    
-    Param:
-    - nl (bool): If True, will print a new line after resetting colorama.
-    """
-    if (nl): end = "\n"
-    else: end = ""
-    print(f"{S.RESET_ALL}", end=end)
-
-def print_main_menu():
+def print_main_menu(numOfRecords):
     """Print the menu for user to choose their next action"""
     print()
-    print(f"{F.LIGHTYELLOW_EX}Welcome to Waffle Hotel's Booking Records")
+    header = "Welcome to Waffle Hotel's Booking Records"
+    print("*" * len(header))
+    print(f"{F.LIGHTYELLOW_EX}{header}")
     print(" " * 16, "System", sep="")
-    reset_colour(1)
+    reset_colour()
+    print("*" * len(header))
     
     print("-" * 13, "Menu Options", "-" * 13)
     print()
-    print(f"> Number of records: ")
+    print(f"> Number of records: {numOfRecords}")
     print()
-    print(f"1. Display records options")
-    print(f"2. Add a new record")
-    print(f"3. Edit records options")
-    print(f"4. Sort records options")
-    print(f"5. Delete records options")
-    
-    print(f"{F.RED}X. Exit Application")
-    reset_colour()
+    print("1. Display records options")
+    print("2. Add a new record")
+    print("3. Edit records options")
+    print("4. Sort records options")
+    print("5. Delete records options")
+    print("X. Exit application and save database")
     
     print()
     print("-" * 40)
@@ -175,3 +170,23 @@ def shutdown(*args):
     reset_colour()
     print("Please press ENTER to exit...")
     input()
+
+def get_range(userInput):
+    """
+    Used for retreiving a range from the user's input.
+    
+    Note: It uses the regex, "\d+(-)\d+|\d+" to check for input validity such as "1-2", or "1" which are valid.
+    
+    Requires one argument to be defined:
+    - The user's URL input (string or list)
+    """
+    userInput = userInput.replace(" ", "")
+    if re.fullmatch(r"^\d+(-)\d+|\d+$", userInput):
+        if ("-" in userInput):
+            userInput = userInput.split("-")
+            rangeList = [int(i) for i in userInput]
+            rangeList.sort() # Sort the list in ascending order to make sure the range is valid
+            return rangeList
+        return int(userInput)
+    else:
+        return 0
