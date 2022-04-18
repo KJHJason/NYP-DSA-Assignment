@@ -564,8 +564,8 @@ X. Exit
         """
         self.__descending_order = descendingFlag
         flag = 0
-        for i in range(len(self.__db)):
-            for j in range(len(self.__db) - 1):
+        for i in range(len(self.__db) - 1): # -1 to stop at last element since the last element will be the highest element after an iteration from the nested for loop
+            for j in range(len(self.__db) - i - 1): # -i to stop at last i element since they are already sorted and -1 to account for the indexing starting from 0
                 if (descendingFlag):
                     # swap the elements if the jth customer name is smaller than the next customer name
                     if (self.__db[j].get_customer_name() < self.__db[j + 1].get_customer_name()):
@@ -973,5 +973,4 @@ if __name__ == "__main__":
         h.add_record(f"Package {i}", f"Customer {i}", randint(1, 5), randint(60, 10000))
         
     h.add_record("Package 1000", "Customer 10000", 1, 100)
-
-    h.search_for_range_of_cost(100, 50000)
+    print(h)
