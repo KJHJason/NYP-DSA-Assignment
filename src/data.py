@@ -1,12 +1,12 @@
-# import local python files
-import functions
+# import third party libraries
+from colorama import Fore as F
+from colorama import Style as S
 
 # import standard libraries
 import math
 
-# import third party libraries
-from colorama import Fore as F
-from colorama import Style as S
+# import local python files
+from functions import get_input
 
 def format_price(price):
     """
@@ -76,7 +76,7 @@ class RecordData:
             elif (newPackageName == "x"):
                 return
             else:
-                confirmInput = functions.get_input(prompt=f"Are you sure you want to change the package name to \"{newPackageName}\"? (Y/N): ", command=("y", "n"))
+                confirmInput = get_input(prompt=f"Are you sure you want to change the package name to \"{newPackageName}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
                     self.__packageName = newPackageName.title()
                     return
@@ -95,7 +95,7 @@ class RecordData:
             elif (newCustomerName == "x"):
                 return
             else:
-                confirmInput = functions.get_input(prompt=f"Are you sure you want to change the customer name to \"{newCustomerName}\"? (Y/N): ", command=("y", "n"))
+                confirmInput = get_input(prompt=f"Are you sure you want to change the customer name to \"{newCustomerName}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
                     self.__customerName = newCustomerName.title()
                     return
@@ -116,7 +116,7 @@ class RecordData:
             else:
                 try:
                     newPaxNum = int(newPaxNum)
-                    confirmInput = functions.get_input(prompt=f"Are you sure you want to change the number of pax to \"{newPaxNum}\"? (Y/N): ", command=("y", "n"))
+                    confirmInput = get_input(prompt=f"Are you sure you want to change the number of pax to \"{newPaxNum}\"? (Y/N): ", command=("y", "n"))
                     if (confirmInput == "y"):
                         self.__paxNum = newPaxNum
                         return
@@ -139,7 +139,7 @@ class RecordData:
             else:
                 try:
                     newPackageCostPerPax = round(float(newPackageCostPerPax), 2)
-                    confirmInput = functions.get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
+                    confirmInput = get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
                     if (confirmInput == "y"):
                         self.__packageCostPerPax = newPackageCostPerPax
                         return
@@ -207,7 +207,7 @@ A. All Fields
 X. Exit
 {'-' * len(header)}"""
         while (1):
-            whichToEdit = functions.get_input(prompt="Which field do you want to edit?: ", command=("1", "2", "3", "4", "5", "a", "x"), prints=menu)
+            whichToEdit = get_input(prompt="Which field do you want to edit?: ", command=("1", "2", "3", "4", "5", "a", "x"), prints=menu)
             if (whichToEdit == "1"):
                 record.update_package_name()
             elif (whichToEdit == "2"):
@@ -324,7 +324,7 @@ X. Exit
             print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!{S.RESET_ALL}")
             return
         print(data)
-        editInput = functions.get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
+        editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
         if (editInput == "y"):
             self.edit_record(data)
 
@@ -340,9 +340,9 @@ X. Exit
                 "Note: In order to search for a package, you must first sort the database by package name for a faster search time...",
                 "Otherwise, you can still search for a package without sorting the database by the package name but with the cost of a longer searching time"
             )
-            sortInput = functions.get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
+            sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"): 
-                reverseOrder = functions.get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+                reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
                     self.heap_sort(1)
                 else:
@@ -355,7 +355,7 @@ X. Exit
                     print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!{S.RESET_ALL}")
                 else:
                     print(record)
-                    editInput = functions.get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
+                    editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
                     if (editInput == "y"):
                         self.edit_record(record)
         else:
@@ -364,7 +364,7 @@ X. Exit
                 print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!{S.RESET_ALL}")
             else:
                 print(record)
-                editInput = functions.get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
+                editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
                 if (editInput == "y"):
                     self.edit_record(record)
     
@@ -381,9 +381,9 @@ X. Exit
                 "Note: In order to search for a range of cost, you must first sort the database by package cost per pax for a faster search time...",
                 "Otherwise, you can still search for a range of cost without sorting the database by the package cost per pax but with the cost of a longer searching time."
             )
-            sortInput = functions.get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
+            sortInput = get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"):
-                reverseOrder = functions.get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+                reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
                     self.radix_sort(1)
                     self.__descending_order = 1
@@ -991,4 +991,4 @@ if __name__ == "__main__":
         h.add_record(f"Package {i}", f"Customer {i}", randint(1, 9), uniform(60, 10000))
 
     h.add_record("Package 1000", "Customer 10000", 1, 100)
-    print(h)
+    h.search_for_range_of_cost(100, 1000)

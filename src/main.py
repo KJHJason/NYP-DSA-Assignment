@@ -1,10 +1,10 @@
+# import third-party libraries
+from colorama import init as coloramaInit
+
 # import standard libraries
 from sys import exit as sysExit
 from sys import exc_info
 import re
-
-# import third-party libraries
-from colorama import init as coloramaInit
 
 # import local python files
 from functions import *

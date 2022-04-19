@@ -23,10 +23,10 @@ def read_db_file():
     """
     Function to load the database file
     """
-    import data
+    from data import HotelDatabase
 
     filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
-    db = data.HotelDatabase()
+    db = HotelDatabase()
     if (filePath.is_file()):
         with open(filePath, "rb") as f:
             db = dill.load(f)
