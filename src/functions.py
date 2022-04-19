@@ -5,6 +5,7 @@ import dill
 
 # import standard libraries
 import re, pathlib
+from time import sleep
 
 def reset_colour(*nl):
     """
@@ -169,7 +170,11 @@ def shutdown(*args):
     reset_colour()
     print("Please press ENTER to exit...")
     input()
+    for i in range(3, -1, -1):
+        print(f"\rAutomatically shutting down in {i} seconds...", end="")
+        if (i != 0): sleep(1)
 
+rangeInputRegex = re.compile(r"^\d+(-)\d+|\d+$")
 def get_range(userInput):
     """
     Used for retreiving a range from the user's input.
@@ -180,12 +185,13 @@ def get_range(userInput):
     - The user's URL input (string or list)
     """
     userInput = userInput.replace(" ", "")
-    if re.fullmatch(r"^\d+(-)\d+|\d+$", userInput):
-        if ("-" in userInput):
-            userInput = userInput.split("-")
-            rangeList = [int(i) for i in userInput]
-            rangeList.sort() # Sort the list in ascending order to make sure the range is valid
-            return rangeList
-        return int(userInput)
+    if re.fullmatch(rangeInputRegex, userInput):
+        if ("-" not in userInput):
+            return int(userInput)
+        userInput = userInput.split("-")
+        rangeList = [int(i) for i in userInput]
+        rangeList.sort() # Sort the list in ascending order to make sure the range is valid
+        return rangeList
+        
     else:
         return 0

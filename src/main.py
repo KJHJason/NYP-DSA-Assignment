@@ -1,5 +1,6 @@
 # import standard libraries
 from sys import exit as sysExit
+import re
 
 # import third-party libraries
 from colorama import init as coloramaInit
@@ -7,6 +8,9 @@ from colorama import init as coloramaInit
 # import local python files
 from functions import *
 from data import print_record_data
+
+paxNumRegex = re.compile(r"^\d+$")
+costRegex = re.compile(r"^\d+(\.\d+)?$")
 
 def main():
     hotelDB = read_db_file()
@@ -86,7 +90,7 @@ def main():
                     elif (paxNumInput == ""):
                         print(f"{F.LIGHTRED_EX}Input cannot be empty, please enter a valid pax number of pax...")
                         reset_colour()
-                    elif (not re.fullmatch(r"^\d+$", paxNumInput)):
+                    elif (not re.fullmatch(paxNumRegex, paxNumInput)):
                         print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax...")
                         reset_colour()
                     else:
@@ -101,7 +105,7 @@ def main():
                     elif (costperPaxInput == ""):
                         print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty, please enter a valid cost per pax...")
                         reset_colour()
-                    elif (not re.fullmatch(r"^\d+\.?\d*$", costperPaxInput)):
+                    elif (not re.fullmatch(costRegex, costperPaxInput)):
                         print(f"{F.LIGHTRED_EX}Invalid package cost per pax, please enter a valid cost per pax...")
                         reset_colour()
                     else:
@@ -184,6 +188,8 @@ def main():
                 elif (subInput == "2"):
                     # Delete record by package name
                     pass
+
+    return 0
 
 if __name__ == "__main__":
     coloramaInit(autoreset=0, convert=1)

@@ -787,7 +787,7 @@ X. Exit
         newArr = self.merge(leftHalf, rightHalf, descendingFlag)
         return newArr
 
-    def counting_sort(self, place):
+    def counting_sort(self, place, descendingFlag):
         """
         Counting sort for radix sort
         
@@ -806,13 +806,19 @@ X. Exit
         countArr = [0] * 10
 
         # Calculate count of elements
-        for i in range(0, n):
+        for i in range(n):
             index = self.__db[i].get_pax_num() // place
             countArr[index % 10] += 1
 
-        # Calculate cumulative count
-        for i in range(1, 10):
-            countArr[i] += countArr[i - 1]
+        # Calculate cumulative count...
+        if (descendingFlag):
+            # in a descending order
+            for i in range(8, -1, -1):
+                countArr[i] += countArr[i + 1]
+        else:
+            # in an ascending order
+            for i in range(1, 10):
+                countArr[i] += countArr[i - 1]
 
         # Place the elements in sorted order
         i = n - 1
@@ -822,7 +828,8 @@ X. Exit
             countArr[index % 10] -= 1
             i -= 1
 
-        for i in range(0, n):
+        # Copy the sorted elements into original array
+        for i in range(n):
             self.__db[i] = outputArr[i]
 
     def radix_sort(self, descendingFlag = False):
@@ -846,11 +853,8 @@ X. Exit
         # place is 10^i where i is current digit number
         place = 1
         while (maxCost // place > 0):
-            self.counting_sort(place)
+            self.counting_sort(place, descendingFlag)
             place *= 10
-            
-        if (descendingFlag):
-            self.__db = self.__db[::-1]
 
         self.__sort_order = "Number of Pax"
 
@@ -973,4 +977,5 @@ if __name__ == "__main__":
         h.add_record(f"Package {i}", f"Customer {i}", randint(1, 5), randint(60, 10000))
         
     h.add_record("Package 1000", "Customer 10000", 1, 100)
+    h.radix_sort(True)
     print(h)
