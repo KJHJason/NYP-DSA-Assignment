@@ -1,6 +1,9 @@
 # import local python files
 import functions
 
+# import standard libraries
+import math
+
 # import third party libraries
 from colorama import Fore as F
 from colorama import Style as S
@@ -59,7 +62,7 @@ class RecordData:
         self.__packageName = packageName.title()
         self.__customerName = customerName.title()
         self.__paxNum = int(paxNum)
-        self.__packageCostPerPax = float(packageCostPerPax)
+        self.__packageCostPerPax = round(float(packageCostPerPax), 2)
 
     def set_package_name(self, packageName):
         self.__packageName = packageName.title()
@@ -123,7 +126,7 @@ class RecordData:
         return self.__paxNum
 
     def set_package_cost_per_pax(self, packageCostPerPax):
-        self.__packageCostPerPax = float(packageCostPerPax)
+        self.__packageCostPerPax = round(float(packageCostPerPax), 2)
     def update_package_cost_per_pax(self):
         while (1):
             print()
@@ -135,7 +138,7 @@ class RecordData:
                 return
             else:
                 try:
-                    newPackageCostPerPax = float(newPackageCostPerPax)
+                    newPackageCostPerPax = round(float(newPackageCostPerPax), 2)
                     confirmInput = functions.get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
                     if (confirmInput == "y"):
                         self.__packageCostPerPax = newPackageCostPerPax
@@ -174,13 +177,13 @@ class HotelDatabase:
 
         if (len(packageName) > self.__table_len[1]):
             self.__table_len[1] = len(packageName)
-            
+
         formattedPackageCostPerPax = format_price(packageCostPerPax)
         if (len(formattedPackageCostPerPax) > self.__table_len[2]):
             self.__table_len[2] = len(formattedPackageCostPerPax)
 
-        if (len(str(paxNum)) > self.__table_len[3]):
-            self.__table_len[3] = len(str(paxNum))
+        if (len(str(int(paxNum))) > self.__table_len[3]):
+            self.__table_len[3] = len(str(int(paxNum)))
 
         self.__sort_order = "Not Sorted"
         self.__db.append(RecordData(packageName, customerName, paxNum, packageCostPerPax))
@@ -227,6 +230,27 @@ X. Exit
                 break
             else:
                 print(f"{F.LIGHTRED_EX}Invalid input...{S.RESET_ALL}")
+
+    def sort_by_pax_num(self, descendingFlag = False):
+        """
+        Do a merge sort on the database by number of pax
+        
+        Optional parameter:
+        - descendingFlag (bool)
+        """
+        if (len(self.__db) > 1):
+            if (isinstance(descendingFlag, str)):
+                if (descendingFlag == "y"): 
+                    descendingFlag = 1
+                else:
+                    descendingFlag = 0
+            self.__descending_order = descendingFlag
+            self.__db = self.merge_sort(self.__db, descendingFlag)
+            self.__sort_order = "Number of Pax"
+        elif (len(self.__db) == 1):
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+        else:
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
 
     def sort_by_customer_name(self, descendingFlag = False):
         """
@@ -361,13 +385,12 @@ X. Exit
             if (sortInput == "y"):
                 reverseOrder = functions.get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.__db = self.merge_sort(self.__db, 1)
+                    self.radix_sort(1)
                     self.__descending_order = 1
                 else:
-                    self.__db = self.merge_sort(self.__db)
+                    self.radix_sort()
                     self.__descending_order = 0
 
-                self.__sort_order = "Cost Per Pax"
                 return self.search_for_range_of_cost(low, high)
             else:
                 arr = self.linear_search_range_of_cost(low, high)
@@ -739,14 +762,14 @@ X. Exit
         rightArrSize = len(rightArr)
         while (i < leftArrSize and j < rightArrSize):
             if (descendingFlag):
-                if (leftArr[i].get_package_cost_per_pax() > rightArr[j].get_package_cost_per_pax()):
+                if (leftArr[i].get_pax_num() > rightArr[j].get_pax_num()):
                     newArr.append(leftArr[i])
                     i += 1
                 else:
                     newArr.append(rightArr[j])
                     j += 1
             else:
-                if (leftArr[i].get_package_cost_per_pax() < rightArr[j].get_package_cost_per_pax()):
+                if (leftArr[i].get_pax_num() < rightArr[j].get_pax_num()):
                     newArr.append(leftArr[i])
                     i += 1
                 else:
@@ -763,9 +786,9 @@ X. Exit
 
         return newArr
 
-    def merge_sort(self, arr, descendingFlag = False):
+    def merge_sort(self, arr, descendingFlag):
         """
-        Do a merge sort on the database by cost per pax
+        Do a merge sort on the database by number of pax
         
         Requires 1 argument:
         - arr (list)
@@ -787,7 +810,7 @@ X. Exit
         newArr = self.merge(leftHalf, rightHalf, descendingFlag)
         return newArr
 
-    def counting_sort(self, place, descendingFlag):
+    def counting_sort_for_radix_sort(self, place, descendingFlag):
         """
         Counting sort for radix sort
         
@@ -807,7 +830,7 @@ X. Exit
 
         # Calculate count of elements
         for i in range(n):
-            index = self.__db[i].get_pax_num() // place
+            index = int(self.__db[i].get_package_cost_per_pax() * 100) // place
             countArr[index % 10] += 1
 
         # Calculate cumulative count...
@@ -823,7 +846,7 @@ X. Exit
         # Place the elements in sorted order
         i = n - 1
         while i >= 0:
-            index = self.__db[i].get_pax_num() // place
+            index = int(self.__db[i].get_package_cost_per_pax() * 100) // place
             outputArr[countArr[index % 10] - 1] = self.__db[i]
             countArr[index % 10] -= 1
             i -= 1
@@ -834,7 +857,7 @@ X. Exit
 
     def radix_sort(self, descendingFlag = False):
         """
-        Do a radix sort on the database by number of pax
+        Do a radix sort on the database by cost per pax
 
         Optional argument:
         - descendingFlag (bool)
@@ -845,22 +868,25 @@ X. Exit
         
         Space complexity: O(n+k)
         Where n is the number of keys and k is the range of keys
+        
+        Note that I multiplied the cost per pax by 100 as it is a float with a possible decimal place of up to 2
         """
         # Find the maximum number to know number of digits
-        maxCost = max(self.__db, key=lambda x: x.get_pax_num()).get_pax_num()
+        maxCost = int(max(self.__db, key=lambda x: x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
 
         # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
         # place is 10^i where i is current digit number
         place = 1
         while (maxCost // place > 0):
-            self.counting_sort(place, descendingFlag)
+            self.counting_sort_for_radix_sort(place, descendingFlag)
             place *= 10
 
-        self.__sort_order = "Number of Pax"
+        self.__sort_order = "Cost Per Pax"
 
     def print_from_array(self, arr):
         """
         Print records from the given array (to satisfy the basic function c.1. criteria)
+        Pagination is an added feature of my own ;)
         
         Requires 1 argument:
         - arr (list)
@@ -871,41 +897,68 @@ X. Exit
 
             counter = 0
             rowsToPrint = 10
+            maxPages = math.ceil(len(arr) / rowsToPrint)
+            currentPage = 1
+            lastPageRecordsToPrint = len(arr) % rowsToPrint
             while (1):
                 print("-" * len(header))
                 print(header)
                 print("-" * len(header))
 
-                if (counter < -len(arr)):
+                if (currentPage > maxPages):
+                    currentPage = 1
                     counter = 0
-                elif (counter >= len(arr)):
+                elif (currentPage < 1):
+                    currentPage = maxPages
                     counter = 0
 
-                for i in range(counter, counter + rowsToPrint):
-                    record = arr[i]
-                    print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
-                    print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
-                    print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
-                    print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
+                if (currentPage != maxPages):
+                    for i in range(counter, counter + rowsToPrint):
+                        record = arr[i]
+                        print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                        print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
+                        print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
+                        print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
 
-                    counter += 1
-                    if (counter >= len(arr)):
-                        break
+                        counter += 1
+                        if (counter >= len(arr)):
+                            break
+                else:
+                    
+                    for i in range(-lastPageRecordsToPrint, 0, 1):
+                        record = arr[i]
+                        print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                        print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
+                        print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
+                        print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
+                    
+                    counter = len(arr) - lastPageRecordsToPrint - rowsToPrint
 
                 print("-" * len(header))
+                
+                pageStatus = f"Page {currentPage} of {maxPages}"
+                print(f"{' ' * (len(header) - len(pageStatus))}{pageStatus}", end="\n\n")
 
                 if (len(arr) > 10):
-                    continuePrompt = input("Press any keys to go to the next page or type \"b\" or \"q\" to go back or stop respectively: ").strip().lower()
+                    try:
+                        continuePrompt = input("Press any keys to go to the next page or type \"b\" or \"q\" to go back or stop respectively: ").strip().lower()
+                    except KeyboardInterrupt:
+                        break
                     
                     if (continuePrompt == "q"): 
                         break
                     else:
                         if (continuePrompt == "b"):
-                            counter -= (rowsToPrint * 2)
+                            if (currentPage != maxPages):
+                                counter -= (rowsToPrint * 2)
+                                currentPage -= 1
+                            else:
+                                currentPage -= 1
+                        else:
+                            currentPage += 1
 
-                        for i in range(rowsToPrint + 6):
-                            print("\033[1A\x1b[2K", end="") # move up cursor and delete whole line
-                            # this may not work in some versions of Windows cmd but running it in powershell will likely works fine
+                        for i in range(rowsToPrint + 8):
+                            print("\033[1A\x1b[2K", end="") # move up a line and deletes the whole line
                 else:
                     break
         else:
@@ -919,63 +972,23 @@ X. Exit
         - startIndex (int)
         - endIndex (int)
         """
-        header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
-
-        counter = startIndex
-        rowsToPrint = 10
-        lenToPrint = endIndex - startIndex + 1
+        self.print_from_array(self.__db[startIndex:endIndex])
         print()
-        while (1):
-            print("-" * len(header))
-            print(header)
-            print("-" * len(header))
-
-            if (counter < -endIndex):
-                counter = startIndex
-            elif (counter >= endIndex):
-                counter = startIndex
-
-            for i in range(counter, counter + rowsToPrint):
-                record = self.__db[i]
-                print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
-                print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
-                print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
-                print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
-
-                counter += 1
-                if (counter >= endIndex):
-                    break
-
-            print("-" * len(header))
-
-            if (lenToPrint > 10):
-                continuePrompt = input("Press any keys to go to the next page or type \"b\" or \"q\" to go back or stop respectively: ").strip().lower()
-                
-                if (continuePrompt == "q"): 
-                    break
-                else:
-                    if (continuePrompt == "b"):
-                        counter -= (rowsToPrint * 2)
-
-                    for i in range(rowsToPrint + 5):
-                        print("\033[1A\x1b[2K", end="") # move up cursor and delete whole line
-                        # this may not work in some versions of Windows cmd but running it in powershell will likely works fine
-            else:
-                break
-
-    def __len__(self):
-        return len(self.__db)
 
     def __str__(self):
         self.print_from_array(self.__db)
         return ""
 
+    def __len__(self):
+        return len(self.__db)
+
+# test codes
 if __name__ == "__main__":
     h = HotelDatabase()
-    from random import randint
+    from random import uniform, randint
+
     for i in range(205):
-        h.add_record(f"Package {i}", f"Customer {i}", randint(1, 5), randint(60, 10000))
-        
+        h.add_record(f"Package {i}", f"Customer {i}", randint(1, 9), uniform(60, 10000))
+
     h.add_record("Package 1000", "Customer 10000", 1, 100)
-    h.radix_sort(True)
     print(h)

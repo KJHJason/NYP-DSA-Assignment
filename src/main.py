@@ -156,7 +156,7 @@ def main():
             subInput = ""
             while (subInput != "f"):
                 print_sub_menu(4)
-                subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                 if (subInput == "1"):
                     # sort by customer name using bubble sort
                     sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
@@ -175,6 +175,12 @@ def main():
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         hotelDB.sort_by_package_cost(descendingFlag)
+                elif (subInput == "4"):
+                    # sort by package's number of pax
+                    sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"))
+                    if (sortConfirmation == "y"):
+                        descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
+                        hotelDB.sort_by_pax_num(descendingFlag)
 
         elif (uInput == "5"):
             # delete options

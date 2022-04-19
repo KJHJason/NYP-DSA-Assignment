@@ -88,11 +88,12 @@ def print_sub_menu(typeOfMenu):
         print("-" * 40)
     elif (typeOfMenu == 4):
         print()
-        print("-" * 13, "Sort Options", "-" * 13)
+        print("-" * 15, "Sort Options", "-" * 15)
         print()
         print("1. Sort records by customer name")
         print("2. Sort records by package name")
         print("3. Sort records by package cost")
+        print("4. Sort records by package's number of pax")
         print("F. Back to main menu")
         print()
         print("-" * 40)
