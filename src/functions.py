@@ -4,7 +4,8 @@ from colorama import Style as S
 import dill
 
 # import standard libraries
-import re, pathlib
+import re, pathlib, logging
+from datetime import datetime
 from time import sleep
 
 def reset_colour(*nl):
@@ -19,10 +20,12 @@ def reset_colour(*nl):
     print(f"{S.RESET_ALL}", end=end)
 
 def read_db_file():
-    """Function to load the database file"""
+    """
+    Function to load the database file
+    """
     import data
 
-    filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.db")
+    filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
     db = data.HotelDatabase()
     if (filePath.is_file()):
         with open(filePath, "rb") as f:
@@ -30,15 +33,19 @@ def read_db_file():
     return db
 
 def save_db_file(db):
-    """Function to save the database file for future runs"""
-    filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.db")
+    """
+    Function to save the database file for future runs
+    """
+    filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
     with open(filePath, "wb") as f:
         dill.dump(db, f)
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
     reset_colour()
 
 def print_main_menu(numOfRecords):
-    """Print the menu for user to choose their next action"""
+    """
+    Print the menu for user to choose their next action
+    """
     print()
     header = "Welcome to Waffle Hotel's Booking Records"
     print("*" * len(header))
@@ -164,16 +171,41 @@ def get_input(**options):
                 print(f"{F.LIGHTRED_EX}Error: Invalid input. Please {instruction} {' or '.join(commandToPrint)}.")
             print(f"{S.RESET_ALL}")
 
-def shutdown(*args):
-    """Print some messages before shutting down the program"""
-    if (args): print()
-    print("\nThank you for using Waffle Hotel's Booking Records System!")
-    reset_colour()
+def log_error():
+    """
+    Logs an error message to the error log file
+    """
+    fileName = "".join(["error-details-", datetime.now().strftime("%d-%m-%Y"), ".log"])
+    logFilePath = pathlib.Path(__file__).parent.resolve().joinpath(fileName)
+
+    if (logFilePath.is_file()):
+        with open(logFilePath, "a") as f:
+            f.write("\n\n")
+    else:
+        with open(logFilePath, "w") as f:
+            f.write("Waffle Hotel's Booking Records System Error Log\n\n")
+
+    logging.basicConfig(filename=logFilePath, filemode="a", format="%(asctime)s - %(message)s")
+    logging.error("Error Details: ", exc_info=True)
+
+def countdown():
+    """
+    Prints a countdown message to the user before closing the application
+    """
     print("Please press ENTER to exit...")
     input()
     for i in range(3, -1, -1):
         print(f"\rAutomatically shutting down in {i} seconds...", end="")
         if (i != 0): sleep(1)
+
+def shutdown(*args):
+    """
+    Print some messages before shutting down the program
+    """
+    if (args): print()
+    print("\nThank you for using Waffle Hotel's Booking Records System!")
+    reset_colour()
+    countdown()
 
 rangeInputRegex = re.compile(r"^\d+(-)\d+|\d+$")
 def get_range(userInput):
@@ -195,4 +227,4 @@ def get_range(userInput):
         return rangeList
         
     else:
-        return 0
+        return "error"

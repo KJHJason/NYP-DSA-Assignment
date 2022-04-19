@@ -1,5 +1,6 @@
 # import standard libraries
 from sys import exit as sysExit
+from sys import exc_info
 import re
 
 # import third-party libraries
@@ -41,7 +42,7 @@ def main():
                         if (rangeInput == "x"):
                             break
                         formattedRange = get_range(rangeInput)
-                        if (formattedRange == 0):
+                        if (formattedRange == "error"):
                             print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
                             reset_colour()
                         else:
@@ -139,6 +140,7 @@ def main():
                             reset_colour()
                         else:
                             hotelDB.search_for_customer(customerName)
+
                 elif (subInput == "2"):
                     # Search record by Package Name using Binary Search and update record
                     while (1):
@@ -150,7 +152,7 @@ def main():
                             reset_colour()
                         else:
                             hotelDB.search_for_package(packageName)
-                
+
         elif (uInput == "4"):
             # sort options
             subInput = ""
@@ -163,18 +165,21 @@ def main():
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         hotelDB.sort_by_customer_name(descendingFlag)
+
                 elif (subInput == "2"):
                     # sort by package name using selection sort
                     sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         hotelDB.sort_by_package_name(descendingFlag)
+
                 elif (subInput == "3"):
                     # sort by package cost using insertion sort
                     sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         hotelDB.sort_by_package_cost(descendingFlag)
+
                 elif (subInput == "4"):
                     # sort by package's number of pax
                     sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"))
@@ -199,13 +204,17 @@ def main():
 
 if __name__ == "__main__":
     coloramaInit(autoreset=0, convert=1)
-    main()
-    # try:
-    #     main()
-    # except KeyboardInterrupt:
-    #     # shutdown(1)
-    #     pass
-    # except SystemExit:
-    #     shutdown(1)
-    # finally:
-    #     sysExit(0)
+    try:
+        main()
+    except (KeyboardInterrupt):
+        shutdown(1)
+    except:
+        print()
+        print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()[0]}")
+        print(f"Please refer to the generated error log file for more details...")
+        reset_colour()
+        log_error()
+        print()
+        countdown()
+    finally:
+        sysExit(0)
