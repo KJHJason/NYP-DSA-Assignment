@@ -8,7 +8,7 @@ import re, pathlib, logging
 from datetime import datetime
 from time import sleep
 
-def reset_colour(*nl):
+def S_reset(*nl):
     """
     Function to reset colorama foreground, background colors and styles.
     
@@ -40,7 +40,7 @@ def save_db_file(db):
     with open(filePath, "wb") as f:
         dill.dump(db, f)
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
-    reset_colour()
+    S_reset()
 
 def print_main_menu(numOfRecords):
     """
@@ -51,7 +51,7 @@ def print_main_menu(numOfRecords):
     print("*" * len(header))
     print(f"{F.LIGHTYELLOW_EX}{header}")
     print(" " * 16, "System", sep="")
-    reset_colour()
+    S_reset()
     print("*" * len(header))
     
     print("-" * 13, "Menu Options", "-" * 13)
@@ -204,7 +204,7 @@ def shutdown(*args):
     """
     if (args): print()
     print("\nThank you for using Waffle Hotel's Booking Records System!")
-    reset_colour()
+    S_reset()
     countdown()
 
 rangeInputRegex = re.compile(r"^\d+(-)\d+|\d+$")

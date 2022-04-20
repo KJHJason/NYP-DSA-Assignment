@@ -6,7 +6,7 @@ from colorama import Style as S
 import math
 
 # import local python files
-from functions import get_input
+from functions import get_input, S_reset
 
 def format_price(price):
     """
@@ -72,7 +72,8 @@ class RecordData:
             print(f"Current package name: {self.__packageName}")
             newPackageName = input("Enter a new package name (x to cancel): ").strip().lower()
             if (newPackageName == ""):
-                print(f"{F.LIGHTRED_EX}Package name cannot be empty!{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}Package name cannot be empty!")
+                S_reset()
             elif (newPackageName == "x"):
                 return
             else:
@@ -91,7 +92,8 @@ class RecordData:
             print(f"Current customer name: {self.__customerName}")
             newCustomerName = input("Enter a new customer name (x to cancel): ").strip().lower()
             if (newCustomerName == ""):
-                print(f"{F.LIGHTRED_EX}Customer name cannot be empty!{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}Customer name cannot be empty!")
+                S_reset()
             elif (newCustomerName == "x"):
                 return
             else:
@@ -110,7 +112,8 @@ class RecordData:
             print(f"Current number of pax: {self.__paxNum}")
             newPaxNum = input("Enter a new number of pax (x to cancel): ").strip().lower()
             if (newPaxNum == ""):
-                print(f"{F.LIGHTRED_EX}Number of pax cannot be empty!{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}Number of pax cannot be empty!")
+                S_reset()
             elif (newPaxNum == "x"):
                 return
             else:
@@ -121,7 +124,8 @@ class RecordData:
                         self.__paxNum = newPaxNum
                         return
                 except ValueError:
-                    print(f"{F.LIGHTRED_EX}Number of pax must be an number!{S.RESET_ALL}")
+                    print(f"{F.LIGHTRED_EX}Number of pax must be an number!")
+                    S_reset()
     def get_pax_num(self):
         return self.__paxNum
 
@@ -133,7 +137,8 @@ class RecordData:
             print(f"Current package cost per pax: {format_price(self.__packageCostPerPax)}")
             newPackageCostPerPax = input("Enter a new package cost per pax (x to cancel): $").strip().lower()
             if (newPackageCostPerPax == ""):
-                print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty!{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty!")
+                S_reset()
             elif (newPackageCostPerPax == "x"):
                 return
             else:
@@ -144,7 +149,8 @@ class RecordData:
                         self.__packageCostPerPax = newPackageCostPerPax
                         return
                 except ValueError:
-                    print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!{S.RESET_ALL}")
+                    print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!")
+                    S_reset()
     def get_package_cost_per_pax(self):
         return self.__packageCostPerPax
 
@@ -229,88 +235,94 @@ X. Exit
             elif (whichToEdit == "x"):
                 break
             else:
-                print(f"{F.LIGHTRED_EX}Invalid input...{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}Invalid input...")
+                S_reset()
 
-    def sort_by_pax_num(self, descendingFlag = False):
+    def sort_by_pax_num(self, reverse=False):
         """
         Do a merge sort on the database by number of pax
         
         Optional parameter:
-        - descendingFlag (bool)
+        - reverse (bool)
         """
         if (len(self.__db) > 1):
-            if (isinstance(descendingFlag, str)):
-                if (descendingFlag == "y"): 
-                    descendingFlag = 1
+            if (isinstance(reverse, str)):
+                if (reverse == "y"): 
+                    reverse = 1
                 else:
-                    descendingFlag = 0
-            self.__descending_order = descendingFlag
-            self.__db = self.merge_sort(self.__db, descendingFlag)
+                    reverse = 0
+            self.__descending_order = reverse
+            self.__db = self.merge_sort(self.__db, reverse=reverse)
             self.__sort_order = "Number of Pax"
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+        S_reset()
 
-    def sort_by_customer_name(self, descendingFlag = False):
+    def sort_by_customer_name(self, reverse=False):
         """
         Do a bubble sort on the database by customer name to satisfy the basic function c.2. criteria
         
         Optional parameter:
-        - descendingFlag (bool)
+        - reverse (bool)
         """
         if (len(self.__db) > 1):
-            if (isinstance(descendingFlag, str)):
-                if (descendingFlag == "y"): 
-                    descendingFlag = 1
+            if (isinstance(reverse, str)):
+                if (reverse == "y"): 
+                    reverse = 1
                 else:
-                    descendingFlag = 0
-            self.bubble_sort(descendingFlag)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!{S.RESET_ALL}")
+                    reverse = 0
+            self.bubble_sort(reverse=reverse)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+        S_reset()
 
-    def sort_by_package_name(self, descendingFlag = False):
+    def sort_by_package_name(self, reverse=False):
         """
         Do a selection sort on the database by package name to satisfy the basic function c.3. criteria
         
         Optional parameter:
-        - descendingFlag (bool)
+        - reverse (bool)
         """
         if (len(self.__db) > 1):
-            if (isinstance(descendingFlag, str)):
-                if (descendingFlag == "y"): 
-                    descendingFlag = 1
+            if (isinstance(reverse, str)):
+                if (reverse == "y"): 
+                    reverse = 1
                 else:
-                    descendingFlag = 0
-            self.selection_sort(descendingFlag)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!{S.RESET_ALL}")
+                    reverse = 0
+            self.selection_sort(reverse=reverse)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+        S_reset()
 
-    def sort_by_package_cost(self, descendingFlag = False):
+    def sort_by_package_cost(self, reverse=False):
         """
         Do a insertion sort on the database by package cost to satisfy the basic function c.4. criteria
         
         Optional parameter:
-        - descendingFlag (bool)
+        - reverse (bool)
         """
         if (len(self.__db) > 1):
-            if (isinstance(descendingFlag, str)):
-                if (descendingFlag == "y"): 
-                    descendingFlag = 1
+            if (isinstance(reverse, str)):
+                if (reverse == "y"): 
+                    reverse = 1
                 else:
-                    descendingFlag = 0
-            self.insertion_sort(descendingFlag)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!{S.RESET_ALL}")
+                    reverse = 0
+            self.insertion_sort(reverse=reverse)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+        S_reset()
 
     def search_for_customer(self, customerName):
         """
@@ -321,7 +333,8 @@ X. Exit
         """
         data = self.linear_search(customerName.title(), "customer")
         if (data == -1):
-            print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!{S.RESET_ALL}")
+            print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!")
+            S_reset()
             return
         print(data)
         editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
@@ -344,7 +357,7 @@ X. Exit
             if (sortInput == "y"): 
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.heap_sort(1)
+                    self.heap_sort(reverse=1)
                 else:
                     self.heap_sort()
 
@@ -352,7 +365,8 @@ X. Exit
             else:
                 record = self.linear_search(packageName.title(), "package")
                 if (not record):
-                    print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!{S.RESET_ALL}")
+                    print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
+                    S_reset()
                 else:
                     print(record)
                     editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
@@ -361,7 +375,8 @@ X. Exit
         else:
             record = self.binary_search_for_package_name(packageName.title())
             if (record == -1):
-                print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
+                S_reset()
             else:
                 print(record)
                 editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
@@ -385,7 +400,7 @@ X. Exit
             if (sortInput == "y"):
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.radix_sort(1)
+                    self.radix_sort(reverse=1)
                     self.__descending_order = 1
                 else:
                     self.radix_sort()
@@ -397,11 +412,13 @@ X. Exit
                 if (arr):
                     self.print_from_array(arr)
                 else:
-                    print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!{S.RESET_ALL}")
+                    print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!")
+                    S_reset()
         else:
             indexOne, indexTwo = self.binary_search_for_range_of_cost(low, high)
             if (indexOne == -1 and indexTwo == -1):
-                print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!{S.RESET_ALL}")
+                print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!")
+                S_reset()
             else:
                 self.print_from_index(indexOne, indexTwo)
 
@@ -572,12 +589,12 @@ X. Exit
 
         return -1 # return -1 if the package name is not found
 
-    def bubble_sort(self, descendingFlag = False):
+    def bubble_sort(self, reverse=False):
         """
         Do a bubble sort on the database by customer name
         
         Optional argument:
-        - descendingFlag (bool)
+        - reverse (bool)
         
         Best time complexity: O(n)
         Worst time complexity: O(n^2)
@@ -585,11 +602,11 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = descendingFlag
+        self.__descending_order = reverse
         flag = 0
         for i in range(len(self.__db) - 1): # -1 to stop at last element since the last element will be the highest element after an iteration from the nested for loop
             for j in range(len(self.__db) - i - 1): # -i to stop at last i element since they are already sorted and -1 to account for the indexing starting from 0
-                if (descendingFlag):
+                if (reverse):
                     # swap the elements if the jth customer name is smaller than the next customer name
                     if (self.__db[j].get_customer_name() < self.__db[j + 1].get_customer_name()):
                         self.__db[j], self.__db[j + 1] = self.__db[j + 1], self.__db[j]
@@ -605,12 +622,12 @@ X. Exit
 
         self.__sort_order = "Customer Name"
 
-    def selection_sort(self, descendingFlag = False):
+    def selection_sort(self, reverse=False):
         """
         Do a selection sort by package name
         
         Optional argument:
-        - descendingFlag (bool)
+        - reverse (bool)
         
         Best time complexity: O(n^2)
         Worst time complexity: O(n^2)
@@ -618,14 +635,14 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = descendingFlag
+        self.__descending_order = reverse
         dbSize = len(self.__db)
         for i in range(dbSize):
-            # initialise the element at ith index and assume that it is the smallest/biggest element based on the descendingFlag
+            # initialise the element at ith index and assume that it is the smallest/biggest element based on the reverse
             index = i
 
             for j in range(i + 1, dbSize):
-                if (descendingFlag):
+                if (reverse):
                     # find the next biggest element to compare with index
                     if (self.__db[j].get_package_name() > self.__db[index].get_package_name()):
                         index = j
@@ -640,12 +657,12 @@ X. Exit
 
         self.__sort_order = "Package Name"
 
-    def insertion_sort(self, descendingFlag = False):
+    def insertion_sort(self, reverse=False):
         """
         Do a insertion sort by package cost
         
         Optional argument:
-        - descendingFlag (bool)
+        - reverse (bool)
         
         Best time complexity: O(n)
         Worst time complexity: O(n^2)
@@ -653,13 +670,13 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = descendingFlag
+        self.__descending_order = reverse
         dbSize = len(self.__db)
         for i in range(1, dbSize):
             el = self.__db[i] # save the value to be positioned
             
             j = i - 1
-            if (descendingFlag):
+            if (reverse):
                 # Compare el with each element on the left of it and move the smaller element to the right ahead of their current position
                 while (j >= 0 and self.__db[j].get_package_cost_per_pax() < el.get_package_cost_per_pax()):
                     self.__db[j + 1] = self.__db[j]
@@ -674,19 +691,19 @@ X. Exit
 
         self.__sort_order = "Cost Per Pax"
 
-    def heapify(self, n, i, descendingFlag): 
+    def heapify(self, n, i, reverse): 
         """
         To heapify subtree rooted at index i. 
         
         Requires 3 arguments:
         - n (int) <-- the size of the array
         - i (int) <-- the index of the root of the subtree
-        - descendingFlag (bool)
+        - reverse (bool)
         """
         l = (2 * i) + 1
         r = (2 * i) + 2
 
-        if (descendingFlag):
+        if (reverse):
             smallest = i  # Initialise smallest as root
 
             # if left child of root exists and is smaller than root 
@@ -702,7 +719,7 @@ X. Exit
                 self.__db[i], self.__db[smallest] = self.__db[smallest], self.__db[i] 
                 
                 # recursively heapify the root.
-                self.heapify(n, smallest, descendingFlag)
+                self.heapify(n, smallest, reverse)
         else:
             largest = i   # Initialise largest as root 
 
@@ -719,14 +736,14 @@ X. Exit
                 self.__db[i], self.__db[largest] = self.__db[largest],self.__db[i]
         
                 # recursively heapify the root.
-                self.heapify(n, largest, descendingFlag) 
+                self.heapify(n, largest, reverse) 
 
-    def heap_sort(self, descendingFlag = False):
+    def heap_sort(self, reverse=False):
         """
         Do a heap sort on the database by package name
         
         Optional argument:
-        - descendingFlag (bool)
+        - reverse (bool)
         
         Best time complexity: O(n log(n))
         Worst time complexity: O(n log(n))
@@ -734,25 +751,25 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = descendingFlag
+        self.__descending_order = reverse
         n = len(self.__db) 
 
         # Build a heap
         for i in range((n // 2) - 1, -1, -1): 
-            self.heapify(n, i, descendingFlag) 
+            self.heapify(n, i, reverse) 
 
         # extract elements individually starting from the end
         for i in range(n - 1, -1, -1): 
             self.__db[i], self.__db[0] = self.__db[0], self.__db[i] # swap the first element with the last node from the heap
-            self.heapify(i, 0, descendingFlag) # call heapify on the reduced list
+            self.heapify(i, 0, reverse) # call heapify on the reduced list
         
         self.__sort_order = "Package Name"
 
-    def merge(self, leftArr, rightArr, descendingFlag):
+    def merge(self, leftArr, rightArr, reverse):
         """
         Merge two sub-arrays
         """
-        if (descendingFlag):
+        if (reverse):
             leftArr = leftArr[::-1]
             rightArr = rightArr[::-1]
 
@@ -761,7 +778,7 @@ X. Exit
         leftArrSize = len(leftArr)
         rightArrSize = len(rightArr)
         while (i < leftArrSize and j < rightArrSize):
-            if (descendingFlag):
+            if (reverse):
                 if (leftArr[i].get_pax_num() > rightArr[j].get_pax_num()):
                     newArr.append(leftArr[i])
                     i += 1
@@ -786,7 +803,7 @@ X. Exit
 
         return newArr
 
-    def merge_sort(self, arr, descendingFlag):
+    def merge_sort(self, arr, reverse=False):
         """
         Do a merge sort on the database by number of pax
         
@@ -807,10 +824,10 @@ X. Exit
         leftHalf = self.merge_sort(arr[:mid])
         rightHalf = self.merge_sort(arr[mid:])
         
-        newArr = self.merge(leftHalf, rightHalf, descendingFlag)
+        newArr = self.merge(leftHalf, rightHalf, reverse)
         return newArr
 
-    def counting_sort_for_radix_sort(self, place, descendingFlag):
+    def counting_sort_for_radix_sort(self, place, reverse):
         """
         Counting sort for radix sort
         
@@ -834,7 +851,7 @@ X. Exit
             countArr[index % 10] += 1
 
         # Calculate cumulative count...
-        if (descendingFlag):
+        if (reverse):
             # in a descending order
             for i in range(8, -1, -1):
                 countArr[i] += countArr[i + 1]
@@ -855,12 +872,12 @@ X. Exit
         for i in range(n):
             self.__db[i] = outputArr[i]
 
-    def radix_sort(self, descendingFlag = False):
+    def radix_sort(self, reverse=False):
         """
         Do a radix sort on the database by cost per pax
 
         Optional argument:
-        - descendingFlag (bool)
+        - reverse (bool)
         
         Best time complexity: O(nk)
         Worst time complexity: O(nk)
@@ -878,7 +895,7 @@ X. Exit
         # place is 10^i where i is current digit number
         place = 1
         while (maxCost // place > 0):
-            self.counting_sort_for_radix_sort(place, descendingFlag)
+            self.counting_sort_for_radix_sort(place, reverse=reverse)
             place *= 10
 
         self.__sort_order = "Cost Per Pax"
@@ -962,7 +979,8 @@ X. Exit
                 else:
                     break
         else:
-            print("No records found")
+            print(f"{F.LIGHTRED_EX}No records found")
+            S_reset()
 
     def print_from_index(self, startIndex, endIndex):
         """
@@ -972,7 +990,7 @@ X. Exit
         - startIndex (int)
         - endIndex (int)
         """
-        self.print_from_array(self.__db[startIndex:endIndex])
+        self.print_from_array(self.__db[startIndex:endIndex + 1])
         print()
 
     def __str__(self):
@@ -991,4 +1009,5 @@ if __name__ == "__main__":
         h.add_record(f"Package {i}", f"Customer {i}", randint(1, 9), uniform(60, 10000))
 
     h.add_record("Package 1000", "Customer 10000", 1, 100)
-    h.search_for_range_of_cost(100, 1000)
+    h.radix_sort(reverse=1)
+    print(h)

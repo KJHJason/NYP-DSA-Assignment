@@ -44,7 +44,7 @@ def main():
                         formattedRange = get_range(rangeInput)
                         if (formattedRange == "error"):
                             print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
-                            reset_colour()
+                            S_reset()
                         else:
                             if (isinstance(formattedRange, int)):
                                 hotelDB.search_for_range_of_cost(formattedRange, formattedRange)
@@ -66,7 +66,7 @@ def main():
                         break
                     elif (packageNameInput == ""):
                         print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
-                        reset_colour()
+                        S_reset()
                     else:
                         packageName = packageNameInput
                         break
@@ -78,7 +78,7 @@ def main():
                         break
                     elif (customerNameInput == ""):
                         print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
-                        reset_colour()
+                        S_reset()
                     else:
                         customerName = customerNameInput
                         break
@@ -90,10 +90,10 @@ def main():
                         break
                     elif (paxNumInput == ""):
                         print(f"{F.LIGHTRED_EX}Input cannot be empty, please enter a valid pax number of pax...")
-                        reset_colour()
+                        S_reset()
                     elif (not re.fullmatch(paxNumRegex, paxNumInput)):
                         print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax...")
-                        reset_colour()
+                        S_reset()
                     else:
                         paxNum = paxNumInput
                         break
@@ -105,10 +105,10 @@ def main():
                         break
                     elif (costperPaxInput == ""):
                         print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty, please enter a valid cost per pax...")
-                        reset_colour()
+                        S_reset()
                     elif (not re.fullmatch(costRegex, costperPaxInput)):
                         print(f"{F.LIGHTRED_EX}Invalid package cost per pax, please enter a valid cost per pax...")
-                        reset_colour()
+                        S_reset()
                     else:
                         costperPax = costperPaxInput
                         break
@@ -119,7 +119,7 @@ def main():
                     if (addConfirmation == "y"):
                         hotelDB.add_record(packageName, customerName, paxNum, costperPax)
                         print(f"{F.LIGHTGREEN_EX}Record added successfully...")
-                        reset_colour()
+                        S_reset()
                 else:
                     break
 
@@ -137,7 +137,7 @@ def main():
                             break
                         elif (customerName == ""):
                             print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
-                            reset_colour()
+                            S_reset()
                         else:
                             hotelDB.search_for_customer(customerName)
 
@@ -149,7 +149,7 @@ def main():
                             break
                         elif (packageName == ""):
                             print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
-                            reset_colour()
+                            S_reset()
                         else:
                             hotelDB.search_for_package(packageName)
 
@@ -212,7 +212,7 @@ if __name__ == "__main__":
         print()
         print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()[0]}")
         print(f"Please refer to the generated error log file for more details...")
-        reset_colour()
+        S_reset()
         log_error()
         print()
         countdown()
