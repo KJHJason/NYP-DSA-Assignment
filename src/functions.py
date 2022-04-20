@@ -19,13 +19,13 @@ def S_reset(*nl):
     else: end = ""
     print(f"{S.RESET_ALL}", end=end)
 
+filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
 def read_db_file():
     """
     Function to load the database file
     """
     from data import HotelDatabase
 
-    filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
     db = HotelDatabase()
     if (filePath.is_file()):
         with open(filePath, "rb") as f:
@@ -36,7 +36,6 @@ def save_db_file(db):
     """
     Function to save the database file for future runs
     """
-    filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
     with open(filePath, "wb") as f:
         dill.dump(db, f)
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
