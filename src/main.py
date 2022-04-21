@@ -12,6 +12,7 @@ from data import print_record_data
 
 paxNumRegex = re.compile(r"^\d+$")
 costRegex = re.compile(r"^\d+(\.\d+)?$")
+DEBUG_FLAG = 1
 
 def main():
     hotelDB = read_db_file()
@@ -35,8 +36,8 @@ def main():
                     print(hotelDB)
                 elif (subInput == "2"):
                     # display records range from $X to $Y. e.g $100-200
+                    print()
                     while (1):
-                        print()
                         print("Please enter the range of prices you want to display in the format, $100-200...")
                         rangeInput = input("Enter the range of prices you want to display (x to cancel): $").lower().strip()
                         if (rangeInput == "x"):
@@ -51,26 +52,20 @@ def main():
                             else:
                                 hotelDB.search_for_range_of_cost(formattedRange[0], formattedRange[1])
 
+                            searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
+                            if (searchAgainPrompt == "n"):
+                                break
+                            else:
+                                print()
+
         elif (uInput == "2"):
             # add new record
-            while (1):
+            continueFlag = 1
+            while (continueFlag != 0):
                 packageName = customerName = ""
                 paxNum = costperPax = 0
-                continueFlag = 1
 
-                while (continueFlag):
-                    print()
-                    packageNameInput = input("Enter the package name (F to cancel): ").lower().strip()
-                    if (packageNameInput == "f"):
-                        continueFlag = 0
-                        break
-                    elif (packageNameInput == ""):
-                        print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
-                        S_reset()
-                    else:
-                        packageName = packageNameInput
-                        break
-
+                print()
                 while (continueFlag):
                     customerNameInput = input("Enter the customer name (F to cancel): ").lower().strip()
                     if (customerNameInput == "f"):
@@ -80,8 +75,28 @@ def main():
                         print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
                         S_reset()
                     else:
-                        customerName = customerNameInput
+                        confirmInput = get_input(prompt=f"Please confirm the customer name, \"{customerNameInput}\" (y/n): ", command=("y", "n"))
+                        if (confirmInput == "y"):
+                            customerName = customerNameInput
+                            print()
+                            break
+                    print()
+
+                while (continueFlag):
+                    packageNameInput = input("Enter the package name (F to cancel): ").lower().strip()
+                    if (packageNameInput == "f"):
+                        continueFlag = 0
                         break
+                    elif (packageNameInput == ""):
+                        print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
+                        S_reset()
+                    else:
+                        confirmInput = get_input(prompt=f"Please confirm the package name, \"{packageNameInput}\" (y/n): ", command=("y", "n"))
+                        if (confirmInput == "y"):
+                            packageName = packageNameInput
+                            print()
+                            break
+                    print()
 
                 while (continueFlag):
                     paxNumInput = input("Enter the number of pax (F to cancel): ").lower().strip()
@@ -95,8 +110,12 @@ def main():
                         print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax...")
                         S_reset()
                     else:
-                        paxNum = paxNumInput
-                        break
+                        confirmInput = get_input(prompt=f"Please confirm the number of pax, \"{paxNumInput}\" (y/n): ", command=("y", "n"))
+                        if (confirmInput == "y"):
+                            paxNum = paxNumInput
+                            print()
+                            break
+                    print()
 
                 while (continueFlag):
                     costperPaxInput = input("Enter the package cost per pax (F to cancel): $").lower().strip()
@@ -110,8 +129,12 @@ def main():
                         print(f"{F.LIGHTRED_EX}Invalid package cost per pax, please enter a valid cost per pax...")
                         S_reset()
                     else:
-                        costperPax = costperPaxInput
-                        break
+                        confirmInput = get_input(prompt=f"Please confirm the package cost per pax, \"{costperPaxInput}\" (y/n): ", command=("y", "n"))
+                        if (confirmInput == "y"):
+                            costperPax = costperPaxInput
+                            print()
+                            break
+                    print()
 
                 if (continueFlag):
                     print(print_record_data(packageName, customerName, paxNum, costperPax))
@@ -121,7 +144,8 @@ def main():
                         print(f"{F.LIGHTGREEN_EX}Record added successfully...")
                         S_reset()
                 else:
-                    break
+                    print(f"\n{F.LIGHTRED_EX}Adding of record cancelled...")
+                    S_reset()
 
         elif (uInput == "3"):
             # edit options
@@ -204,13 +228,25 @@ def main():
 
 if __name__ == "__main__":
     coloramaInit(autoreset=0, convert=1)
+
+    header = "Welcome to Waffle Hotel's Booking Records"
+    print("*" * len(header))
+    print(f"{F.LIGHTYELLOW_EX}{header}")
+    print(" " * 16, "System", sep="")
+    S_reset()
+    print("*" * len(header))
+
     try:
         main()
     except (KeyboardInterrupt):
-        shutdown(1)
+        if (DEBUG_FLAG):
+            print(f"\n{F.LIGHTRED_EX}KeyboardInterrupt detected...")
+            S_reset()
+        else:
+            shutdown(nl=1, program="Main")
     except:
         print()
-        print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()[0]}")
+        print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")
         print(f"Please refer to the generated error log file for more details...")
         S_reset()
         log_error()

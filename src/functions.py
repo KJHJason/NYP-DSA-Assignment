@@ -8,18 +8,24 @@ import re, pathlib, logging
 from datetime import datetime
 from time import sleep
 
-def S_reset(*nl):
+def S_reset(nl=0):
     """
     Function to reset colorama foreground, background colors and styles.
     
     Param:
-    - nl (bool): If True, will print a new line after resetting colorama.
+    - nl (bool): If True, will print a new line after resetting colorama. Defaults to False.
     """
     if (nl): end = "\n"
     else: end = ""
     print(f"{S.RESET_ALL}", end=end)
 
 filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
+def check_if_db_file_exists():
+    """
+    Check if the db pickle file exists
+    """
+    return filePath.is_file()
+
 def read_db_file():
     """
     Function to load the database file
@@ -27,7 +33,7 @@ def read_db_file():
     from data import HotelDatabase
 
     db = HotelDatabase()
-    if (filePath.is_file()):
+    if (check_if_db_file_exists()):
         with open(filePath, "rb") as f:
             db = dill.load(f)
     return db
@@ -46,13 +52,6 @@ def print_main_menu(numOfRecords):
     Print the menu for user to choose their next action
     """
     print()
-    header = "Welcome to Waffle Hotel's Booking Records"
-    print("*" * len(header))
-    print(f"{F.LIGHTYELLOW_EX}{header}")
-    print(" " * 16, "System", sep="")
-    S_reset()
-    print("*" * len(header))
-    
     print("-" * 13, "Menu Options", "-" * 13)
     print()
     print(f"> Number of records: {numOfRecords}")
@@ -76,13 +75,13 @@ def print_sub_menu(typeOfMenu):
     """
     if (typeOfMenu == 1):
         print()
-        print("-" * 16, "Display Options", "-" * 16)
+        print("-" * 8, "Display Options", "-" * 8)
         print()
         print("1. Display all records")
         print("2. List records by cost")
         print("F. Back to main menu")
         print()
-        print("-" * 49)
+        print("-" * 33)
     elif (typeOfMenu == 3):
         print()
         print("-" * 13, "Edit Options", "-" * 13)
@@ -115,12 +114,12 @@ def print_sub_menu(typeOfMenu):
     else:
         raise Exception(f"Unknown type of sub-menu argument, {typeOfMenu}...")
 
-def get_input(**options):
+def get_input(prints=None, prompt=None, command=None, warning=None):
     """
     Returns user's input based on the defined command paramater without 
     letting the user enter anything else besides the defined command parameter.
     
-    Params:
+    Args:
     - prompt: The prompt to be displayed to the user.
     - prints: The message to be printed to the user.
     - command: The input to be accepted by the program.
@@ -132,17 +131,11 @@ def get_input(**options):
     - prints: None, will not print out any messages
     - warning: None, will not display any error messages
     """
-    prints = options.get("prints")
-
-    prompt = options.get("prompt")
     if (not prompt): 
         prompt = ""
 
-    commands = options.get("command")
-    if (not commands): 
-        raise Exception("command parameter must be defined in the function, get_input_from_user")
-
-    warning = options.get("warning")
+    if (not command): 
+        raise Exception("command keyword argument must be defined in the function, get_input")
 
     if (prints):
         print()
@@ -155,16 +148,16 @@ def get_input(**options):
 
     while (1):
         userInput = input(prompt).lower().strip()
-        if (userInput in commands): 
+        if (userInput in command): 
             return userInput
         else: 
             if (warning): 
                 print(f"{F.LIGHTRED_EX}Error: {warning}")
             else: 
-                commandToPrint = (s for s in commands if s != "")
+                commandToPrint = (s for s in command if s != "")
                 
                 instruction = "enter"
-                if ("" in commands):
+                if ("" in command):
                     instruction = "press Enter or"
 
                 print(f"{F.LIGHTRED_EX}Error: Invalid input. Please {instruction} {' or '.join(commandToPrint)}.")
@@ -174,8 +167,11 @@ def log_error():
     """
     Logs an error message to the error log file
     """
+    logFolderPath = pathlib.Path(__file__).parent.resolve().joinpath("logs")
+    logFolderPath.mkdir(exist_ok=1, parents=1)
+    
     fileName = "".join(["error-details-", datetime.now().strftime("%d-%m-%Y"), ".log"])
-    logFilePath = pathlib.Path(__file__).parent.resolve().joinpath(fileName)
+    logFilePath = logFolderPath.joinpath(fileName)
 
     if (logFilePath.is_file()):
         with open(logFilePath, "a") as f:
@@ -195,14 +191,22 @@ def countdown():
     input()
     for i in range(3, -1, -1):
         print(f"\rAutomatically shutting down in {i} seconds...", end="")
-        if (i != 0): sleep(1)
+        if (i != 0): 
+            sleep(1)
 
-def shutdown(*args):
+def shutdown(nl=0, program="Main"):
     """
     Print some messages before shutting down the program
+
+    Args:
+    - nl (int/bool, optional): Whether to print a newline before the shutdown messages. Defaults to 0/False.
+    - program (str, optional): Print the corresponding program shutdown messages. Defaults to "Main".
     """
-    if (args): print()
-    print("\nThank you for using Waffle Hotel's Booking Records System!")
+    if (nl): print()
+    if (program.title() == "Main"): 
+        print(f"\n{F.LIGHTYELLOW_EX}Thank you for using Waffle Hotel's Booking Records System!")
+    else:
+        print(f"\n{F.LIGHTRED_EX}Exiting program...")
     S_reset()
     countdown()
 

@@ -2,7 +2,7 @@
 from colorama import Fore as F
 from colorama import Style as S
 
-# import standard libraries
+# import standard library
 import math
 
 # import local python files
@@ -909,14 +909,19 @@ X. Exit
         - arr (list)
         """
         print()
+        print("Length of arr:", len(arr))
         if (len(arr) > 0):
             header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
 
             counter = 0
             rowsToPrint = 10
-            maxPages = math.ceil(len(arr) / rowsToPrint)
             currentPage = 1
+            maxPages = math.ceil(len(arr) / rowsToPrint)
+
             lastPageRecordsToPrint = len(arr) % rowsToPrint
+            if (lastPageRecordsToPrint == 0):
+                lastPageRecordsToPrint = rowsToPrint
+
             while (1):
                 print("-" * len(header))
                 print(header)
@@ -941,7 +946,6 @@ X. Exit
                         if (counter >= len(arr)):
                             break
                 else:
-                    
                     for i in range(-lastPageRecordsToPrint, 0, 1):
                         record = arr[i]
                         print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
@@ -993,21 +997,18 @@ X. Exit
         self.print_from_array(self.__db[startIndex:endIndex + 1])
         print()
 
+    def get_array(self):
+        """
+        Return the database array
+
+        Returns:
+            list: get the array of records
+        """
+        return self.__db
+
     def __str__(self):
         self.print_from_array(self.__db)
         return ""
 
     def __len__(self):
         return len(self.__db)
-
-# test codes
-if __name__ == "__main__":
-    h = HotelDatabase()
-    from random import uniform, randint
-
-    for i in range(205):
-        h.add_record(f"Package {i}", f"Customer {i}", randint(1, 9), uniform(60, 10000))
-
-    h.add_record("Package 1000", "Customer 10000", 1, 100)
-    h.radix_sort(reverse=1)
-    print(h)
