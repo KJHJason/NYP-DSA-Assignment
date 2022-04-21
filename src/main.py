@@ -12,7 +12,7 @@ from data import print_record_data
 
 paxNumRegex = re.compile(r"^\d+$")
 costRegex = re.compile(r"^\d+(\.\d+)?$")
-DEBUG_FLAG = 1
+DEBUG_FLAG = 0
 
 def main():
     hotelDB = read_db_file()
@@ -163,7 +163,7 @@ def main():
                             print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
                             S_reset()
                         else:
-                            hotelDB.search_for_customer(customerName)
+                            hotelDB.search_for_customer(customerName, mode="Edit")
 
                 elif (subInput == "2"):
                     # Search record by Package Name using Binary Search and update record
@@ -175,7 +175,7 @@ def main():
                             print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
                             S_reset()
                         else:
-                            hotelDB.search_for_package(packageName)
+                            hotelDB.search_for_package(packageName, mode="Edit")
 
         elif (uInput == "4"):
             # sort options
@@ -217,13 +217,31 @@ def main():
             while (subInput != "f"):
                 print_sub_menu(5)
                 subInput = get_input(prompt="Enter option: ", command=("1", "2", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                
                 if (subInput == "1"):
                     # Delete record by customer name
-                    pass
+                    while (1):
+                        print()
+                        customerName = input("Enter the customer name (F to cancel): ").lower().strip()
+                        if (customerName == "f"):
+                            break
+                        elif (customerName == ""):
+                            print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
+                            S_reset()
+                        else:
+                            hotelDB.search_for_customer(customerName, mode="Delete")
                 elif (subInput == "2"):
                     # Delete record by package name
-                    pass
-
+                    while (1):
+                        print()
+                        packageName = input("Enter the package name (F to cancel): ").lower().strip()
+                        if (packageName == "f"):
+                            break
+                        elif (packageName == ""):
+                            print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
+                            S_reset()
+                        else:
+                            hotelDB.search_for_package(packageName, mode="Delete")
     return 0
 
 if __name__ == "__main__":

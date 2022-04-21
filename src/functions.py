@@ -62,7 +62,6 @@ def print_main_menu(numOfRecords):
     print("4. Sort records options")
     print("5. Delete records options")
     print("X. Exit application and save database")
-    
     print()
     print("-" * 40)
 

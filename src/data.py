@@ -1,6 +1,5 @@
 # import third party libraries
 from colorama import Fore as F
-from colorama import Style as S
 
 # import standard library
 import math
@@ -168,6 +167,17 @@ class HotelDatabase:
         self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
         self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), len(self.__table_headers[2]), len(self.__table_headers[3])]
 
+    def delete_record(self, record):
+        """
+        Deletes a record from the database
+        
+        Args:
+        record: The record to be deleted
+        """
+        self.__db.remove(record)
+        print(f"{F.LIGHTGREEN_EX}Record deleted!")
+        S_reset()
+
     def add_record(self, packageName, customerName, paxNum, packageCostPerPax):
         """
         Add a record to the database
@@ -324,30 +334,34 @@ X. Exit
             print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
         S_reset()
 
-    def search_for_customer(self, customerName):
+    def search_for_customer(self, customerName, mode="Edit"):
         """
         Do a linear search on the database for the customer name to satisfy the basic function c.5. criteria
         
         Requires 1 argument:
         - customerName (string)
         """
-        data = self.linear_search(customerName.title(), "customer")
+        customerName = customerName.title()
+        data = self.linear_search(customerName, "customer")
         if (data == -1):
             print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!")
             S_reset()
             return
         print(data)
-        editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
-        if (editInput == "y"):
+        editInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
+        if (editInput == "y" and mode == "Edit"):
             self.edit_record(data)
+        elif (editInput == "y" and mode == "Delete"):
+            self.delete_record(data)
 
-    def search_for_package(self, packageName):
+    def search_for_package(self, packageName, mode="Edit"):
         """
         Do a binary search or a linear search on the database for the package name to satisfy the basic function c.6. criteria
         
         Requires 1 argument:
         - packageName (string)
         """
+        packageName = packageName.title()
         if (self.__sort_order != "Package Name" and len(self.__db) > 1):
             alertMsg = (
                 "Note: In order to search for a package, you must first sort the database by package name for a faster search time...",
@@ -361,28 +375,32 @@ X. Exit
                 else:
                     self.heap_sort()
 
-                return self.search_for_package(packageName)
+                return self.search_for_package(packageName, mode=mode)
             else:
-                record = self.linear_search(packageName.title(), "package")
+                record = self.linear_search(packageName, "package")
                 if (not record):
                     print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
                     S_reset()
                 else:
                     print(record)
-                    editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
-                    if (editInput == "y"):
+                    userInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
+                    if (userInput == "y" and mode == "Edit"):
                         self.edit_record(record)
+                    elif (userInput == "y" and mode == "Delete"):
+                        self.delete_record(record)
         else:
-            record = self.binary_search_for_package_name(packageName.title())
+            record = self.binary_search_for_package_name(packageName)
             if (record == -1):
                 print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
                 S_reset()
             else:
                 print(record)
-                editInput = get_input(prompt="Do you want to edit the record? (Y/N): ", command=("y", "n"))
-                if (editInput == "y"):
+                userInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
+                if (userInput == "y" and mode == "Edit"):
                     self.edit_record(record)
-    
+                elif (userInput == "y" and mode == "Delete"):
+                    self.delete_record(record)
+
     def search_for_range_of_cost(self, low, high):
         """
         Do a binary search or a linear search on the database for the range of cost specified by the user to satisfy the basic function c.7. criteria
@@ -862,7 +880,7 @@ X. Exit
 
         # Place the elements in sorted order
         i = n - 1
-        while i >= 0:
+        while (i >= 0):
             index = int(self.__db[i].get_package_cost_per_pax() * 100) // place
             outputArr[countArr[index % 10] - 1] = self.__db[i]
             countArr[index % 10] -= 1
@@ -1002,7 +1020,7 @@ X. Exit
         Return the database array
 
         Returns:
-            list: get the array of records
+        list: get the array of records
         """
         return self.__db
 
