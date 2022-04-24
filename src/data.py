@@ -371,14 +371,18 @@ X. Exit
             if (sortInput == "y"): 
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.heap_sort(reverse=1)
+                    # self.heap_sort(reverse=1)
+                    self.three_way_quicksort(0, len(self.__db) - 1, reverse=1)
                 else:
-                    self.heap_sort()
+                    # self.heap_sort()
+                    self.three_way_quicksort(0, len(self.__db) - 1)
+                
+                self.__sort_order = "Package Name"
 
                 return self.search_for_package(packageName, mode=mode)
             else:
                 record = self.linear_search(packageName, "package")
-                if (not record):
+                if (record == -1):
                     print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
                     S_reset()
                 else:
@@ -783,6 +787,105 @@ X. Exit
         
         self.__sort_order = "Package Name"
 
+    def partition(self, low, high, reverse):
+        """
+        Partition the array into three parts using the "Dutch National Flag Algorithm"
+
+        In an ascending order,
+        - arr[low...i] contains all the elements smaller than the pivot
+        - arr[i+1...j-1] contains all the elements equal to the pivot
+        - arr[j...high] contains all the elements larger than the pivot
+
+        In a descending order,
+        - arr[low...i] contains all the elements larger than the pivot
+        - arr[i+1...j-1] contains all the elements equal to the pivot
+        - arr[j...high] contains all the elements smaller than the pivot
+        
+        Args:
+        - low (int): The lower index of the array
+        - high (int): The higher index of the array
+        - reverse (bool): Whether the array is sorted in ascending or descending order.
+        """
+        arr = self.__db
+
+        # if looking at two or less elements
+        if (high - low <= 1):
+            # swap the elements if in wrong order
+            if (not reverse):
+                if (arr[high].get_package_name() < arr[low].get_package_name()):
+                    arr[high], arr[low] = arr[low], arr[high]
+                return low, high # i, j pointers for the next recursive call
+            else:
+                if (arr[high].get_package_name() > arr[low].get_package_name()):
+                    arr[high], arr[low] = arr[low], arr[high]
+                return low, high # i, j pointers for the next recursive call
+
+        # initialise mid pointer and pivot
+        mid = low
+        pivot = arr[high].get_package_name()
+        while (mid <= high):
+            # if the element is smaller than the pivot, swap it the elements
+            if (arr[mid].get_package_name() < pivot):
+                if (not reverse):
+                    # Ascending order: swap the elements with the high pointer such that the smaller element is on the left
+                    arr[mid], arr[low] = arr[low], arr[mid]
+                    mid += 1
+                    low += 1
+                else:
+                    # Descending order: swap the elements with the low pointer such that the smaller element is on the right
+                    arr[mid], arr[high] = arr[high], arr[mid]
+                    high -= 1
+
+            # if there are values that are the same as the pivot
+            elif (arr[mid].get_package_name() == pivot):
+                # increment the mid pointer to move to the next element
+                mid += 1 
+
+            # if the element is greater than the pivot, swap it with the element at the high pointer
+            elif (arr[mid].get_package_name() > pivot):
+                if (not reverse):
+                    # Ascending order: swap the elements with the low pointer such that the larger element is on the right
+                    arr[mid], arr[high] = arr[high], arr[mid]
+                    high -= 1
+                else:
+                    # Descending order: swap the elements with the high pointer such that the larger element is on the left
+                    arr[mid], arr[low] = arr[low], arr[mid]
+                    mid += 1
+                    low += 1
+
+        return low - 1, mid # i, j pointers for the next recursive call
+
+    def three_way_quicksort(self, low, high, reverse=False):
+        """
+        3-way quicksort algorithm for sorting an array in ascending or descending order
+
+        Advantages of 3way quicksort over the traditional quicksort algorithm is that it is able to sort the array quicker if there are many duplicate values.
+        
+        Time Complexities:
+        - Best case: O(n(log(n)))
+        - Worst case: O(n^2)
+        - Average case: O(n(log(n)))
+        
+        Space Complexity:
+        - O(1) in this function
+        
+        Args:
+        - low (int): The lower index of the array
+        - high (int): The higher index of the array
+        - reverse (bool): Whether the array is sorted in ascending or descending order. Default to False.
+        """
+        if (low >= high): 
+            return
+
+        # partition the array
+        i, j = self.partition(low, high, reverse)
+
+        # sort the left half recursively
+        self.three_way_quicksort(low, i, reverse)
+        
+        # sort the right half recursively
+        self.three_way_quicksort(j, high, reverse)
+
     def merge(self, leftArr, rightArr, reverse):
         """
         Merge two sub-arrays
@@ -1030,3 +1133,12 @@ X. Exit
 
     def __len__(self):
         return len(self.__db)
+
+if (__name__ == "__main__"):
+    # test codes
+    from random import randint, uniform
+    h = HotelDatabase()
+    for i in range(1000):
+        h.add_record(f"Customer {i}", f"Package {randint(1, 9999)}", randint(1, 9), uniform(50, 9999))
+    h.search_for_package("Pack")
+    print(h)
