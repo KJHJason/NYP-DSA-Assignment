@@ -59,7 +59,7 @@ def main():
     save_db_file(hotelDB)
     return 0
 
-if __name__ == "__main__":
+if (__name__ == "__main__"):
     coloramaInit(autoreset=0, convert=1)
     try:
         print(f"{F.LIGHTGREEN_EX}Welcome to the Hotel Records Generator meant for development use!")

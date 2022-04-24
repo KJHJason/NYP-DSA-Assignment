@@ -244,7 +244,7 @@ def main():
                             hotelDB.search_for_package(packageName, mode="Delete")
     return 0
 
-if __name__ == "__main__":
+if (__name__ == "__main__"):
     coloramaInit(autoreset=0, convert=1)
 
     header = "Welcome to Waffle Hotel's Booking Records"
