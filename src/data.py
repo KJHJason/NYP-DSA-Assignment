@@ -814,11 +814,11 @@ X. Exit
             if (not reverse):
                 if (arr[high].get_package_name() < arr[low].get_package_name()):
                     arr[high], arr[low] = arr[low], arr[high]
-                return low, high # i, j pointers for the next recursive call
             else:
                 if (arr[high].get_package_name() > arr[low].get_package_name()):
                     arr[high], arr[low] = arr[low], arr[high]
-                return low, high # i, j pointers for the next recursive call
+
+            return low, high # i, j pointers for the next recursive call
 
         # initialise mid pointer and pivot
         mid = low
