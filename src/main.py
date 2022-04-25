@@ -45,7 +45,7 @@ def main():
                         formattedRange = get_range(rangeInput)
                         if (formattedRange == "error"):
                             print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
-                            S_reset()
+                            S_reset(nl=1)
                         else:
                             if (isinstance(formattedRange, int)):
                                 hotelDB.search_for_range_of_cost(formattedRange, formattedRange)
