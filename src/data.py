@@ -356,7 +356,9 @@ X. Exit
 
     def search_for_package(self, packageName, mode="Edit"):
         """
-        Do a binary search or a linear search on the database for the package name to satisfy the basic function c.6. criteria
+        Do a binary search on the database for the package name to satisfy the basic function c.6. criteria
+        
+        Note: Depending on the user's preference, the package name can be searched using linear search algorithm if the user wish to perserve the order of the database.
         
         Requires 1 argument:
         - packageName (string)
@@ -1030,8 +1032,8 @@ X. Exit
         - arr (list)
         """
         print()
-        print("Length of arr:", len(arr))
         if (len(arr) > 0):
+            print("Length of arr:", len(arr))
             header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
 
             counter = 0
@@ -1104,7 +1106,7 @@ X. Exit
                 else:
                     break
         else:
-            print(f"{F.LIGHTRED_EX}No records found")
+            print(f"{F.LIGHTRED_EX}Error: There is no records...")
             S_reset()
 
     def print_from_index(self, startIndex, endIndex):

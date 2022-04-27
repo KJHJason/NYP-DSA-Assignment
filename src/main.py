@@ -37,26 +37,30 @@ def main():
                 elif (subInput == "2"):
                     # display records range from $X to $Y. e.g $100-200
                     print()
-                    while (1):
-                        print("Please enter the range of prices you want to display in the format, $100-200...")
-                        rangeInput = input("Enter the range of prices you want to display (x to cancel): $").lower().strip()
-                        if (rangeInput == "x"):
-                            break
-                        formattedRange = get_range(rangeInput)
-                        if (formattedRange == "error"):
-                            print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
-                            S_reset(nl=1)
-                        else:
-                            if (isinstance(formattedRange, int)):
-                                hotelDB.search_for_range_of_cost(formattedRange, formattedRange)
-                            else:
-                                hotelDB.search_for_range_of_cost(formattedRange[0], formattedRange[1])
-
-                            searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
-                            if (searchAgainPrompt == "n"):
+                    if (len(hotelDB) > 0):
+                        while (1):
+                            print("Please enter the range of prices you want to display in the format, $100-200...")
+                            rangeInput = input("Enter the range of prices you want to display (x to cancel): $").lower().strip()
+                            if (rangeInput == "x"):
                                 break
+                            formattedRange = get_range(rangeInput)
+                            if (formattedRange == "error"):
+                                print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
+                                S_reset(nl=1)
                             else:
-                                print()
+                                if (isinstance(formattedRange, int)):
+                                    hotelDB.search_for_range_of_cost(formattedRange, formattedRange)
+                                else:
+                                    hotelDB.search_for_range_of_cost(formattedRange[0], formattedRange[1])
+
+                                searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
+                                if (searchAgainPrompt == "n"):
+                                    break
+                                else:
+                                    print()
+                    else:
+                        print(f"{F.LIGHTRED_EX}Error: There is no records...")
+                        S_reset(nl=1)
 
         elif (uInput == "2"):
             # add new record
