@@ -5,56 +5,7 @@ from colorama import Fore as F
 import math
 
 # import local python files
-from functions import get_input, S_reset
-
-def format_price(price):
-    """
-    Format the price to 2 decimal places and return a string
-    
-    Requires 1 argument:
-    - price (int/float)
-    """
-    return f"${round(float(price), 2):.2f}"
-
-def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageCostPerPaxInput):
-    """
-    Function to print the record data in a readable format.
-    
-    Requires 4 arguments:
-    - packageNameInput (str): The package name
-    - customerNameInput (str): The customer name
-    - paxNumInput (int): The number of pax
-    - packageCostPerPaxInput (int/float): The package cost per pax
-    """
-    header = "Record Data Displayed Below:"
-    maxLen = len(header)
-
-    packageName = f"Package Name: {packageNameInput}"
-    if (len(packageName) > maxLen):
-        maxLen = len(packageName)
-
-    customerName = f"Customer Name: {customerNameInput}"
-    if (len(customerName) > maxLen):
-        maxLen = len(customerName)
-
-    paxNum = f"Number of Pax: {paxNumInput}"
-    if (len(paxNum) > maxLen):
-        maxLen = len(paxNum)
-
-    packageCostPerPax = f"Package Cost Per Pax: {format_price(packageCostPerPaxInput)}"
-    if (len(packageCostPerPax) > maxLen):
-        maxLen = len(packageCostPerPax)
-
-    print()
-    print("-" * maxLen)
-    print(header)
-    print()
-    print(packageName)
-    print(customerName)
-    print(paxNum)
-    print(packageCostPerPax)
-    print("-" * maxLen)
-    return ""
+from functions import get_input, S_reset, format_price, print_record_data
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -366,8 +317,8 @@ X. Exit
         packageName = packageName.title()
         if (self.__sort_order != "Package Name" and len(self.__db) > 1):
             alertMsg = (
-                "Note: In order to search for a package, you must first sort the database by package name for a faster search time...",
-                "Otherwise, you can still search for a package without sorting the database by the package name but with the cost of a longer searching time"
+                "Note: You can first sort the database by package name for a faster search time in future searches...",
+                "Otherwise, you can still search for a package and maintain the original order of the database..."
             )
             sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"): 
@@ -417,8 +368,8 @@ X. Exit
         """
         if (self.__sort_order != "Cost Per Pax" and len(self.__db) > 1):
             alertMsg = (
-                "Note: In order to search for a range of cost, you must first sort the database by package cost per pax for a faster search time...",
-                "Otherwise, you can still search for a range of cost without sorting the database by the package cost per pax but with the cost of a longer searching time."
+                "Note: You can first sort the database by package cost per pax for a faster search time in future searches...",
+                "Otherwise, you can still search for packages that fits within the specified range of cost and maintain the original order of the database..."
             )
             sortInput = get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"):

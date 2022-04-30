@@ -12,7 +12,7 @@ from data import print_record_data
 
 paxNumRegex = re.compile(r"^\d+$")
 costRegex = re.compile(r"^\d+(\.\d+)?$")
-DEBUG_FLAG = 0
+DEBUG_FLAG = 1
 
 def main():
     hotelDB = read_db_file()
@@ -258,21 +258,20 @@ if (__name__ == "__main__"):
     S_reset()
     print("*" * len(header))
 
-    try:
-        main()
-    except (KeyboardInterrupt):
-        if (DEBUG_FLAG):
-            print(f"\n{F.LIGHTRED_EX}KeyboardInterrupt detected...")
-            S_reset()
-        else:
+    if (not DEBUG_FLAG):
+        try:
+            main()
+        except (KeyboardInterrupt):
             shutdown(nl=1, program="Main")
-    except:
-        print()
-        print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")
-        print(f"Please refer to the generated error log file for more details...")
-        S_reset()
-        log_error()
-        print()
-        countdown()
-    finally:
-        sysExit(0)
+        except:
+            print()
+            print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")
+            print(f"Please refer to the generated error log file for more details...")
+            S_reset()
+            log_error()
+            print()
+            countdown()
+        finally:
+            sysExit(0)
+    else:
+        main()

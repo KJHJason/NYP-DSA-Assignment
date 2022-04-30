@@ -230,3 +230,52 @@ def get_range(userInput):
         
     else:
         return "error"
+
+def format_price(price):
+    """
+    Format the price to 2 decimal places and return a string
+    
+    Requires 1 argument:
+    - price (int/float)
+    """
+    return f"${round(float(price), 2):.2f}"
+
+def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageCostPerPaxInput):
+    """
+    Function to print the record data in a readable format.
+    
+    Requires 4 arguments:
+    - packageNameInput (str): The package name
+    - customerNameInput (str): The customer name
+    - paxNumInput (int): The number of pax
+    - packageCostPerPaxInput (int/float): The package cost per pax
+    """
+    header = "Record Data Displayed Below:"
+    maxLen = len(header)
+
+    packageName = f"Package Name: {packageNameInput}"
+    if (len(packageName) > maxLen):
+        maxLen = len(packageName)
+
+    customerName = f"Customer Name: {customerNameInput}"
+    if (len(customerName) > maxLen):
+        maxLen = len(customerName)
+
+    paxNum = f"Number of Pax: {paxNumInput}"
+    if (len(paxNum) > maxLen):
+        maxLen = len(paxNum)
+
+    packageCostPerPax = f"Package Cost Per Pax: {format_price(packageCostPerPaxInput)}"
+    if (len(packageCostPerPax) > maxLen):
+        maxLen = len(packageCostPerPax)
+
+    print()
+    print("-" * maxLen)
+    print(header)
+    print()
+    print(packageName)
+    print(customerName)
+    print(paxNum)
+    print(packageCostPerPax)
+    print("-" * maxLen)
+    return ""
