@@ -7,6 +7,7 @@ import dill
 import re, pathlib, logging
 from datetime import datetime
 from time import sleep
+from random import randint, uniform
 
 def S_reset(nl=0):
     """
@@ -36,6 +37,11 @@ def read_db_file():
     if (check_if_db_file_exists()):
         with open(filePath, "rb") as f:
             db = dill.load(f)
+    else:
+        # pre-initialize the database with 10 records
+        for i in range(10):
+            db.add_record(f"Package {i}", f"Customer {i}", randint(1,9), uniform(50,10000))
+
     return db
 
 def save_db_file(db):
