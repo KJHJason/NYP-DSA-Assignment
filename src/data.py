@@ -578,21 +578,21 @@ X. Exit
         Space complexity: O(1)
         """
         self.__descending_order = reverse
-        flag = 0
         for i in range(len(self.__db) - 1): # -1 to stop at last element since the last element will be the highest element after an iteration from the nested for loop
+            swapFlag = 0
             for j in range(len(self.__db) - i - 1): # -i to stop at last i element since they are already sorted and -1 to account for the indexing starting from 0
                 if (reverse):
                     # swap the elements if the jth customer name is smaller than the next customer name
                     if (self.__db[j].get_customer_name() < self.__db[j + 1].get_customer_name()):
                         self.__db[j], self.__db[j + 1] = self.__db[j + 1], self.__db[j]
-                        flag = 1
+                        swapFlag = 1
                 else:
                     # swap the elements if the jth customer name is greater than the next customer name
                     if (self.__db[j].get_customer_name() > self.__db[j + 1].get_customer_name()):
                         self.__db[j], self.__db[j + 1] = self.__db[j + 1], self.__db[j]
-                        flag = 1
+                        swapFlag = 1
 
-            if (not flag):
+            if (not swapFlag):
                 break # break when the array is already sorted
 
         self.__sort_order = "Customer Name"
