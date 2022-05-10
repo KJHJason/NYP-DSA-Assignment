@@ -6,6 +6,7 @@ import math
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data
+from tree_code import *
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -113,6 +114,7 @@ class HotelDatabase:
         Constructor for the Hotel Database which will create an empty array and set the descending order flag to False
         """
         self.__db = []
+        self.__bst_root = None
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
         self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
@@ -153,7 +155,9 @@ class HotelDatabase:
             self.__table_len[3] = len(str(int(paxNum)))
 
         self.__sort_order = "Not Sorted"
-        self.__db.append(RecordData(packageName, customerName, paxNum, packageCostPerPax))
+        recordData = RecordData(packageName, customerName, paxNum, packageCostPerPax)
+        self.__db.append(recordData)
+        self.__bst_root = insert(self.__bst_root, recordData)
 
     def edit_record(self, record):
         """
@@ -201,7 +205,7 @@ X. Exit
 
     def sort_by_pax_num(self, reverse=False):
         """
-        Do a merge sort on the database by number of pax
+        Do a 3 way quicksort on the database by number of pax
         
         Optional parameter:
         - reverse (bool)
@@ -213,7 +217,7 @@ X. Exit
                 else:
                     reverse = 0
             self.__descending_order = reverse
-            self.__db = self.merge_sort(self.__db, reverse=reverse)
+            self.three_way_quicksort(0, len(self.__db) - 1, reverse=reverse)
             self.__sort_order = "Number of Pax"
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
         elif (len(self.__db) == 1):
@@ -236,6 +240,7 @@ X. Exit
                 else:
                     reverse = 0
             self.bubble_sort(reverse=reverse)
+            self.__sort_order = "Customer Name"
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -257,6 +262,7 @@ X. Exit
                 else:
                     reverse = 0
             self.selection_sort(reverse=reverse)
+            self.__sort_order = "Package Name"
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -278,6 +284,7 @@ X. Exit
                 else:
                     reverse = 0
             self.insertion_sort(reverse=reverse)
+            self.__sort_order = "Cost Per Pax"
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -291,19 +298,33 @@ X. Exit
         
         Requires 1 argument:
         - customerName (string)
+        - mode (string): "Edit" or "Display" or "Delete", defaults to "Edit"
         """
+        mode = mode.title()
+
+        if (mode == "Display"):
+            dataList = search(self.__bst_root, customerName)
+            if (dataList != -1):
+                self.print_from_array(dataList)
+            else:
+                print(f"{F.LIGHTRED_EX}No records found with the customer name, {customerName}!")
+                S_reset()
+            return
+        
         customerName = customerName.title()
         data = self.linear_search(customerName, "customer")
         if (data == -1):
             print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!")
             S_reset()
             return
+
         print(data)
         editInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
         if (editInput == "y" and mode == "Edit"):
             self.edit_record(data)
         elif (editInput == "y" and mode == "Delete"):
             self.delete_record(data)
+            deleteNode(self.__bst_root, data, deleteAll=False)
 
     def search_for_package(self, packageName, mode="Edit"):
         """
@@ -324,11 +345,9 @@ X. Exit
             if (sortInput == "y"): 
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    # self.heap_sort(reverse=1)
-                    self.three_way_quicksort(0, len(self.__db) - 1, reverse=1)
+                    self.heap_sort(reverse=1)
                 else:
-                    # self.heap_sort()
-                    self.three_way_quicksort(0, len(self.__db) - 1)
+                    self.heap_sort()
                 
                 self.__sort_order = "Package Name"
 
@@ -381,6 +400,7 @@ X. Exit
                     self.radix_sort()
                     self.__descending_order = 0
 
+                self.__sort_order = "Cost Per Pax"
                 return self.search_for_range_of_cost(low, high)
             else:
                 arr = self.linear_search_range_of_cost(low, high)
@@ -595,8 +615,6 @@ X. Exit
             if (not swapFlag):
                 break # break when the array is already sorted
 
-        self.__sort_order = "Customer Name"
-
     def selection_sort(self, reverse=False):
         """
         Do a selection sort by package name
@@ -630,8 +648,6 @@ X. Exit
                 # swap the found minimum/maximum element with the element at index i if the smallest/biggest elemment is not in its proper position
                 self.__db[i], self.__db[index] = self.__db[index], self.__db[i]
 
-        self.__sort_order = "Package Name"
-
     def insertion_sort(self, reverse=False):
         """
         Do a insertion sort by package cost
@@ -663,8 +679,6 @@ X. Exit
                     j -= 1
 
             self.__db[j + 1] = el
-
-        self.__sort_order = "Cost Per Pax"
 
     def heapify(self, n, i, reverse): 
         """
@@ -737,8 +751,6 @@ X. Exit
         for i in range(n - 1, -1, -1): 
             self.__db[i], self.__db[0] = self.__db[0], self.__db[i] # swap the first element with the last node from the heap
             self.heapify(i, 0, reverse) # call heapify on the reduced list
-        
-        self.__sort_order = "Package Name"
 
     def partition(self, low, high, reverse):
         """
@@ -765,20 +777,20 @@ X. Exit
         if (high - low <= 1):
             # swap the elements if in wrong order
             if (not reverse):
-                if (arr[high].get_package_name() < arr[low].get_package_name()):
+                if (arr[high].get_pax_num() < arr[low].get_pax_num()):
                     arr[high], arr[low] = arr[low], arr[high]
             else:
-                if (arr[high].get_package_name() > arr[low].get_package_name()):
+                if (arr[high].get_pax_num() > arr[low].get_pax_num()):
                     arr[high], arr[low] = arr[low], arr[high]
 
             return low, high # i, j pointers for the next recursive call
 
         # initialise mid pointer and pivot
         mid = low
-        pivot = arr[high].get_package_name()
+        pivot = arr[high].get_pax_num()
         while (mid <= high):
             # if the element is smaller than the pivot, swap it the elements
-            if (arr[mid].get_package_name() < pivot):
+            if (arr[mid].get_pax_num() < pivot):
                 if (not reverse):
                     # Ascending order: swap the elements with the high pointer such that the smaller element is on the left
                     arr[mid], arr[low] = arr[low], arr[mid]
@@ -790,12 +802,12 @@ X. Exit
                     high -= 1
 
             # if there are values that are the same as the pivot
-            elif (arr[mid].get_package_name() == pivot):
+            elif (arr[mid].get_pax_num() == pivot):
                 # increment the mid pointer to move to the next element
                 mid += 1 
 
             # if the element is greater than the pivot, swap it with the element at the high pointer
-            elif (arr[mid].get_package_name() > pivot):
+            elif (arr[mid].get_pax_num() > pivot):
                 if (not reverse):
                     # Ascending order: swap the elements with the low pointer such that the larger element is on the right
                     arr[mid], arr[high] = arr[high], arr[mid]
@@ -810,9 +822,10 @@ X. Exit
 
     def three_way_quicksort(self, low, high, reverse=False):
         """
-        3-way quicksort algorithm for sorting an array in ascending or descending order
+        3-way quicksort algorithm for sorting the database by pax number in ascending or descending order
 
-        Advantages of 3way quicksort over the traditional quicksort algorithm is that it is able to sort the array quicker if there are many duplicate values.
+        Advantages of 3way quicksort over the traditional quicksort algorithm is that it is able to sort the array quicker if there are many duplicate values
+        which is ideal for pax number as hotels usually have between 1 to 9 pax per room.
         
         Time Complexities:
         - Best case: O(n(log(n)))
@@ -838,68 +851,6 @@ X. Exit
         
         # sort the right half recursively
         self.three_way_quicksort(j, high, reverse)
-
-    def merge(self, leftArr, rightArr, reverse):
-        """
-        Merge two sub-arrays
-        """
-        if (reverse):
-            leftArr = leftArr[::-1]
-            rightArr = rightArr[::-1]
-
-        newArr = []
-        i = j = 0
-        leftArrSize = len(leftArr)
-        rightArrSize = len(rightArr)
-        while (i < leftArrSize and j < rightArrSize):
-            if (reverse):
-                if (leftArr[i].get_pax_num() > rightArr[j].get_pax_num()):
-                    newArr.append(leftArr[i])
-                    i += 1
-                else:
-                    newArr.append(rightArr[j])
-                    j += 1
-            else:
-                if (leftArr[i].get_pax_num() < rightArr[j].get_pax_num()):
-                    newArr.append(leftArr[i])
-                    i += 1
-                else:
-                    newArr.append(rightArr[j])
-                    j += 1
-
-        while (i < leftArrSize):
-            newArr.append(leftArr[i])
-            i += 1
-
-        while (j < rightArrSize):
-            newArr.append(rightArr[j])
-            j += 1
-
-        return newArr
-
-    def merge_sort(self, arr, reverse=False):
-        """
-        Do a merge sort on the database by number of pax
-        
-        Requires 1 argument:
-        - arr (list)
-        
-        Best time complexity: O(n log(n))
-        Worst time complexity: O(n log(n))
-        Average time complexity: O(n log(n))
-        
-        Space complexity: O(n)
-        """
-        arrLen = len(arr)
-        if (arrLen <= 1): 
-            return arr # return if the array has only one element
-
-        mid = arrLen // 2
-        leftHalf = self.merge_sort(arr[:mid])
-        rightHalf = self.merge_sort(arr[mid:])
-        
-        newArr = self.merge(leftHalf, rightHalf, reverse)
-        return newArr
 
     def counting_sort_for_radix_sort(self, place, reverse):
         """
@@ -971,8 +922,6 @@ X. Exit
         while (maxCost // place > 0):
             self.counting_sort_for_radix_sort(place, reverse=reverse)
             place *= 10
-
-        self.__sort_order = "Cost Per Pax"
 
     def print_from_array(self, arr):
         """

@@ -30,7 +30,7 @@ def main():
             subInput = ""
             while (subInput != "f"):
                 print_sub_menu(1)
-                subInput = get_input(prompt="Enter option: ", command=("1", "2", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                 if (subInput == "1"):
                     # display all records
                     print(hotelDB)
@@ -61,6 +61,19 @@ def main():
                     else:
                         print(f"{F.LIGHTRED_EX}Error: There is no records...")
                         S_reset(nl=1)
+                        
+                elif (subInput == "3"):
+                    # search for records that matches the specified customer name
+                    print()
+                    searchAgainPrompt = ""
+                    while (searchAgainPrompt != "x"):
+                        custInp = input("Enter customer name (x to cancel): ").lower()
+
+                        if (custInp != "x"):
+                            hotelDB.search_for_customer(custInp, mode="Display")
+                            searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
+                        else:
+                            searchAgainPrompt = "x"
 
         elif (uInput == "2"):
             # add new record
@@ -234,6 +247,7 @@ def main():
                             S_reset()
                         else:
                             hotelDB.search_for_customer(customerName, mode="Delete")
+
                 elif (subInput == "2"):
                     # Delete record by package name
                     while (1):

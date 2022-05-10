@@ -7,7 +7,8 @@ import dill
 import re, pathlib, logging
 from datetime import datetime
 from time import sleep
-from random import randint, uniform
+from random import randint, uniform, choice
+from uuid import uuid4
 
 def S_reset(nl=0):
     """
@@ -27,6 +28,15 @@ def check_if_db_file_exists():
     """
     return filePath.is_file()
 
+def preintialise_data():
+    """
+    Randomly picks a package name and customer name from the list of packages and customers predefined in this function and returns them in a tuple.
+    """
+    packagePresets = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package"]
+    customerPresets = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones"]
+
+    return choice(packagePresets), choice(customerPresets)
+
 def read_db_file():
     """
     Function to load the database file
@@ -40,7 +50,8 @@ def read_db_file():
     else:
         # pre-initialize the database with 10 records
         for i in range(10):
-            db.add_record(f"Package {i}", f"Customer {i}", randint(1,9), uniform(50,10000))
+            randPackage, randCust = preintialise_data()
+            db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 
     return db
 
@@ -62,7 +73,7 @@ def print_main_menu(numOfRecords):
     print()
     print(f"> Number of records: {numOfRecords}")
     print()
-    print("1. Display records options")
+    print("1. Search records options")
     print("2. Add a new record")
     print("3. Edit records options")
     print("4. Sort records options")
@@ -80,10 +91,11 @@ def print_sub_menu(typeOfMenu):
     """
     if (typeOfMenu == 1):
         print()
-        print("-" * 8, "Display Options", "-" * 8)
+        print("-" * 8, "Search Options", "-" * 8)
         print()
         print("1. Display all records")
         print("2. List records by cost (linear search/binary search + radix sort)")
+        print("3. List records by customer name (binary search tree)")
         print("F. Back to main menu")
         print()
         print("-" * 33)
@@ -103,7 +115,7 @@ def print_sub_menu(typeOfMenu):
         print("1. Sort records by customer name (bubble sort)")
         print("2. Sort records by package name (selection sort)")
         print("3. Sort records by package cost (insertion sort)")
-        print("4. Sort records by package's number of pax (merge sort)")
+        print("4. Sort records by package's number of pax (heap sort)")
         print("F. Back to main menu")
         print()
         print("-" * 40)
