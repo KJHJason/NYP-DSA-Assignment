@@ -48,7 +48,7 @@ class binaryTreeNode:
 
     def search(self, target):
         """
-        Do a binary search on the tree
+        Do a search on the tree
         
         Best Time complexity: O(log n) when the tree is balanced
         Worst Time complexity: O(n) when the tree is unbalanced
