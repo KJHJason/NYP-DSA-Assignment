@@ -1,5 +1,5 @@
 # import local python files
-from data import HotelDatabase
+from hotel_record import HotelDatabase
 from functions import read_db_file, save_db_file, check_if_db_file_exists, get_input, shutdown, S_reset, preintialise_data
 
 # import third-party libraries

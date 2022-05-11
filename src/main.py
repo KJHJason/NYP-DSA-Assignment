@@ -8,7 +8,7 @@ import re
 
 # import local python files
 from functions import *
-from data import print_record_data
+from hotel_record import print_record_data
 
 paxNumRegex = re.compile(r"^\d+$")
 costRegex = re.compile(r"^\d+(\.\d+)?$")

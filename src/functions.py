@@ -40,7 +40,7 @@ def read_db_file():
     """
     Function to load the database file
     """
-    from data import HotelDatabase
+    from hotel_record import HotelDatabase
 
     db = HotelDatabase()
     if (check_if_db_file_exists()):

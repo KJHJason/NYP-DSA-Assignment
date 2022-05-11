@@ -284,7 +284,7 @@ def delete_node(root, target):
 
 # Test codes for the BST
 if __name__ == "__main__":
-    from data import RecordData
+    from hotel_record import RecordData
     
     nodeList = []
     for i in range(0, 3):
