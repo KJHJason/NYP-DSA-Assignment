@@ -12,7 +12,7 @@ from random import randint, uniform
 from sys import exit as sysExit
 from sys import exc_info
 
-numRegex = re.compile(r"^\d+$")
+NUM_REGEX = re.compile(r"^\d+$")
 
 def main():
     hotelDB = HotelDatabase()
@@ -27,7 +27,7 @@ def main():
     numOfRecords = 0
     while (1):
         numOfRecords = input("Enter the number of records to generate: ")
-        if (re.fullmatch(numRegex, numOfRecords)):
+        if (re.fullmatch(NUM_REGEX, numOfRecords)):
             numOfRecords = int(numOfRecords)
             break
         else:

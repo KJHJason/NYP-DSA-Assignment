@@ -9,6 +9,10 @@ from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
 
+RANGE_INPUT_REGEX = re.compile(r"^\d+(-)\d+|\d+$")
+FILE_PATH = pathlib.Path(__file__).parent.resolve()
+PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
+
 def S_reset(nl=0):
     """
     Function to reset colorama foreground, background colors and styles.
@@ -20,12 +24,11 @@ def S_reset(nl=0):
     else: end = ""
     print(f"{S.RESET_ALL}", end=end)
 
-filePath = pathlib.Path(__file__).parent.resolve().joinpath("hotel_records.pickle")
 def check_if_db_file_exists():
     """
     Check if the db pickle file exists
     """
-    return filePath.is_file()
+    return PICKLE_FILE_PATH.is_file()
 
 def preintialise_data():
     """
@@ -44,7 +47,7 @@ def read_db_file():
 
     db = HotelDatabase()
     if (check_if_db_file_exists()):
-        with open(filePath, "rb") as f:
+        with open(PICKLE_FILE_PATH, "rb") as f:
             db = dill.load(f)
     else:
         # pre-initialize the database with 10 records
@@ -58,7 +61,7 @@ def save_db_file(db):
     """
     Function to save the database file for future runs
     """
-    with open(filePath, "wb") as f:
+    with open(PICKLE_FILE_PATH, "wb") as f:
         dill.dump(db, f)
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
     S_reset()
@@ -183,7 +186,7 @@ def log_error():
     """
     Logs an error message to the error log file
     """
-    logFolderPath = pathlib.Path(__file__).parent.resolve().joinpath("logs")
+    logFolderPath = FILE_PATH.joinpath("logs")
     logFolderPath.mkdir(exist_ok=1, parents=1)
     
     fileName = "".join(["error-details-", datetime.now().strftime("%d-%m-%Y"), ".log"])
@@ -226,10 +229,11 @@ def shutdown(nl=0, program="Main"):
     S_reset()
     countdown()
 
-rangeInputRegex = re.compile(r"^\d+(-)\d+|\d+$")
 def get_range(userInput):
     """
     Used for retreiving a range from the user's input.
+    
+    Returns an integer or a list of integers
     
     Note: It uses the regex, "\d+(-)\d+|\d+" to check for input validity such as "1-2", or "1" which are valid.
     
@@ -237,14 +241,17 @@ def get_range(userInput):
     - The user's URL input (string or list)
     """
     userInput = userInput.replace(" ", "")
-    if re.fullmatch(rangeInputRegex, userInput):
+    if re.fullmatch(RANGE_INPUT_REGEX, userInput):
         if ("-" not in userInput):
             return int(userInput)
         userInput = userInput.split("-")
         rangeList = [int(i) for i in userInput]
-        rangeList.sort() # Sort the list in ascending order to make sure the range is valid
-        return rangeList
         
+        # Check if the list in ascending order to make sure the range is valid
+        if (rangeList[0] > rangeList[1]):
+            # If not, swap the values
+            rangeList = [rangeList[1], rangeList[0]]
+        return rangeList
     else:
         return "error"
 

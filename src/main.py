@@ -10,8 +10,8 @@ import re
 from functions import *
 from hotel_record import print_record_data
 
-paxNumRegex = re.compile(r"^\d+$")
-costRegex = re.compile(r"^\d+(\.\d+)?$")
+PAX_NUM_REGEX = re.compile(r"^\d+$")
+COST_REGEX = re.compile(r"^\d+(\.\d+)?$")
 DEBUG_FLAG = 1
 
 def main():
@@ -129,7 +129,7 @@ def main():
                     elif (paxNumInput == ""):
                         print(f"{F.LIGHTRED_EX}Input cannot be empty, please enter a valid pax number of pax...")
                         S_reset()
-                    elif (not re.fullmatch(paxNumRegex, paxNumInput)):
+                    elif (not re.fullmatch(PAX_NUM_REGEX, paxNumInput)):
                         print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax...")
                         S_reset()
                     else:
@@ -148,7 +148,7 @@ def main():
                     elif (costperPaxInput == ""):
                         print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty, please enter a valid cost per pax...")
                         S_reset()
-                    elif (not re.fullmatch(costRegex, costperPaxInput)):
+                    elif (not re.fullmatch(COST_REGEX, costperPaxInput)):
                         print(f"{F.LIGHTRED_EX}Invalid package cost per pax, please enter a valid cost per pax...")
                         S_reset()
                     else:
