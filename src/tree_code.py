@@ -15,7 +15,9 @@ class binaryTreeNode:
         """
         Insert a new node into the tree
         
-        Time complexity: O(log n)
+        Best Time complexity: O(log n) when the tree is balanced
+        Worst Time complexity: O(n) when the tree is unbalanced
+        Average Time complexity: O(log n)
         
         Requires one argument:
         - data (RecordData): The value to insert into the tree
@@ -48,7 +50,9 @@ class binaryTreeNode:
         """
         Do a binary search on the tree
         
-        Time complexity: O(log n)
+        Best Time complexity: O(log n) when the tree is balanced
+        Worst Time complexity: O(n) when the tree is unbalanced
+        Average Time complexity: O(log n)
     
         Requires one argument:
         - target (string): The target value to search for (customer name)
@@ -226,8 +230,9 @@ def min_value_node(root):
     """
     Find the minimum value node in the tree
 
-    Time complexity: O(log n) when the tree is sorted and balanced
-    Worst case: O(n) when the tree is left-skewed
+    Best Time complexity: O(log n) when the tree is balanced
+    Worst Time complexity: O(n) when the tree is left-skewed
+    Average Time complexity: O(log n)
 
     Requires one argument:
     - root (binaryTreeNode): The root node of the tree
@@ -241,6 +246,10 @@ def min_value_node(root):
 def delete_node(root, target):
     """
     Delete a node from the tree and returns the root of modified tree
+    
+    Best Time complexity: O(log n) when the tree is balanced
+    Worst Time complexity: O(n) when the tree is unbalanced
+    Average Time complexity: O(log n)
 
     Requires three arguments:
     - root (binaryTreeNode): The root node of the tree
@@ -264,21 +273,29 @@ def delete_node(root, target):
             root.data.remove_a_node(target)
             return root
 
-        # otherwise, delete the node that has only one or no child
-        if (not root.left):
-            return root.right
-        elif (not root.right):
-            return root.left
+        # Case 1: if the node has no children
+        if (not root.left and not root.right):
+            root = None
 
-        # if the node has two childrens, find the index of the minimum value node in the right subtree
-        temp = min_value_node(root.right)
-        
-        # copy the smallest value node's content to the current node
-        root.key = temp.key
-        root.data = temp.data
-        
-        # delete the smallest value node
-        root.right = delete_node(root.right, temp.key)
+        # Case 2: if the node has only one child
+        elif (not root.left):
+            # make the right child the new root of the subtree by moving the root to the right child
+            root = root.right
+        elif (not root.right):
+            # make the left child the new root of the subtree by moving the root to the left child
+            root = root.left 
+
+        # Case 3: the node has two childrens
+        else:
+            # find the minimum value node in the right subtree
+            temp = min_value_node(root.right)
+            
+            # copy the successor's value to the current node
+            root.key = temp.key
+            root.data = temp.data
+            
+            # delete the successor node from the right subtree
+            root.right = delete_node(root.right, temp.key)
 
     return root
 

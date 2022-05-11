@@ -114,7 +114,7 @@ class HotelDatabase:
         Constructor for the Hotel Database which will create an empty array and set the descending order flag to False
         """
         self.__db = []
-        self.__bst_root = BinarySearchTree()
+        self.__bst_root = BinarySearchTree() # create a binary search tree based on customer names as the keys
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
         self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
