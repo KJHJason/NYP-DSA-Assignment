@@ -6,7 +6,7 @@ import math
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data
-from tree_code import *
+from tree_code import BinarySearchTree
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -114,7 +114,7 @@ class HotelDatabase:
         Constructor for the Hotel Database which will create an empty array and set the descending order flag to False
         """
         self.__db = []
-        self.__bst_root = None
+        self.__bst_root = BinarySearchTree()
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
         self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
@@ -157,7 +157,7 @@ class HotelDatabase:
         self.__sort_order = "Not Sorted"
         recordData = RecordData(packageName, customerName, paxNum, packageCostPerPax)
         self.__db.append(recordData)
-        self.__bst_root = insert(self.__bst_root, recordData)
+        self.__bst_root.insert(recordData)
 
     def edit_record(self, record):
         """
@@ -301,17 +301,18 @@ X. Exit
         - mode (string): "Edit" or "Display" or "Delete", defaults to "Edit"
         """
         mode = mode.title()
+        customerName = customerName.title()
 
         if (mode == "Display"):
-            dataList = search(self.__bst_root, customerName)
+            dataList = self.__bst_root.search(customerName)
             if (dataList != -1):
-                self.print_from_array(dataList)
+                self.print_from_array(dataList.convert_to_array())
+                return
             else:
                 print(f"{F.LIGHTRED_EX}No records found with the customer name, {customerName}!")
-                S_reset()
-            return
-        
-        customerName = customerName.title()
+                S_reset(nl=1)
+                return -1
+
         data = self.linear_search(customerName, "customer")
         if (data == -1):
             print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!")
@@ -324,7 +325,7 @@ X. Exit
             self.edit_record(data)
         elif (editInput == "y" and mode == "Delete"):
             self.delete_record(data)
-            deleteNode(self.__bst_root, data, deleteAll=False)
+            self.__bst_root.delete(data, deleteAll=False)
 
     def search_for_package(self, packageName, mode="Edit"):
         """
@@ -933,7 +934,7 @@ X. Exit
         """
         print()
         if (len(arr) > 0):
-            print("Length of arr:", len(arr))
+            print("Numbers of results found:", len(arr))
             header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
 
             counter = 0

@@ -8,7 +8,6 @@ import re, pathlib, logging
 from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
-from uuid import uuid4
 
 def S_reset(nl=0):
     """
@@ -32,8 +31,8 @@ def preintialise_data():
     """
     Randomly picks a package name and customer name from the list of packages and customers predefined in this function and returns them in a tuple.
     """
-    packagePresets = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package"]
-    customerPresets = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones"]
+    packagePresets = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package"]
+    customerPresets = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles"]
 
     return choice(packagePresets), choice(customerPresets)
 
@@ -49,7 +48,7 @@ def read_db_file():
             db = dill.load(f)
     else:
         # pre-initialize the database with 10 records
-        for i in range(10):
+        for i in range(15):
             randPackage, randCust = preintialise_data()
             db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 

@@ -16,7 +16,6 @@ numRegex = re.compile(r"^\d+$")
 
 def main():
     hotelDB = HotelDatabase()
-    currentPackageInt = currentCustomerInt = 0
     if (check_if_db_file_exists()):
         loadExisting = get_input(prompt="Load existing records? (y/n): ", command=("y", "n"))
         if (loadExisting == "y"):

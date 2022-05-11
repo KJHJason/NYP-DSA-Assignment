@@ -67,11 +67,17 @@ def main():
                     print()
                     searchAgainPrompt = ""
                     while (searchAgainPrompt != "x"):
-                        custInp = input("Enter customer name (x to cancel): ").lower()
-
-                        if (custInp != "x"):
-                            hotelDB.search_for_customer(custInp, mode="Display")
-                            searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
+                        custInp = input("Enter customer name (x to cancel): ").strip()
+                        
+                        if (custInp == ""):
+                            print(f"{F.LIGHTRED_EX}Error: Please provide a customer name...")
+                            S_reset(nl=1)
+                        elif (custInp.lower() != "x"):
+                            success = hotelDB.search_for_customer(custInp, mode="Display")
+                            if (success != -1):
+                                searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
+                                if (searchAgainPrompt == "n"):
+                                    searchAgainPrompt = "x"
                         else:
                             searchAgainPrompt = "x"
 
