@@ -270,7 +270,7 @@ def delete_node(root, target):
     else:
         # if the node has more than one object inside the linkedlist, delete the target object from the linkedlist
         if (len(root.data) > 1):
-            root.data.remove_a_node(target)
+            root.data.remove_node(target)
             return root
 
         # Case 1: if the node has no children
@@ -319,15 +319,16 @@ if __name__ == "__main__":
     print(root.search(nodeList[0].get_customer_name()))
     
     print("\nbefore deleting...")
-    root.print_tree(traversalType=0, printData=1)
-    
-    root.delete(nodeList[1])
-    print("\ntree after deleting one data from the node:")
-    root.print_tree(traversalType=0, printData=1)
+    root.print_tree(traversalType=3, printData=1)
     
     root.delete(nodeList[0])
-    print("\ntree after deleting the node:")
-    root.print_tree(traversalType=0, printData=1)
+    print("\ntree after deleting one data from the node:")
+    root.print_tree(traversalType=3, printData=1)
+    
+    root.delete(nodeList[1])
+    root.delete(nodeList[2])
+    print("\ntree after deleting the node twice:")
+    root.print_tree(traversalType=3, printData=1)
     
     root.insert(RecordData("Package 1", "Customer 1", 12, 120))
     print("\ntree:")

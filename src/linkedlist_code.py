@@ -35,7 +35,7 @@ class DoublyLinkedList:
         self.size += 1
         return
 
-    def remove_a_node(self, data):
+    def remove_node(self, data):
         """
         Remove a node from the linked list
         
@@ -107,22 +107,30 @@ class DoublyLinkedList:
         return self.size
 
     def __str__(self):
-        return str(self.convert_to_array())
+        """
+        Returns a string representation of the linked list
+        """
+        if (not self.head):
+            return "- []"
+        
+        arr = self.convert_to_array()
+        arr = [repr(i) for i in arr]
+        return f"- [{', '.join(arr)}]"
 
 # test codes for doubly linked list
 if __name__ == "__main__":
     ll = DoublyLinkedList()
     for i in range(10):
-        ll.add(i)
-    
-    ll.remove(8)
+        ll.add_to_back(i)
+
+    ll.remove_node(8)
     print(ll)
-    
-    ll.remove(0)
+
+    ll.remove_node(0)
     print(ll)
-    
-    ll.remove(9)
+
+    ll.remove_node(9)
     print(ll)
-    
-    ll.add(9)
+
+    ll.add_to_back(9)
     print(ll)

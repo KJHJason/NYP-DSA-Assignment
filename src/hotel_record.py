@@ -1037,11 +1037,11 @@ X. Exit
     def __len__(self):
         return len(self.__db)
 
+# test codes
 if (__name__ == "__main__"):
-    # test codes
     from random import randint, uniform
     h = HotelDatabase()
     for i in range(1000):
         h.add_record(f"Customer {i}", f"Package {randint(1, 9999)}", randint(1, 9), uniform(50, 9999))
-    h.search_for_package("Pack")
-    print(h)
+        
+    # add main test code below

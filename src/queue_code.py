@@ -54,3 +54,38 @@ class Queue:
         
         # return the dequeued node
         return temp.data
+
+    def __repr__(self):
+        """
+        Returns a string representation of the queue.
+        """
+        if (self.is_empty()):
+            return "- []"
+
+        # set the current node to the front
+        current = self.front
+
+        # loop through the queue and add the data of each node to the string
+        arr = []
+        while (current):
+            arr.append(repr(current.data))
+            current = current.next
+
+        return f"- [{', '.join(arr)}]"
+
+# test code for queue
+if __name__ == "__main__":
+    q = Queue()
+
+    print("Enqueueing 10 elements...")
+    for i in range(10):
+        q.enqueue(i)
+
+    print(q)
+
+    print("\nDequeuing 3 elements...")
+    for i in range(3):
+        print("Dequeued:", q.dequeue())
+
+    print()
+    print(q)
