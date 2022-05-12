@@ -129,8 +129,8 @@ def main():
                     elif (paxNumInput == ""):
                         print(f"{F.LIGHTRED_EX}Input cannot be empty, please enter a valid pax number of pax...")
                         S_reset()
-                    elif (not re.fullmatch(PAX_NUM_REGEX, paxNumInput)):
-                        print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax...")
+                    elif (not re.fullmatch(PAX_NUM_REGEX, paxNumInput) or int(paxNumInput) < 1):
+                        print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax more than 0...")
                         S_reset()
                     else:
                         confirmInput = get_input(prompt=f"Please confirm the number of pax, \"{paxNumInput}\" (y/n): ", command=("y", "n"))
@@ -205,13 +205,16 @@ def main():
             subInput = ""
             while (subInput != "f"):
                 print_sub_menu(4)
-                subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "noob", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                 if (subInput == "1"):
-                    # sort by customer name using bubble sort
+                    # sort by customer name using bubble sort or tree sort
                     sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
-                        hotelDB.sort_by_customer_name(descendingFlag)
+                        if (len(hotelDB) < 5):
+                            hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="bubble")
+                        else:
+                            hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="tree")
 
                 elif (subInput == "2"):
                     # sort by package name using selection sort
@@ -233,6 +236,38 @@ def main():
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         hotelDB.sort_by_pax_num(descendingFlag)
+
+                # easter egg menu
+                elif (subInput == "noob"):
+                    print(f"\n{F.LIGHTYELLOW_EX}Notice: You found the easter egg menu!")
+                    S_reset()
+                    # sort by using non-sensical sorting algorithm such as bogosort
+                    easterInput = ""
+                    WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very slow and may take a long time to sort the records...\nPlease use with caution, especially if you have a large number of records...{S.RESET_ALL}"
+                    while (easterInput != "q"):
+                        print_sub_menu(6)
+                        easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+
+                        if (easterInput == "1"):
+                            # sort by customer name using stalin sort
+                            sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                            if (sortConfirmation == "y"):
+                                hotelDB.easter_egg_sorts(typeOfSort="stalinsort")
+                        elif (easterInput == "2"):
+                            # sort by package name using bogo sort
+                            sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                            if (sortConfirmation == "y"):
+                                hotelDB.easter_egg_sorts(typeOfSort="bogosort")
+                        elif (easterInput == "3"):
+                            # sort by package cost using slow sort
+                            sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                            if (sortConfirmation == "y"):
+                                hotelDB.easter_egg_sorts(typeOfSort="slowsort")
+                        elif (easterInput == "4"):
+                            # sort by package's number of pax using sleep sort
+                            sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                            if (sortConfirmation == "y"):
+                                hotelDB.easter_egg_sorts(typeOfSort="sleepsort")
 
         elif (uInput == "5"):
             # delete options

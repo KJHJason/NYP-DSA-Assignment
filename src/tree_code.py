@@ -98,7 +98,7 @@ class binaryTreeNode:
 
     def inorder_return_node(self, arr, reverse=False):
         """
-        Return each node in the tree in inorder tree traversal 
+        Return each node in the tree in inorder tree traversal for tree sort
         (Left, Visit, Right) --> Ascending
         (Right, Visit, Left) --> Descending
         
@@ -255,6 +255,35 @@ class BinarySearchTree:
             else:
                 raise Exception("Invalid traversal type passed into print_tree() function")
 
+    def tree_sort(self, reverse=False):
+        """
+        Returns a sorted array of the tree by customer name
+        
+        Best Time complexity: O(n)
+        Worst Time complexity: O(n)
+        Average Time complexity: O(n)
+        
+        Space complexity: O(n)
+        
+        Requires one argument:
+        - reverse (bool): Whether to return the nodes in ascending or descending order. Defaults to False
+        """
+        if (not self.root):
+            return []
+        
+        arr = []
+        self.root.inorder_return_node(arr, reverse) # will return a list of linkedlist nodes
+        
+        # convert the list of linkedlist nodes into a list of RecordData objects
+        newArr = []
+        for node in arr:
+            nodeData = node.data.convert_to_array()
+            for data in nodeData:
+                newArr.append(data)
+
+        # return the sorted list of RecordData objects by customer name
+        return newArr
+
 def min_value_node(root):
     """
     Find the minimum value node in the tree
@@ -328,45 +357,15 @@ def delete_node(root, target):
 
     return root
 
-def tree_sort(arr, reverse=False):
-    """
-    Sort an array using a binary search tree
-    
-    Best Time complexity: O(n log n)
-    Worst Time complexity: O(n log n)
-    Average Time complexity: O(n log n)
-    
-    Requires two arguments:
-    - arr (list): The array to sort
-    - reverse (bool): Whether to sort in ascending or descending order. Default to False.
-    """
-    # check if the array is empty
-    if (not arr):
-        return arr
-
-    tree = BinarySearchTree()
-    for i in range(len(arr)):
-        tree.insert(arr[i])
-
-    arr.clear()
-    tree.root.inorder_return_node(arr, reverse=reverse)
-
-    newArr = []
-    for node in arr:
-        nodeData = node.data.convert_to_array()
-        for data in nodeData:
-            newArr.append(data)
-    return newArr
-
 # Test codes for the BST
 if __name__ == "__main__":
     from hotel_record import RecordData
-    
+
     nodeList = []
     for i in range(0, 3):
         for j in range(3):
             nodeList.append(RecordData(f"Product {j}", f"Customer {i}", 12, 1000))
-    
+
     root = BinarySearchTree()
     for node in nodeList:
         root.insert(node)
@@ -393,6 +392,5 @@ if __name__ == "__main__":
     print("\ntree:")
     root.print_tree(traversalType=3, printData=0)
     
-    arr = tree_sort(nodeList)
-    print("\ntree sort:")
-    print(arr)
+    print("\nTree sort:")
+    print(root.tree_sort())

@@ -7,6 +7,7 @@ import math
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data
 from tree_code import BinarySearchTree
+from noob_sorts import *
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -138,8 +139,8 @@ class HotelDatabase:
         Requires 4 arguments for the record:
         1. Package Name (string)
         2. Customer Name (string)
-        3. Number of Pax (int)
-        4. Package Cost per Pax (int)
+        3. Number of Pax (int/string) -> will be converted to int if it's a string
+        4. Package Cost per Pax (float/string) -> will be converted to float if it's a string
         """
         if (len(customerName) > self.__table_len[0]):
             self.__table_len[0] = len(customerName)
@@ -151,8 +152,8 @@ class HotelDatabase:
         if (len(formattedPackageCostPerPax) > self.__table_len[2]):
             self.__table_len[2] = len(formattedPackageCostPerPax)
 
-        if (len(str(int(paxNum))) > self.__table_len[3]):
-            self.__table_len[3] = len(str(int(paxNum)))
+        if (len(str(paxNum)) > self.__table_len[3]):
+            self.__table_len[3] = len(str(paxNum))
 
         self.__sort_order = "Not Sorted"
         recordData = RecordData(packageName, customerName, paxNum, packageCostPerPax)
@@ -226,7 +227,7 @@ X. Exit
             print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
         S_reset()
 
-    def sort_by_customer_name(self, reverse=False):
+    def sort_by_customer_name(self, reverse=False, typeOfSort="tree"):
         """
         Do a bubble sort on the database by customer name to satisfy the basic function c.2. criteria
         
@@ -239,7 +240,12 @@ X. Exit
                     reverse = 1
                 else:
                     reverse = 0
-            self.bubble_sort(reverse=reverse)
+
+            if (typeOfSort == "tree"):
+                self.__db = self.__bst_root.tree_sort(reverse=reverse)
+            else:
+                self.bubble_sort(reverse=reverse)
+
             self.__sort_order = "Customer Name"
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
@@ -285,7 +291,7 @@ X. Exit
                     reverse = 0
             self.insertion_sort(reverse=reverse)
             self.__sort_order = "Cost Per Pax"
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
         else:
@@ -1022,6 +1028,37 @@ X. Exit
         """
         self.print_from_array(self.__db[startIndex:endIndex + 1])
         print()
+    
+    def easter_egg_sorts(self, typeOfSort="bogosort"):
+        """
+        Method to sort the database using different non-sensical sorts such as bogosort
+        
+        Requires 1 argument:
+        - typeOfSort (str) -> "bogosort", "stalinsort", "slowsort", "sleepsort"
+        """
+        if (typeOfSort == "bogosort"):
+            # sorts by package name
+            print("\nSorting...", end="")
+            self.__db, iterNums = bogosort(self.__db)
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name!")
+            S_reset(nl=1)
+        elif (typeOfSort == "stalinsort"):
+            # sorts by customer name
+            self.__db = stalinsort(self.__db)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
+            S_reset()
+        elif (typeOfSort == "slowsort"):
+            # sorts by package cost per pax
+            self.__db = slowsort(self.__db, 0, len(self.__db) - 1)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
+            S_reset()
+        elif (typeOfSort == "sleepsort"):
+            # sorts by pax number
+            self.__db = sleepsort(self.__db)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
+            S_reset()
+        else:
+            raise Exception(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
 
     def get_array(self):
         """

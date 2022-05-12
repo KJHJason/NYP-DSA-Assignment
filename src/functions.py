@@ -51,7 +51,7 @@ def read_db_file():
             db = dill.load(f)
     else:
         # pre-initialize the database with 10 records
-        for i in range(15):
+        for i in range(10):
             randPackage, randCust = preintialise_data()
             db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 
@@ -114,13 +114,13 @@ def print_sub_menu(typeOfMenu):
         print()
         print("-" * 15, "Sort Options", "-" * 15)
         print()
-        print("1. Sort records by customer name (bubble sort)")
+        print("1. Sort records by customer name (bubble sort/tree sort)")
         print("2. Sort records by package name (selection sort)")
         print("3. Sort records by package cost (insertion sort)")
         print("4. Sort records by package's number of pax (heap sort)")
         print("F. Back to main menu")
         print()
-        print("-" * 40)
+        print("-" * 44)
     elif (typeOfMenu == 5):
         print()
         print("-" * 13, "Delete Options", "-" * 13)
@@ -130,6 +130,17 @@ def print_sub_menu(typeOfMenu):
         print("F. Back to main menu")
         print()
         print("-" * 42)
+    elif (typeOfMenu == 6):
+        print()
+        print("-" * 10, "Easter Egg Menu Options", "-" * 10)
+        print()
+        print("1. Sort records by customer name (stalin sort)")
+        print("2. Sort records by package name (bogo sort)")
+        print("3. Sort records by package cost (slow sort)")
+        print("4. Sort records by package's number of pax (sleep sort)")
+        print("Q. Back to sort menu")
+        print()
+        print("-" * 45)
     else:
         raise Exception(f"Unknown type of sub-menu argument, {typeOfMenu}...")
 
@@ -180,7 +191,7 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
                     instruction = "press Enter or"
 
                 print(f"{F.LIGHTRED_EX}Error: Invalid input. Please {instruction} {' or '.join(commandToPrint)}.")
-            print(f"{S.RESET_ALL}")
+            S_reset(1)
 
 def log_error():
     """
