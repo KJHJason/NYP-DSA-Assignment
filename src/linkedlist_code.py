@@ -27,7 +27,7 @@ class DoublyLinkedList:
             self.tail = self.head
             self.size += 1
             return
-        
+
         # case 2: if the linked list has more than one node
         self.tail.next = Node(data)
         self.tail.next.prev = self.tail
