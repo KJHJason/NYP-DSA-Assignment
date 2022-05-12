@@ -96,6 +96,20 @@ class binaryTreeNode:
         if (self.right):
             self.right.inorder(printData)
 
+    def inorder_return_node(self, arr):
+        """
+        Return each node in the tree in inorder tree traversal (Left, Visit, Right)
+        
+        Time complexity: O(n) where n is the number of nodes in the tree
+        """
+        if (self.left):
+            self.left.inorder_return_node(arr)
+        
+        arr.append(self)
+        
+        if (self.right):
+            self.right.inorder_return_node(arr)
+
     def preorder(self, printData):
         """
         Print the tree in preorder tree traversal (Visit, Left, Right)
@@ -299,6 +313,24 @@ def delete_node(root, target):
 
     return root
 
+def tree_sort(arr):
+    """
+    Sort an array using a binary search tree
+    """
+    tree = BinarySearchTree()
+    for i in range(len(arr)):
+        tree.insert(arr[i])
+
+    arr.clear()
+    tree.root.inorder_return_node(arr)
+
+    newArr = []
+    for node in arr:
+        nodeData = node.data.convert_to_array()
+        for data in nodeData:
+            newArr.append(data)
+    return newArr
+
 # Test codes for the BST
 if __name__ == "__main__":
     from hotel_record import RecordData
@@ -333,3 +365,7 @@ if __name__ == "__main__":
     root.insert(RecordData("Package 1", "Customer 1", 12, 120))
     print("\ntree:")
     root.print_tree(traversalType=3, printData=0)
+    
+    arr = tree_sort(nodeList)
+    print("\ntree sort:")
+    print(arr)
