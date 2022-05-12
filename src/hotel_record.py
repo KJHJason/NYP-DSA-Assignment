@@ -744,7 +744,9 @@ X. Exit
         self.__descending_order = reverse
         n = len(self.__db) 
 
-        # Build a heap
+        # Build a min or max heap depending on the reverse condition
+        # if in ascending order, then build a max heap
+        # if in descending order, then build a min heap
         for i in range((n // 2) - 1, -1, -1): 
             self.heapify(n, i, reverse) 
 
