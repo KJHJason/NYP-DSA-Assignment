@@ -28,7 +28,7 @@ class DoublyLinkedList:
             self.size += 1
             return
         
-        # case 2: if the linked list has multiple nodes
+        # case 2: if the linked list has more than one node
         self.tail.next = Node(data)
         self.tail.next.prev = self.tail
         self.tail = self.tail.next
@@ -111,6 +111,12 @@ class DoublyLinkedList:
             current = current.next
 
         return -1 # return -1 if the node is not in the linked list
+
+    def is_empty(self):
+        """
+        Returns True if the linked list is empty, False otherwise
+        """
+        return self.size == 0
 
     def print_list(self):
         """
