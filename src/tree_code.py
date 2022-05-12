@@ -340,6 +340,10 @@ def tree_sort(arr, reverse=False):
     - arr (list): The array to sort
     - reverse (bool): Whether to sort in ascending or descending order. Default to False.
     """
+    # check if the array is empty
+    if (not arr):
+        return arr
+
     tree = BinarySearchTree()
     for i in range(len(arr)):
         tree.insert(arr[i])
