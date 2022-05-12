@@ -27,22 +27,6 @@ def stalinsort(arr):
     
     return res
 
-from threading import Timer
-from time import sleep
-def sleepsort(arr):
-    sleepsort.result = []
-    def add_to_list(x):
-        sleepsort.result.append(x)
-
-    mx = arr[0]
-    for v in arr:
-        if (mx < v): 
-            mx = v
-        Timer(v, add_to_list, [v]).start()
-
-    sleep(mx + 1)
-    return sleepsort.result
-
 if __name__ == "__main__":
     print("Bogo sort")
     arr = [1,2,3,4,5,6,7,8,9,10]
@@ -59,7 +43,3 @@ if __name__ == "__main__":
     
     arr = [10, 1, 2, 3, 4]
     print(stalinsort(arr))
-    
-    print("\nSleep sort")
-    arr = [1, 5, 3, 6, 4, 10]
-    print(sleepsort(arr))
