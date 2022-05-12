@@ -96,19 +96,34 @@ class binaryTreeNode:
         if (self.right):
             self.right.inorder(printData)
 
-    def inorder_return_node(self, arr):
+    def inorder_return_node(self, arr, reverse=False):
         """
-        Return each node in the tree in inorder tree traversal (Left, Visit, Right)
+        Return each node in the tree in inorder tree traversal 
+        (Left, Visit, Right) --> Ascending
+        (Right, Visit, Left) --> Descending
         
         Time complexity: O(n) where n is the number of nodes in the tree
+        
+        Requires two argument:
+        - arr (list): The list to append the nodes to
+        - reverse (bool): Whether to return the nodes in ascending or descending order. Defaults to False
         """
-        if (self.left):
-            self.left.inorder_return_node(arr)
-        
-        arr.append(self)
-        
-        if (self.right):
-            self.right.inorder_return_node(arr)
+        if (not reverse):
+            if (self.left):
+                self.left.inorder_return_node(arr, reverse)
+            
+            arr.append(self)
+            
+            if (self.right):
+                self.right.inorder_return_node(arr, reverse)
+        else:
+            if (self.right):
+                self.right.inorder_return_node(arr, reverse)
+            
+            arr.append(self)
+            
+            if (self.left):
+                self.left.inorder_return_node(arr, reverse)
 
     def preorder(self, printData):
         """
@@ -313,16 +328,24 @@ def delete_node(root, target):
 
     return root
 
-def tree_sort(arr):
+def tree_sort(arr, reverse=False):
     """
     Sort an array using a binary search tree
+    
+    Best Time complexity: O(n log n)
+    Worst Time complexity: O(n log n)
+    Average Time complexity: O(n log n)
+    
+    Requires two arguments:
+    - arr (list): The array to sort
+    - reverse (bool): Whether to sort in ascending or descending order. Default to False.
     """
     tree = BinarySearchTree()
     for i in range(len(arr)):
         tree.insert(arr[i])
 
     arr.clear()
-    tree.root.inorder_return_node(arr)
+    tree.root.inorder_return_node(arr, reverse=reverse)
 
     newArr = []
     for node in arr:
