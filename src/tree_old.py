@@ -1,5 +1,4 @@
 # import local python files
-from queue_code import Queue
 from linkedlist_code import DoublyLinkedList
 
 class binaryTreeNode:
@@ -163,29 +162,6 @@ class binaryTreeNode:
         else:
             print(self.key)
 
-    def levelorder(self, printData):
-        """
-        Print the tree in levelorder tree traversal using a queue data structure
-        
-        Time complexity: O(n) where n is the number of nodes in the tree        
-        
-        Requires one argument:
-        - printData (bool): Whether to print the data or the key (customer name)
-        """
-        q = Queue()
-        q.enqueue(self)
-        while (not q.is_empty()):
-            node = q.dequeue()
-            if (printData):
-                print(node.data)
-            else:
-                print(node.key)
-
-            if (node.left):
-                q.enqueue(node.left)
-            if (node.right):
-                q.enqueue(node.right)
-
 """ ---------------- End of utility functions ---------------- """
 
 class BinarySearchTree:
@@ -315,7 +291,7 @@ def delete_node(root, target):
     """
     if (not root):
         return root
-    
+
     # If the target is smaller than the current node, search the left subtree
     elif (target.get_customer_name() < root.key):
         root.left = delete_node(root.left, target)
@@ -338,10 +314,14 @@ def delete_node(root, target):
         # Case 2: if the node has only one child
         elif (not root.left):
             # make the right child the new root of the subtree by moving the root to the right child
-            root = root.right
+            temp = root.right
+            root = None
+            root = temp
         elif (not root.right):
             # make the left child the new root of the subtree by moving the root to the left child
-            root = root.left 
+            temp = root.left 
+            root = None
+            root = temp
 
         # Case 3: the node has two childrens
         else:
@@ -357,12 +337,35 @@ def delete_node(root, target):
 
     return root
 
+def visualise_tree(root, indent="", rightChildNode=1):
+    """
+    Print the tree to visually check if the tree is balanced 
+    in a preorder traversal (Visit, Left, Right)
+    
+    Requires three arguments:
+    root: the root of the tree
+    indent: the indentation of the current node
+    rightChildNode: the node that is the right child of the current node
+    """
+    if (root):
+        print(indent, end="")
+        if (rightChildNode):
+            print("R-----", end="")
+            indent += "     "
+        else:
+            print("L-----", end="")
+            indent += "|    "
+
+        print(root.key)
+        visualise_tree(root.left, indent, False)
+        visualise_tree(root.right, indent, True)
+
 # Test codes for the BST
 if __name__ == "__main__":
     from hotel_record import RecordData
 
     nodeList = []
-    for i in range(0, 3):
+    for i in range(0, 20, 4):
         for j in range(3):
             nodeList.append(RecordData(f"Product {j}", f"Customer {i}", 12, 1000))
 
@@ -371,26 +374,24 @@ if __name__ == "__main__":
         root.insert(node)
 
     print("tree:")
-    root.print_tree(traversalType=3)
+    visualise_tree(root.root)
     
     print("\nsearching")
     print(root.search(nodeList[0].get_customer_name()))
     
-    print("\nbefore deleting...")
-    root.print_tree(traversalType=3, printData=1)
-    
     root.delete(nodeList[0])
     print("\ntree after deleting one data from the node:")
-    root.print_tree(traversalType=3, printData=1)
+    visualise_tree(root.root)
     
     root.delete(nodeList[1])
     root.delete(nodeList[2])
     print("\ntree after deleting the node twice:")
-    root.print_tree(traversalType=3, printData=1)
+    visualise_tree(root.root)
     
     root.insert(RecordData("Package 1", "Customer 1", 12, 120))
     print("\ntree:")
     root.print_tree(traversalType=3, printData=0)
     
     print("\nTree sort:")
-    print(root.tree_sort())
+    arr = root.tree_sort()
+    [print(repr(x)) for x in arr]

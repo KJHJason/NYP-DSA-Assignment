@@ -6,7 +6,7 @@ import math
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data
-from tree_code import BinarySearchTree
+from tree import AVLTree
 from noob_sorts import *
 
 class RecordData:
@@ -106,6 +106,9 @@ class RecordData:
     def get_package_cost_per_pax(self):
         return self.__packageCostPerPax
 
+    def __repr__(self):
+        return "(" + f"{self.__packageName}, " + f"{self.__customerName}, " + f"{self.__paxNum} pax, " + format_price(self.__packageCostPerPax) + ")"
+
     def __str__(self):
         return print_record_data(self.__packageName, self.__customerName, self.__paxNum, self.__packageCostPerPax)
 
@@ -115,7 +118,7 @@ class HotelDatabase:
         Constructor for the Hotel Database which will create an empty array and set the descending order flag to False
         """
         self.__db = []
-        self.__bst_root = BinarySearchTree() # create a binary search tree based on customer names as the keys
+        self.__bst_root = AVLTree() # create an AVL tree based on customer names as the keys
         self.__descending_order = False
         self.__sort_order = "Not Sorted"
         self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
@@ -331,7 +334,7 @@ X. Exit
             self.edit_record(data)
         elif (editInput == "y" and mode == "Delete"):
             self.delete_record(data)
-            self.__bst_root.delete(data, deleteAll=False)
+            self.__bst_root.delete(data)
 
     def search_for_package(self, packageName, mode="Edit"):
         """

@@ -72,7 +72,11 @@ def slowsort(arr, i, j):
     
     Sorts by package cost.
     
-    Time Complexity: O(n^2.709) according to GeeksforGeeks which is worse than bubblesort
+    According to GeeksforGeeks, its time complexities are;
+    Best Time Complexity: O(n^2.709)
+    Worst Time Complexity: O(n^2.709)
+    Average Time Complexity: O(n^2.709)
+    which is worse than other O(n^2) algorithms such as bubble sort
     
     Works by 
     - Splitting the array into two halves

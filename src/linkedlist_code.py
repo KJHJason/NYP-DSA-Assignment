@@ -1,9 +1,7 @@
-# import local python files
-from queue_code import Node as SinglePointerNode
-
-class Node(SinglePointerNode):
+class Node:
     def __init__(self, data):
-        super().__init__(data)
+        self.data = data
+        self.next = None
         self.prev = None
 
 class DoublyLinkedList:
