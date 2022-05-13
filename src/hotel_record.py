@@ -1049,7 +1049,7 @@ X. Exit
             S_reset()
         elif (typeOfSort == "slowsort"):
             # sorts by package cost per pax
-            self.__db = slowsort(self.__db, 0, len(self.__db) - 1)
+            slowsort(self.__db, 0, len(self.__db) - 1)
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
             S_reset()
         elif (typeOfSort == "sleepsort"):
