@@ -1,12 +1,13 @@
 # import third party libraries
 from re import S
+import re
 from colorama import Fore as F
 
 # import standard library
 import math
 
 # import local python files
-from functions import get_input, S_reset, format_price, print_record_data
+from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
 from tree import AVLTree
 from noob_sorts import *
 
@@ -221,17 +222,14 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        reverse = convert_var_to_bool(reverse)
+
         if (self.__sort_order == PAX_NUM and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's number of pax!")
             S_reset()
             return
 
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str) and reverse == "y"):
-                reverse = True
-            else:
-                reverse = False
-
             self.shellsort(reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PAX_NUM
@@ -249,17 +247,14 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        reverse = convert_var_to_bool(reverse)
+
         if (self.__sort_order == CUST_NAME and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the customer's name!")
             S_reset()
             return
 
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str) and reverse == "y"):
-                reverse = True
-            else:
-                reverse = False
-
             if (typeOfSort == "tree"):
                 self.__db = self.__bst_root.tree_sort(reverse=reverse)
             else:
@@ -281,17 +276,14 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        reverse = convert_var_to_bool(reverse)
+
         if (self.__sort_order == PACKAGE_NAME and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's name!")
             S_reset()
             return
 
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str) and reverse == "y"):
-                reverse = True
-            else:
-                reverse = False
-
             self.selection_sort(reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PACKAGE_NAME
@@ -309,17 +301,14 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        reverse = convert_var_to_bool(reverse)
+
         if (self.__sort_order == COST_PER_PAX and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's cost!")
             S_reset()
             return
 
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str) and reverse == "y"):
-                reverse = True
-            else:
-                reverse = False
-
             self.insertion_sort(reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = COST_PER_PAX
@@ -384,12 +373,11 @@ X. Exit
             sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"): 
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
-                if (reverseOrder == "y"):
-                    self.heap_sort(reverse=True)
-                    self.__descending_order = True
-                else:
-                    self.heap_sort()
-                    self.__descending_order = False
+
+                reverseOrder = convert_var_to_bool(reverseOrder)
+                self.heap_sort(reverse=reverseOrder)
+                self.__descending_order = reverseOrder
+
 
                 print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
                 S_reset(nl=True)
@@ -437,12 +425,10 @@ X. Exit
             sortInput = get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"):
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
-                if (reverseOrder == "y"):
-                    self.radix_sort(reverse=True)
-                    self.__descending_order = True
-                else:
-                    self.radix_sort()
-                    self.__descending_order = False
+
+                reverseOrder = convert_var_to_bool(reverseOrder)
+                self.radix_sort(reverse=reverseOrder)
+                self.__descending_order = reverseOrder
 
                 print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax!")
                 S_reset(nl=True)

@@ -12,6 +12,7 @@ from random import randint, uniform, choice
 RANGE_INPUT_REGEX = re.compile(r"^\d+(-)\d+|\d+$")
 FILE_PATH = pathlib.Path(__file__).parent.resolve()
 PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
+USED_TRUE_CONDITIONS = ("y")
 
 def S_reset(nl=0):
     """
@@ -314,3 +315,19 @@ def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageC
     print(packageCostPerPax)
     print("-" * maxLen)
     return ""
+
+def convert_var_to_bool(var):
+    """
+    Convert a variable to a boolean
+    
+    Requires 1 argument:
+    - var (str/int/float/bool): The variable to be converted
+    """
+    if (isinstance(var, bool)):
+        return var
+    elif (isinstance(var, int)):
+        return bool(var)
+    elif (isinstance(var, str) and var.lower() in USED_TRUE_CONDITIONS):
+        return True
+    else:
+        False
