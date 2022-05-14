@@ -74,15 +74,14 @@ class AVLTree:
         """
         if (not self.root):
             return []
-        
+
         arr = []
         self.inorder_return_node(arr, reverse=reverse) # will return a list of linkedlist nodes
-        
+
         # convert the list of linkedlist nodes into a list of RecordData objects
         newArr = []
         for node in arr:
-            nodeData = node.data.convert_to_array()
-            for data in nodeData:
+            for data in node.data.convert_to_array():
                 newArr.append(data)
 
         # return the sorted list of RecordData objects by customer name
