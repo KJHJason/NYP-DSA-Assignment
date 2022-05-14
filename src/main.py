@@ -12,7 +12,7 @@ from hotel_record import print_record_data
 
 PAX_NUM_REGEX = re.compile(r"^\d+$")
 COST_REGEX = re.compile(r"^\d+(\.\d+)?$")
-DEBUG_FLAG = 1
+DEBUG_FLAG = True
 
 def main():
     hotelDB = read_db_file()
@@ -46,7 +46,7 @@ def main():
                             formattedRange = get_range(rangeInput)
                             if (formattedRange == "error"):
                                 print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
-                                S_reset(nl=1)
+                                S_reset(nl=True)
                             else:
                                 if (isinstance(formattedRange, int)):
                                     hotelDB.search_for_range_of_cost(formattedRange, formattedRange)
@@ -60,7 +60,7 @@ def main():
                                     print()
                     else:
                         print(f"{F.LIGHTRED_EX}Error: There is no records...")
-                        S_reset(nl=1)
+                        S_reset(nl=True)
                         
                 elif (subInput == "3"):
                     # search for records that matches the specified customer name
@@ -71,7 +71,7 @@ def main():
                         
                         if (custInp == ""):
                             print(f"{F.LIGHTRED_EX}Error: Please provide a customer name...")
-                            S_reset(nl=1)
+                            S_reset(nl=True)
                         elif (custInp.lower() != "x"):
                             success = hotelDB.search_for_customer(custInp, mode="Display")
                             if (success != -1):
@@ -83,7 +83,7 @@ def main():
 
         elif (uInput == "2"):
             # add new record
-            continueFlag = 1
+            continueFlag = True
             while (continueFlag != 0):
                 packageName = customerName = ""
                 paxNum = costperPax = 0
@@ -92,7 +92,7 @@ def main():
                 while (continueFlag):
                     customerNameInput = input("Enter the customer name (F to cancel): ").lower().strip()
                     if (customerNameInput == "f"):
-                        continueFlag = 0
+                        continueFlag = False
                         break
                     elif (customerNameInput == ""):
                         print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
@@ -108,7 +108,7 @@ def main():
                 while (continueFlag):
                     packageNameInput = input("Enter the package name (F to cancel): ").lower().strip()
                     if (packageNameInput == "f"):
-                        continueFlag = 0
+                        continueFlag = False
                         break
                     elif (packageNameInput == ""):
                         print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
@@ -124,7 +124,7 @@ def main():
                 while (continueFlag):
                     paxNumInput = input("Enter the number of pax (F to cancel): ").lower().strip()
                     if (paxNumInput == "f"):
-                        continueFlag = 0
+                        continueFlag = False
                         break
                     elif (paxNumInput == ""):
                         print(f"{F.LIGHTRED_EX}Input cannot be empty, please enter a valid pax number of pax...")
@@ -143,7 +143,7 @@ def main():
                 while (continueFlag):
                     costperPaxInput = input("Enter the package cost per pax (F to cancel): $").lower().strip()
                     if (costperPaxInput == "f"):
-                        continueFlag = 0
+                        continueFlag = False
                         break
                     elif (costperPaxInput == ""):
                         print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty, please enter a valid cost per pax...")
@@ -304,7 +304,7 @@ def main():
     return 0
 
 if (__name__ == "__main__"):
-    coloramaInit(autoreset=0, convert=1)
+    coloramaInit(autoreset=False, convert=True)
 
     header = "Welcome to Waffle Hotel's Booking Records"
     print("*" * len(header))
@@ -317,7 +317,7 @@ if (__name__ == "__main__"):
         try:
             main()
         except (KeyboardInterrupt):
-            shutdown(nl=1, program="Main")
+            shutdown(nl=True, program="Main")
         except:
             print()
             print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")

@@ -106,7 +106,7 @@ def print_sub_menu(typeOfMenu):
         print("-" * 13, "Edit Options", "-" * 13)
         print()
         print("1. Edit record by customer name (linear search)")
-        print("2. Edit record by package name (linear search/binary search + 3way quicksort)")
+        print("2. Edit record by package name (linear search/binary search + heap sort)")
         print("F. Back to main menu")
         print()
         print("-" * 40)
@@ -117,7 +117,7 @@ def print_sub_menu(typeOfMenu):
         print("1. Sort records by customer name (bubble sort/tree sort)")
         print("2. Sort records by package name (selection sort)")
         print("3. Sort records by package cost (insertion sort)")
-        print("4. Sort records by package's number of pax (heap sort)")
+        print("4. Sort records by package's number of pax (shellsort)")
         print("F. Back to main menu")
         print()
         print("-" * 44)
@@ -126,7 +126,7 @@ def print_sub_menu(typeOfMenu):
         print("-" * 13, "Delete Options", "-" * 13)
         print()
         print("1. Delete record by customer name (linear search)")
-        print("2. Delete record by package name (linear search/binary search + 3way quicksort)")
+        print("2. Delete record by package name (linear search/binary search + heap sort)")
         print("F. Back to main menu")
         print()
         print("-" * 42)
@@ -174,7 +174,7 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
                 print(line)
         else: 
             print(prints)
-        print()
+        S_reset(nl=True)
 
     while (1):
         userInput = input(prompt).lower().strip()
@@ -191,14 +191,14 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
                     instruction = "press Enter or"
 
                 print(f"{F.LIGHTRED_EX}Error: Invalid input. Please {instruction} {' or '.join(commandToPrint)}.")
-            S_reset(1)
+            S_reset(nl=True)
 
 def log_error():
     """
     Logs an error message to the error log file
     """
     logFolderPath = FILE_PATH.joinpath("logs")
-    logFolderPath.mkdir(exist_ok=1, parents=1)
+    logFolderPath.mkdir(exist_ok=True, parents=True)
     
     fileName = "".join(["error-details-", datetime.now().strftime("%d-%m-%Y"), ".log"])
     logFilePath = logFolderPath.joinpath(fileName)

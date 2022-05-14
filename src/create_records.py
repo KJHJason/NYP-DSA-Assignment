@@ -22,7 +22,7 @@ def main():
             hotelDB = read_db_file()
     else:
         print(f"{F.LIGHTRED_EX}No database file found. Creating new database file.")
-        S_reset(nl=1)
+        S_reset(nl=True)
 
     numOfRecords = 0
     while (1):
@@ -41,7 +41,7 @@ def main():
     return 0
 
 if (__name__ == "__main__"):
-    coloramaInit(autoreset=0, convert=1)
+    coloramaInit(autoreset=False, convert=True)
     try:
         print(f"{F.LIGHTGREEN_EX}Welcome to the Hotel Records Generator meant for development use!")
         S_reset()
@@ -54,5 +54,5 @@ if (__name__ == "__main__"):
         print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")
         S_reset()
     finally:
-        shutdown(nl=1, program="create_records.py")
+        shutdown(nl=True, program="create_records.py")
         sysExit(0)

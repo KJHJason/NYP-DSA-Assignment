@@ -1,4 +1,5 @@
 # import third party libraries
+from re import S
 from colorama import Fore as F
 
 # import standard library
@@ -8,6 +9,12 @@ import math
 from functions import get_input, S_reset, format_price, print_record_data
 from tree import AVLTree
 from noob_sorts import *
+
+NOT_SORTED = "Not Sorted"
+CUST_NAME = "Customer Name"
+PACKAGE_NAME  = "Package Name"
+PAX_NUM = "Number of Pax"
+COST_PER_PAX = "Cost Per Pax"
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -120,8 +127,8 @@ class HotelDatabase:
         self.__db = []
         self.__bst_root = AVLTree() # create an AVL tree based on customer names as the keys
         self.__descending_order = False
-        self.__sort_order = "Not Sorted"
-        self.__table_headers = ["Customer Name", "Package Name", "Cost per Pax", "Number of Pax"]
+        self.__sort_order = NOT_SORTED
+        self.__table_headers = [CUST_NAME, PACKAGE_NAME, COST_PER_PAX, PAX_NUM]
         self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), len(self.__table_headers[2]), len(self.__table_headers[3])]
 
     def delete_record(self, record):
@@ -158,7 +165,7 @@ class HotelDatabase:
         if (len(str(paxNum)) > self.__table_len[3]):
             self.__table_len[3] = len(str(paxNum))
 
-        self.__sort_order = "Not Sorted"
+        self.__sort_order = NOT_SORTED
         recordData = RecordData(packageName, customerName, paxNum, packageCostPerPax)
         self.__db.append(recordData)
         self.__bst_root.insert(recordData)
@@ -214,15 +221,20 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        if (self.__sort_order == PAX_NUM and self.__descending_order == reverse):
+            print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's number of pax!")
+            S_reset()
+            return
+
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str)):
-                if (reverse == "y"): 
-                    reverse = 1
-                else:
-                    reverse = 0
+            if (isinstance(reverse, str) and reverse == "y"):
+                reverse = True
+            else:
+                reverse = False
+
+            self.shellsort(reverse=reverse)
             self.__descending_order = reverse
-            self.three_way_quicksort(0, len(self.__db) - 1, reverse=reverse)
-            self.__sort_order = "Number of Pax"
+            self.__sort_order = PAX_NUM
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -237,19 +249,24 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        if (self.__sort_order == CUST_NAME and self.__descending_order == reverse):
+            print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the customer's name!")
+            S_reset()
+            return
+
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str)):
-                if (reverse == "y"): 
-                    reverse = 1
-                else:
-                    reverse = 0
+            if (isinstance(reverse, str) and reverse == "y"):
+                reverse = True
+            else:
+                reverse = False
 
             if (typeOfSort == "tree"):
                 self.__db = self.__bst_root.tree_sort(reverse=reverse)
             else:
                 self.bubble_sort(reverse=reverse)
 
-            self.__sort_order = "Customer Name"
+            self.__descending_order = reverse
+            self.__sort_order = CUST_NAME
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -264,14 +281,20 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        if (self.__sort_order == PACKAGE_NAME and self.__descending_order == reverse):
+            print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's name!")
+            S_reset()
+            return
+
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str)):
-                if (reverse == "y"): 
-                    reverse = 1
-                else:
-                    reverse = 0
+            if (isinstance(reverse, str) and reverse == "y"):
+                reverse = True
+            else:
+                reverse = False
+
             self.selection_sort(reverse=reverse)
-            self.__sort_order = "Package Name"
+            self.__descending_order = reverse
+            self.__sort_order = PACKAGE_NAME
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -286,14 +309,20 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
+        if (self.__sort_order == COST_PER_PAX and self.__descending_order == reverse):
+            print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's cost!")
+            S_reset()
+            return
+
         if (len(self.__db) > 1):
-            if (isinstance(reverse, str)):
-                if (reverse == "y"): 
-                    reverse = 1
-                else:
-                    reverse = 0
+            if (isinstance(reverse, str) and reverse == "y"):
+                reverse = True
+            else:
+                reverse = False
+
             self.insertion_sort(reverse=reverse)
-            self.__sort_order = "Cost Per Pax"
+            self.__descending_order = reverse
+            self.__sort_order = COST_PER_PAX
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
@@ -319,7 +348,7 @@ X. Exit
                 return
             else:
                 print(f"{F.LIGHTRED_EX}No records found with the customer name, {customerName}!")
-                S_reset(nl=1)
+                S_reset(nl=True)
                 return -1
 
         data = self.linear_search(customerName, "customer")
@@ -345,21 +374,26 @@ X. Exit
         Requires 1 argument:
         - packageName (string)
         """
+        mode = mode.title()
         packageName = packageName.title()
-        if (self.__sort_order != "Package Name" and len(self.__db) > 1):
+        if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
             alertMsg = (
-                "Note: You can first sort the database by package name for a faster search time in future searches...",
+                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches...",
                 "Otherwise, you can still search for a package and maintain the original order of the database..."
             )
             sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"): 
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.heap_sort(reverse=1)
+                    self.heap_sort(reverse=True)
+                    self.__descending_order = True
                 else:
                     self.heap_sort()
-                
-                self.__sort_order = "Package Name"
+                    self.__descending_order = False
+
+                print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
+                S_reset(nl=True)
+                self.__sort_order = PACKAGE_NAME
 
                 return self.search_for_package(packageName, mode=mode)
             else:
@@ -395,22 +429,24 @@ X. Exit
         - low (int)
         - high (int)
         """
-        if (self.__sort_order != "Cost Per Pax" and len(self.__db) > 1):
+        if (self.__sort_order != COST_PER_PAX and len(self.__db) > 1):
             alertMsg = (
-                "Note: You can first sort the database by package cost per pax for a faster search time in future searches...",
+                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package cost per pax for a faster search time in future searches...",
                 "Otherwise, you can still search for packages that fits within the specified range of cost and maintain the original order of the database..."
             )
             sortInput = get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"):
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
                 if (reverseOrder == "y"):
-                    self.radix_sort(reverse=1)
-                    self.__descending_order = 1
+                    self.radix_sort(reverse=True)
+                    self.__descending_order = True
                 else:
                     self.radix_sort()
-                    self.__descending_order = 0
+                    self.__descending_order = False
 
-                self.__sort_order = "Cost Per Pax"
+                print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax!")
+                S_reset(nl=True)
+                self.__sort_order = COST_PER_PAX
                 return self.search_for_range_of_cost(low, high)
             else:
                 arr = self.linear_search_range_of_cost(low, high)
@@ -607,7 +643,6 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = reverse
         for i in range(len(self.__db) - 1): # -1 to stop at last element since the last element will be the highest element after an iteration from the nested for loop
             swapFlag = 0
             for j in range(len(self.__db) - i - 1): # -i to stop at last i element since they are already sorted and -1 to account for the indexing starting from 0
@@ -638,7 +673,6 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = reverse
         dbSize = len(self.__db)
         for i in range(dbSize):
             # initialise the element at ith index and assume that it is the smallest/biggest element based on the reverse
@@ -671,7 +705,6 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = reverse
         dbSize = len(self.__db)
         for i in range(1, dbSize):
             el = self.__db[i] # save the value to be positioned
@@ -750,7 +783,6 @@ X. Exit
         
         Space complexity: O(1)
         """
-        self.__descending_order = reverse
         n = len(self.__db) 
 
         # Build a min or max heap depending on the reverse condition
@@ -764,105 +796,49 @@ X. Exit
             self.__db[i], self.__db[0] = self.__db[0], self.__db[i] # swap the first element with the last node from the heap
             self.heapify(i, 0, reverse) # call heapify on the reduced list
 
-    def partition(self, low, high, reverse):
+    def shellsort(self, reverse=False):
         """
-        Partition the array into three parts using the "Dutch National Flag Algorithm"
-
-        In an ascending order,
-        - arr[low...i] contains all the elements smaller than the pivot
-        - arr[i+1...j-1] contains all the elements equal to the pivot
-        - arr[j...high] contains all the elements larger than the pivot
-
-        In a descending order,
-        - arr[low...i] contains all the elements larger than the pivot
-        - arr[i+1...j-1] contains all the elements equal to the pivot
-        - arr[j...high] contains all the elements smaller than the pivot
+        Shellsort algorithm works like the insertion sort algorithm but
+        shellsort will sort the elements that are far apart from each other,
+        and progressively reduces the interval gap between the elements to be compared.
         
-        Args:
-        - low (int): The lower index of the array
-        - high (int): The higher index of the array
-        - reverse (bool): Whether the array is sorted in ascending or descending order.
+        Sorts by pax number
+        
+        Best Time Complexity: O(n log n)
+        Average Time Complexity: O(n log n)
+        Worst Time Complexity: O(n^2)
         """
+        # initialise the gap by halving the array size first
         arr = self.__db
+        gap = len(arr) // 2
 
-        # if looking at two or less elements
-        if (high - low <= 1):
-            # swap the elements if in wrong order
-            if (not reverse):
-                if (arr[high].get_pax_num() < arr[low].get_pax_num()):
-                    arr[high], arr[low] = arr[low], arr[high]
-            else:
-                if (arr[high].get_pax_num() > arr[low].get_pax_num()):
-                    arr[high], arr[low] = arr[low], arr[high]
+        while (gap > 0):
+            # loop through the elements in the array in intervals of the gap
+            for i in range(gap, len(arr)):
+                temp = arr[i] # store the current element as temp
+                j = i # initialise j to be the value of i
 
-            return low, high # i, j pointers for the next recursive call
+                # rearrange the elements at n/2, n/4, n/8, ... intervals
 
-        # initialise mid pointer and pivot
-        mid = low
-        pivot = arr[high].get_pax_num()
-        while (mid <= high):
-            # if the element is smaller than the pivot, swap it the elements
-            if (arr[mid].get_pax_num() < pivot):
-                if (not reverse):
-                    # Ascending order: swap the elements with the high pointer such that the smaller element is on the left
-                    arr[mid], arr[low] = arr[low], arr[mid]
-                    mid += 1
-                    low += 1
-                else:
-                    # Descending order: swap the elements with the low pointer such that the smaller element is on the right
-                    arr[mid], arr[high] = arr[high], arr[mid]
-                    high -= 1
+                # if j is still greater or equal to the gap,
+                # checks if the value at j-gap is greater than temp,
+                # where j - gap is the element at the first element of the gap
+                while (not reverse and j >= gap and arr[j - gap].get_pax_num() > temp.get_pax_num()):
+                    arr[j] = arr[j - gap] # if it is, replace the value at j with the value at j-gap
+                    j -= gap
 
-            # if there are values that are the same as the pivot
-            elif (arr[mid].get_pax_num() == pivot):
-                # increment the mid pointer to move to the next element
-                mid += 1 
+                # same as the previous while loop, but checks if the value at j-gap is less than temp
+                while (reverse and j >= gap and arr[j - gap].get_pax_num() < temp.get_pax_num()):
+                    arr[j] = arr[j - gap]
+                    j -= gap
 
-            # if the element is greater than the pivot, swap it with the element at the high pointer
-            elif (arr[mid].get_pax_num() > pivot):
-                if (not reverse):
-                    # Ascending order: swap the elements with the low pointer such that the larger element is on the right
-                    arr[mid], arr[high] = arr[high], arr[mid]
-                    high -= 1
-                else:
-                    # Descending order: swap the elements with the high pointer such that the larger element is on the left
-                    arr[mid], arr[low] = arr[low], arr[mid]
-                    mid += 1
-                    low += 1
+                # finally, replace the value at j with temp 
+                # in the case where arr[j] was replaced by arr[j - gap]
+                # j would be pointed to the first element of the gap
+                # hence, effectively swapping the elements
+                arr[j] = temp 
 
-        return low - 1, mid # i, j pointers for the next recursive call
-
-    def three_way_quicksort(self, low, high, reverse=False):
-        """
-        3-way quicksort algorithm for sorting the database by pax number in ascending or descending order
-
-        Advantages of 3way quicksort over the traditional quicksort algorithm is that it is able to sort the array quicker if there are many duplicate values
-        which is ideal for pax number as hotels usually have between 1 to 9 pax per room.
-        
-        Time Complexities:
-        - Best case: O(n(log(n)))
-        - Worst case: O(n^2)
-        - Average case: O(n(log(n)))
-        
-        Space Complexity:
-        - O(1) in this function
-        
-        Args:
-        - low (int): The lower index of the array
-        - high (int): The higher index of the array
-        - reverse (bool): Whether the array is sorted in ascending or descending order. Default to False.
-        """
-        if (low >= high): 
-            return
-
-        # partition the array
-        i, j = self.partition(low, high, reverse)
-
-        # sort the left half recursively
-        self.three_way_quicksort(low, i, reverse)
-        
-        # sort the right half recursively
-        self.three_way_quicksort(j, high, reverse)
+            gap //= 2 # halve the gap
 
     def counting_sort_for_radix_sort(self, place, reverse):
         """
@@ -938,7 +914,7 @@ X. Exit
     def print_from_array(self, arr):
         """
         Print records from the given array (to satisfy the basic function c.1. criteria)
-        Pagination is an added feature of my own ;)
+        Pagination is an added feature.
         
         Requires 1 argument:
         - arr (list)
@@ -1039,12 +1015,13 @@ X. Exit
         Requires 1 argument:
         - typeOfSort (str) -> "bogosort", "stalinsort", "slowsort", "sleepsort"
         """
+        self.__descending_order = False
         if (typeOfSort == "bogosort"):
             # sorts by package name
             print("\nSorting...", end="")
             self.__db, iterNums = bogosort(self.__db)
             print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name!")
-            S_reset(nl=1)
+            S_reset(nl=True)
         elif (typeOfSort == "stalinsort"):
             # sorts by customer name
             self.__db = stalinsort(self.__db)
