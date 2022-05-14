@@ -1,6 +1,4 @@
 # import third party libraries
-from re import S
-import re
 from colorama import Fore as F
 
 # import standard library
