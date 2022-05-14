@@ -365,9 +365,6 @@ class AVLTree:
             self.visualise_tree(root.right, indent, True)
 
     def __str__(self):
-        """
-        Return a string representation of the tree
-        """
         self.visualise_tree(self.root)
         return ""
 

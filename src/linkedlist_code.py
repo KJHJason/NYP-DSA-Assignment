@@ -140,9 +140,6 @@ class DoublyLinkedList:
         return self.size
 
     def __str__(self):
-        """
-        Returns a string representation of the linked list
-        """
         if (not self.head):
             return "- []"
         
