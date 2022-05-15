@@ -214,7 +214,6 @@ class BinarySearchTree:
             - 0: inorder traversal (Depth-first)
             - 1: preorder traversal (Depth-first)
             - 2: postorder traversal (Depth-first)
-            - 3: levelorder traversal (Breadth-first)
         - printData (bool): Whether to print the data or the key (customer name)
         """
         if (not self.root):
@@ -226,8 +225,6 @@ class BinarySearchTree:
                 self.root.preorder(printData)
             elif (traversalType == 2):
                 self.root.postorder(printData)
-            elif (traversalType == 3):
-                self.root.levelorder(printData)
             else:
                 raise Exception("Invalid traversal type passed into print_tree() function")
 
@@ -390,7 +387,7 @@ if __name__ == "__main__":
     
     root.insert(RecordData("Package 1", "Customer 1", 12, 120))
     print("\ntree:")
-    root.print_tree(traversalType=3, printData=0)
+    visualise_tree(root.root)
     
     print("\nTree sort:")
     arr = root.tree_sort()
