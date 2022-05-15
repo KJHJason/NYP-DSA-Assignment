@@ -197,9 +197,11 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
                 print(f"{F.LIGHTRED_EX}Error: {warning}")
             else:
                 if (not isinstance(command, tuple)):
-                    print(f"{F.LIGHTRED_EX}Error: Please enter {command}")
+                    print(f"{F.LIGHTRED_EX}Input Error: Please enter {command}.")
+                elif (len(command) == 2):
+                    print(f"{F.LIGHTRED_EX}Input Error: Please enter {command[0]} or {command[1]}.")
                 else:
-                    print(f"{F.LIGHTRED_EX}Error: Invalid input. Please enter {', '.join(command[:-1])}, or {command[-1]}.")
+                    print(f"{F.LIGHTRED_EX}Input Error: Please enter {', '.join(command[:-1])}, or {command[-1]}.")
 
             S_reset(nl=True)
 
