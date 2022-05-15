@@ -1,14 +1,18 @@
 # import third party libraries
+import re
 from colorama import Fore as F
 
 # import standard library
 import math
 
 # import local python files
+
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
 from tree import AVLTree
 from noob_sorts import *
 
+NUM_REGEX = re.compile(r"^\d+$")
+COST_REGEX = re.compile(r"^\d+(\.\d+)?$")
 NOT_SORTED = "Not Sorted"
 CUST_NAME = "Customer Name"
 PACKAGE_NAME  = "Package Name"
@@ -33,11 +37,13 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Package name cannot be empty!")
                 S_reset()
             elif (newPackageName == "x"):
-                return
+                return -1
             else:
-                confirmInput = get_input(prompt=f"Are you sure you want to change the package name to \"{newPackageName}\"? (Y/N): ", command=("y", "n"))
+                confirmInput = get_input(prompt=f"Are you sure you want to change the package name to \"{newPackageName.title()}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
                     self.__packageName = newPackageName.title()
+                    print(f"{F.LIGHTGREEN_EX}Package name updated!")
+                    S_reset()
                     return
     def get_package_name(self):
         return self.__packageName
@@ -53,11 +59,13 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Customer name cannot be empty!")
                 S_reset()
             elif (newCustomerName == "x"):
-                return
+                return -1
             else:
-                confirmInput = get_input(prompt=f"Are you sure you want to change the customer name to \"{newCustomerName}\"? (Y/N): ", command=("y", "n"))
+                confirmInput = get_input(prompt=f"Are you sure you want to change the customer name to \"{newCustomerName.title()}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
                     self.__customerName = newCustomerName.title()
+                    print(f"{F.LIGHTGREEN_EX}Customer name updated!")
+                    S_reset()
                     return
     def get_customer_name(self):
         return self.__customerName
@@ -73,17 +81,19 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Number of pax cannot be empty!")
                 S_reset()
             elif (newPaxNum == "x"):
-                return
+                return -1
+            elif (not re.fullmatch(NUM_REGEX, newPaxNum) or int(newPaxNum) < 1):
+                print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax more than 0...")
+                S_reset()
             else:
-                try:
-                    newPaxNum = int(newPaxNum)
-                    confirmInput = get_input(prompt=f"Are you sure you want to change the number of pax to \"{newPaxNum}\"? (Y/N): ", command=("y", "n"))
-                    if (confirmInput == "y"):
-                        self.__paxNum = newPaxNum
-                        return
-                except ValueError:
-                    print(f"{F.LIGHTRED_EX}Number of pax must be an number!")
+                newPaxNum = int(newPaxNum)
+                confirmInput = get_input(prompt=f"Are you sure you want to change the number of pax to \"{newPaxNum}\"? (Y/N): ", command=("y", "n"))
+                if (confirmInput == "y"):
+                    self.__paxNum = newPaxNum
+                    print(f"{F.LIGHTRED_EX}Number of pax updated!")
                     S_reset()
+                    return
+
     def get_pax_num(self):
         return self.__paxNum
 
@@ -98,17 +108,19 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Package cost per pax cannot be empty!")
                 S_reset()
             elif (newPackageCostPerPax == "x"):
-                return
+                return -1
+            elif (not re.fullmatch(COST_REGEX, newPackageCostPerPax)):
+                print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!")
+                S_reset()
             else:
-                try:
-                    newPackageCostPerPax = round(float(newPackageCostPerPax), 2)
-                    confirmInput = get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
-                    if (confirmInput == "y"):
-                        self.__packageCostPerPax = newPackageCostPerPax
-                        return
-                except ValueError:
-                    print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!")
+                newPackageCostPerPax = round(float(newPackageCostPerPax), 2)
+                confirmInput = get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
+                if (confirmInput == "y"):
+                    self.__packageCostPerPax = newPackageCostPerPax
+                    print(f"{F.LIGHTGREEN_EX}Package cost per pax updated!")
                     S_reset()
+                    return
+
     def get_package_cost_per_pax(self):
         return self.__packageCostPerPax
 
@@ -200,12 +212,21 @@ X. Exit
             elif (whichToEdit == "5"):
                 print(record, end="")
             elif (whichToEdit == "a"):
-                record.update_package_name()
+                res = record.update_package_name()
                 print()
-                record.update_customer_name()
+                if (res == -1):
+                    break
+
+                res = record.update_customer_name()
                 print()
-                record.update_pax_num()
+                if (res == -1):
+                    break
+
+                res = record.update_pax_num()
                 print()
+                if (res == -1):
+                    break
+
                 record.update_package_cost_per_pax()
             elif (whichToEdit == "x"):
                 break
@@ -317,6 +338,39 @@ X. Exit
             print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
         S_reset()
 
+    def get_index_from_list(self, data=-1, mode=None, typeOfOperations=None, target=None):
+        if (not mode or not target or not typeOfOperations):
+            raise Exception(f"Invalid arguments, {mode} or {typeOfOperations} or {target}, in get_index_from_list()")
+
+        if (data == -1 or not data):
+            # if data is equal to -1 or is an empty list
+            print(f"{F.LIGHTRED_EX}{mode.title()} \"{target}\" not found!")
+            S_reset()
+            return -1
+
+        if (len(data) > 1):
+            print(f"{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
+            print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!\n")
+            S_reset()
+            self.print_from_array(data)
+        else:
+            return 0
+
+        index = 0
+        while (len(data) > 1 and 1):
+            numIndexChoice = input(f"Which record would you like to {typeOfOperations.lower()}? (x to cancel): No.").strip()
+            if (numIndexChoice.lower() == "x"):
+                print(f"{F.LIGHTRED_EX}Cancelled {typeOfOperations.lower()} operation with {mode}, {target}!")
+                S_reset(nl=True)
+                return -1
+            if (re.fullmatch(NUM_REGEX, numIndexChoice)):
+                index = int(numIndexChoice) - 1
+                if (index >= 0 and index < len(data)):
+                    return index
+                else:
+                    print(f"{F.LIGHTRED_EX}Invalid input, please try again!")
+                    S_reset()
+
     def search_for_customer(self, customerName, mode="Edit"):
         """
         Do a linear search on the database for the customer name to satisfy the basic function c.5. criteria
@@ -339,16 +393,16 @@ X. Exit
                 return -1
 
         data = self.linear_search(customerName, "customer")
-        if (data == -1):
-            print(f"{F.LIGHTRED_EX}Customer \"{customerName}\" not found!")
-            S_reset()
+        index = self.get_index_from_list(data=data, mode="customer", typeOfOperations=mode, target=customerName)
+        if (index == -1):
             return
 
+        data = data[index]
         print(data)
-        editInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
-        if (editInput == "y" and mode == "Edit"):
+        inp = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
+        if (inp == "y" and mode == "Edit"):
             self.edit_record(data)
-        elif (editInput == "y" and mode == "Delete"):
+        elif (inp == "y" and mode == "Delete"):
             self.delete_record(data)
             self.__bst_root.delete(data)
 
@@ -383,29 +437,33 @@ X. Exit
 
                 return self.search_for_package(packageName, mode=mode)
             else:
-                record = self.linear_search(packageName, "package")
-                if (record == -1):
-                    print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
-                    S_reset()
-                else:
-                    print(record)
-                    userInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
-                    if (userInput == "y" and mode == "Edit"):
-                        self.edit_record(record)
-                    elif (userInput == "y" and mode == "Delete"):
-                        self.delete_record(record)
-        else:
-            record = self.binary_search_for_package_name(packageName)
-            if (record == -1):
-                print(f"{F.LIGHTRED_EX}Package \"{packageName}\" not found!")
-                S_reset()
-            else:
+                records = self.linear_search(packageName, "package")
+                index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
+                if (index == -1):
+                    return
+
+                record = records[index]
                 print(record)
-                userInput = get_input(prompt=f"Do you want to {mode.lower()} the record? (Y/N): ", command=("y", "n"))
+                userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
                 if (userInput == "y" and mode == "Edit"):
                     self.edit_record(record)
                 elif (userInput == "y" and mode == "Delete"):
                     self.delete_record(record)
+        else:
+            lowIndex, highIndex = self.binary_search_for_package_name(packageName)
+            records = self.__db[lowIndex:highIndex + 1]
+            index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
+            if (index == -1):
+                return
+
+            record = records[index]
+            print(record)
+            userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
+            if (userInput == "y" and mode == "Edit"):
+                self.edit_record(record)
+            elif (userInput == "y" and mode == "Delete"):
+                self.delete_record(record)
+                self.__bst_root.delete(record)
 
     def search_for_range_of_cost(self, low, high):
         """
@@ -447,9 +505,10 @@ X. Exit
             else:
                 self.print_from_index(indexOne, indexTwo)
 
-    def lowerIndex(self, i, lowerRange):
+    def costLowerIndex(self, i, lowerRange):
         """
-        Search for any records within the lowerRange of the cost specified by the user starting from the index found from the search
+        Search for any records within the lowerRange of the cost specified by the user starting from the index found from a search algorithm.
+        Limitations: Array must sorted by package cost per pax
         
         Requires 2 arguments:
         - i (int) <-- refers to the index obtained from a search algorithm
@@ -458,8 +517,6 @@ X. Exit
         Best time complexity: O(n)
         Worst time complexity: O(n)
         Average time complexity: O(n)
-        
-        Space complexity: O(1)
         """
         if (not self.__descending_order):
             while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() >= lowerRange):
@@ -469,9 +526,10 @@ X. Exit
                 i += 1
         return i
 
-    def upperIndex(self, i, upperRange):
+    def costUpperIndex(self, i, upperRange):
         """
-        Search for any records within the upperRange of the cost specified by the user starting from the index found from the search
+        Search for any records within the upperRange of the cost specified by the user starting from the index found from a search algorithm.
+        Limitations: Array must sorted by package cost per pax
         
         Requires 2 arguments:
         - i (int) <-- refers to the index obtained from a search algorithm
@@ -480,8 +538,6 @@ X. Exit
         Best time complexity: O(n)
         Worst time complexity: O(n)
         Average time complexity: O(n)
-        
-        Space complexity: O(1)
         """
         if (not self.__descending_order):
             while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() <= upperRange):
@@ -502,8 +558,6 @@ X. Exit
         Best time complexity: O(1)
         Worst time complexity: O(log(n))
         Average time complexity: O(log(n))
-        
-        Space complexity: O(1)
         """
         l = 0
         r = len(self.__db) - 1
@@ -513,9 +567,9 @@ X. Exit
             # return mid if the range is found in the subarray
             if (self.__db[mid].get_package_cost_per_pax() >= lowRange and self.__db[mid].get_package_cost_per_pax() <= highRange):
                 if (self.__descending_order):
-                    return self.upperIndex(mid, highRange), self.lowerIndex(mid, lowRange)
+                    return self.costUpperIndex(mid, highRange), self.costLowerIndex(mid, lowRange)
                 else:
-                    return self.lowerIndex(mid, lowRange), self.upperIndex(mid, highRange)
+                    return self.costLowerIndex(mid, lowRange), self.costUpperIndex(mid, highRange)
 
             if (not self.__descending_order):
                 # if the lower range to find is greater than mid, search the right half
@@ -545,8 +599,6 @@ X. Exit
         Best time complexity: O(1)
         Worst time complexity: O(n)
         Average time complexity: O(n)
-        
-        Space complexity: O(1)
         """
         arr = []
         for record in self.__db:
@@ -562,18 +614,41 @@ X. Exit
         - target (string)
         - typeOfSearch (string) <-- "customer" or "package"
         
-        Best time complexity: O(1)
+        Best time complexity: O(n)
         Worst time complexity: O(n)
         Average time complexity: O(n)
-        
-        Space complexity: O(1)
         """
+        arr = []
         for record in self.__db:
             if (typeOfSearch == "customer" and record.get_customer_name() == target):
-                return record
+                arr.append(record)
             elif (typeOfSearch == "package" and record.get_package_name() == target):
-                return record
-        return -1
+                arr.append(record)
+        return -1 if (len(arr) == 0) else arr
+
+    def findAllNameOccurrences(self, i, name):
+        """
+        Search for all occurrences of the target name specified by the user starting from the index found from a search algorithm.
+        Limitations: Array must sorted by target name type
+        
+        Requires 2 arguments:
+        - i (int) <-- refers to the index obtained from a search algorithm
+        - name (string) <-- package name
+        
+        Best time complexity: O(n)
+        Worst time complexity: O(n)
+        Average time complexity: O(n)
+        """
+        iCopy = i
+        # search the right
+        while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_name() == name):
+            i += 1
+
+        # search the left
+        while (iCopy > 0 and self.__db[iCopy - 1].get_package_name() == name):
+            iCopy -= 1
+
+        return iCopy, i
 
     def binary_search_for_package_name(self, packageName):
         """
@@ -585,8 +660,6 @@ X. Exit
         Best time complexity: O(1)
         Worst time complexity: O(log(n))
         Average time complexity: O(log(n))
-        
-        Space complexity: O(1)
         """
         l = 0
         r = len(self.__db) - 1
@@ -595,7 +668,8 @@ X. Exit
             
             # return mid if the package name is found in the subarray
             if (self.__db[mid].get_package_name() == packageName):
-                return self.__db[mid]
+                # will return the index of the first and last occurrence of the package name in a tuple
+                return self.findAllNameOccurrences(mid, packageName) 
 
             if (not self.__descending_order):
                 # if the package name to find is greater than mid, search the right half
@@ -612,7 +686,7 @@ X. Exit
                 else:
                     r = mid - 1
 
-        return -1 # return -1 if the package name is not found
+        return -1, -1 # return -1 if the package name is not found
 
     def bubble_sort(self, reverse=False):
         """
@@ -624,8 +698,6 @@ X. Exit
         Best time complexity: O(n)
         Worst time complexity: O(n^2)
         Average time complexity: O(n^2)
-        
-        Space complexity: O(1)
         """
         for i in range(len(self.__db) - 1): # -1 to stop at last element since the last element will be the highest element after an iteration from the nested for loop
             swapFlag = 0
@@ -654,8 +726,6 @@ X. Exit
         Best time complexity: O(n^2)
         Worst time complexity: O(n^2)
         Average time complexity: O(n^2)
-        
-        Space complexity: O(1)
         """
         dbSize = len(self.__db)
         for i in range(dbSize):
@@ -686,8 +756,6 @@ X. Exit
         Best time complexity: O(n)
         Worst time complexity: O(n^2)
         Average time complexity: O(n^2)
-        
-        Space complexity: O(1)
         """
         dbSize = len(self.__db)
         for i in range(1, dbSize):
@@ -764,8 +832,6 @@ X. Exit
         Best time complexity: O(n log(n))
         Worst time complexity: O(n log(n))
         Average time complexity: O(n log(n))
-        
-        Space complexity: O(1)
         """
         n = len(self.__db) 
 
@@ -905,11 +971,22 @@ X. Exit
         """
         print()
         if (len(arr) > 0):
-            print("Numbers of results found:", len(arr))
-            header = f"| {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+            # calculate the number of padding to add for the number header
+            noHeader = "No."
+            noHeaderLen = len(str(len(arr)))
+            if (noHeaderLen > len(noHeader)):
+                noLen = noHeaderLen
+            else:
+                noLen = len(noHeader)
 
-            counter = 0
+            print("Numbers of results found:", len(arr))
+            header = f"| {noHeader.ljust(noLen)} | {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+
+            # default rows to print per page, change at own will
             rowsToPrint = 10
+            
+            # initialise some variables
+            counter = 0
             currentPage = 1
             maxPages = math.ceil(len(arr) / rowsToPrint)
 
@@ -917,22 +994,29 @@ X. Exit
             if (lastPageRecordsToPrint == 0):
                 lastPageRecordsToPrint = rowsToPrint
 
+            # for the no. header numbers for the last page as the last page is using negative indexing
+            noLastPageArr = [str(i + 1) for i in range(len(arr) - lastPageRecordsToPrint, len(arr))]
+
             while (1):
                 print("-" * len(header))
                 print(header)
                 print("-" * len(header))
 
+                # reset the counter and current page if the current page exceeds the max pages
                 if (currentPage > maxPages):
                     currentPage = 1
                     counter = 0
+                # if the current page is 0, print the last page
                 elif (currentPage < 1):
                     currentPage = maxPages
                     counter = 0
 
+                # for the front few pages
                 if (currentPage != maxPages):
                     for i in range(counter, counter + rowsToPrint):
                         record = arr[i]
-                        print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                        print(f"| {str(i + 1).ljust(noLen)}", end=" | ")
+                        print(f"{record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
                         print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
                         print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
                         print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
@@ -940,10 +1024,12 @@ X. Exit
                         counter += 1
                         if (counter >= len(arr)):
                             break
+                # for the last page which will use negative indexing
                 else:
                     for i in range(-lastPageRecordsToPrint, 0, 1):
                         record = arr[i]
-                        print(f"| {record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
+                        print(f"| {noLastPageArr[i].ljust(noLen)}", end=" | ")
+                        print(f"{record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
                         print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
                         print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
                         print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
@@ -951,19 +1037,22 @@ X. Exit
                     counter = len(arr) - lastPageRecordsToPrint - rowsToPrint
 
                 print("-" * len(header))
-                
+
                 pageStatus = f"Page {currentPage} of {maxPages}"
                 print(f"{' ' * (len(header) - len(pageStatus))}{pageStatus}", end="\n\n")
 
                 if (len(arr) > 10):
                     try:
                         continuePrompt = input("Press any keys to go to the next page or type \"b\" or \"q\" to go back or stop respectively: ").strip().lower()
-                    except KeyboardInterrupt:
-                        break
-                    
+                    except (KeyboardInterrupt):
+                        # ctrl + c to quit
+                        return
+
+                    # quit by entering q
                     if (continuePrompt == "q"): 
-                        break
+                        return
                     else:
+                        # continue and calculate the counter and current page
                         if (continuePrompt == "b"):
                             if (currentPage != maxPages):
                                 counter -= (rowsToPrint * 2)
@@ -976,7 +1065,7 @@ X. Exit
                         for i in range(rowsToPrint + 8):
                             print("\033[1A\x1b[2K", end="") # move up a line and deletes the whole line
                 else:
-                    break
+                    return
         else:
             print(f"{F.LIGHTRED_EX}Error: There is no records...")
             S_reset()
@@ -1048,3 +1137,4 @@ if (__name__ == "__main__"):
         h.add_record(f"Customer {i}", f"Package {randint(1, 9999)}", randint(1, 9), uniform(50, 9999))
         
     # add main test code below
+    print(h)

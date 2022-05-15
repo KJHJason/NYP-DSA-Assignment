@@ -1,5 +1,5 @@
 # import local python files
-from hotel_record import HotelDatabase
+from hotel_record import HotelDatabase, NUM_REGEX
 from functions import read_db_file, save_db_file, check_if_db_file_exists, get_input, shutdown, S_reset, preintialise_data
 
 # import third-party libraries
@@ -11,8 +11,6 @@ import re
 from random import randint, uniform
 from sys import exit as sysExit
 from sys import exc_info
-
-NUM_REGEX = re.compile(r"^\d+$")
 
 def main():
     hotelDB = HotelDatabase()

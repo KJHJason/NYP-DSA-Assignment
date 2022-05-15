@@ -13,6 +13,8 @@ RANGE_INPUT_REGEX = re.compile(r"^\d+(-)\d+|\d+$")
 FILE_PATH = pathlib.Path(__file__).parent.resolve()
 PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
 USED_TRUE_CONDITIONS = ("y")
+PACKAGE_NAME_PRESETS = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package"]
+CUSTOMER_NAME_PRESETS = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles"]
 
 def S_reset(nl=0):
     """
@@ -35,10 +37,7 @@ def preintialise_data():
     """
     Randomly picks a package name and customer name from the list of packages and customers predefined in this function and returns them in a tuple.
     """
-    packagePresets = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package"]
-    customerPresets = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles"]
-
-    return choice(packagePresets), choice(customerPresets)
+    return choice(PACKAGE_NAME_PRESETS), choice(CUSTOMER_NAME_PRESETS)
 
 def read_db_file():
     """
@@ -179,19 +178,19 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
 
     while (1):
         userInput = input(prompt).lower().strip()
-        if (userInput in command): 
+        if (isinstance(command, tuple) and userInput in command): 
+            return userInput
+        elif (userInput == command):
             return userInput
         else: 
             if (warning): 
                 print(f"{F.LIGHTRED_EX}Error: {warning}")
-            else: 
-                commandToPrint = (s for s in command if s != "")
-                
-                instruction = "enter"
-                if ("" in command):
-                    instruction = "press Enter or"
+            else:
+                if (not isinstance(command, tuple)):
+                    print(f"{F.LIGHTRED_EX}Error: Please enter {command}")
+                else:
+                    print(f"{F.LIGHTRED_EX}Error: Invalid input. Please enter {', '.join(command[:-1])}, or {command[-1]}.")
 
-                print(f"{F.LIGHTRED_EX}Error: Invalid input. Please {instruction} {' or '.join(commandToPrint)}.")
             S_reset(nl=True)
 
 def log_error():
