@@ -98,7 +98,6 @@ class RecordData:
                     print(f"{F.LIGHTRED_EX}Number of pax updated!")
                     S_reset()
                     return
-
     def get_pax_num(self):
         return self.__paxNum
 
@@ -125,7 +124,6 @@ class RecordData:
                     print(f"{F.LIGHTGREEN_EX}Package cost per pax updated!")
                     S_reset()
                     return
-
     def get_package_cost_per_pax(self):
         return self.__packageCostPerPax
 
@@ -344,6 +342,16 @@ X. Exit
         S_reset()
 
     def get_index_from_list(self, data=-1, mode=None, typeOfOperations=None, target=None):
+        """
+        Function to get the index from a list of data.
+        Used to when there is duplicate data in the search results.
+        
+        Requires 4 arguments:
+        - data (list/int): if int, it must be -1 to indicate no results found
+        - mode (str): mode is defined as what type of data, e.g. "customer" and "package".
+        - typeOfOperations (str): operations such as "edit" and "delete"
+        - target (str): the target data to be passed into such as the customer/package name
+        """
         if (not mode or not target or not typeOfOperations):
             raise Exception(f"Invalid arguments, {mode} or {typeOfOperations} or {target}, in get_index_from_list()")
 

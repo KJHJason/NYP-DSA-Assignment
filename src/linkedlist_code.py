@@ -124,7 +124,7 @@ class DoublyLinkedList:
         while (current):
             print(current.data)
             current = current.next
-    
+
     def convert_to_array(self):
         """
         Convert the linked list to an array/list
