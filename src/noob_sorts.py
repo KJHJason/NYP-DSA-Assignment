@@ -102,6 +102,18 @@ def slowsort(arr, i, j):
     # recursively sort the whole array again except the last jth element as it is the maximum element
     slowsort(arr, i, j - 1)
 
+def add_to_list(el, arr):
+    """
+    Adds the element to the list.
+    
+    Used for sleepsort.
+    
+    Requires two arguments: 
+    - el: the element to be added
+    - arr: the list to be added to
+    """
+    arr.append(el)
+
 def sleepsort(values):
     """
     Creates different threads for each elements and 
@@ -116,9 +128,6 @@ def sleepsort(values):
     Space Complexity: O(n)
     """
     newArr = []
-
-    # lambda function to append the element to the array
-    add_to_list = lambda x, arr: arr.append(x)
 
     maxEl = values[0] # initialise the first element to be the maximum element
     for v in values:

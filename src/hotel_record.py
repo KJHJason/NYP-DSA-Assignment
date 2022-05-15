@@ -368,7 +368,7 @@ X. Exit
             return -1
 
         if (len(data) > 1):
-            print(f"{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
+            print(f"\n{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
             print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!\n")
             S_reset()
             self.print_from_array(data)
@@ -382,7 +382,10 @@ X. Exit
                 print(f"{F.LIGHTRED_EX}Cancelled {typeOfOperations.lower()} operation with {mode}, {target}!")
                 S_reset(nl=True)
                 return -1
-            if (re.fullmatch(NUM_REGEX, numIndexChoice)):
+            elif (numIndexChoice == ""):
+                print(f"{F.LIGHTRED_EX}Please enter a number from the table!")
+                S_reset(nl=True)
+            elif (re.fullmatch(NUM_REGEX, numIndexChoice)):
                 index = int(numIndexChoice) - 1
                 if (index >= 0 and index < len(data)):
                     return index
@@ -640,11 +643,13 @@ X. Exit
         if (typeOfSearch not in ("customer", "package")):
             raise ValueError(f"Invalid search type, {typeOfSearch}, Must be either \"customer\" or \"package\"!")
 
-        get_val = lambda d: d.get_customer_name() if (typeOfSearch == "customer") \
-                                                  else d.get_package_name()
+        def get_val(record, typeOfVal):
+            return record.get_customer_name() if (typeOfVal == "customer") \
+                                              else record.get_package_name()
+
         arr = []
         for record in self.__db:
-            if (get_val(record) == target):
+            if (get_val(record, typeOfSearch) == target):
                 arr.append(record)
         return -1 if (len(arr) == 0) else arr
 
