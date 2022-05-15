@@ -6,7 +6,6 @@ from colorama import Fore as F
 import math
 
 # import local python files
-
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
 from tree import AVLTree
 from noob_sorts import *
@@ -18,6 +17,12 @@ CUST_NAME = "Customer Name"
 PACKAGE_NAME  = "Package Name"
 PAX_NUM = "Number of Pax"
 COST_PER_PAX = "Cost Per Pax"
+NOOB_SORTS_INFO_DICT = {
+    "bogosort": PACKAGE_NAME,
+    "stalinsort": CUST_NAME,
+    "slowsort": COST_PER_PAX,
+    "sleepsort": PAX_NUM
+}
 
 class RecordData:
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
@@ -1088,7 +1093,14 @@ X. Exit
         Requires 1 argument:
         - typeOfSort (str) -> "bogosort", "stalinsort", "slowsort", "sleepsort"
         """
-        self.__descending_order = False
+        if (not NOOB_SORTS_INFO_DICT.get(typeOfSort)):
+            raise Exception(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
+
+        if (NOOB_SORTS_INFO_DICT[typeOfSort] == self.__sort_order and self.__descending_order == False):
+            print(f"{F.LIGHTRED_EX}Error: The database is already sorted by {NOOB_SORTS_INFO_DICT[typeOfSort].lower()}...")
+            S_reset()
+            return
+
         if (typeOfSort == "bogosort"):
             # sorts by package name
             print("\nSorting...", end="")
@@ -1110,8 +1122,9 @@ X. Exit
             self.__db = sleepsort(self.__db)
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
             S_reset()
-        else:
-            raise Exception(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
+
+        self.__descending_order = False
+        self.__sort_order = NOOB_SORTS_INFO_DICT[typeOfSort]
 
     def get_array(self):
         """
