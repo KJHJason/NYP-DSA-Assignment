@@ -637,6 +637,9 @@ X. Exit
         Worst time complexity: O(n)
         Average time complexity: O(n)
         """
+        if (typeOfSearch not in ("customer", "package")):
+            raise ValueError(f"Invalid search type, {typeOfSearch}, Must be either \"customer\" or \"package\"!")
+
         get_val = lambda d: d.get_customer_name() if (typeOfSearch == "customer") \
                                                   else d.get_package_name()
         arr = []

@@ -21,7 +21,8 @@ PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
 # a tuple of strings that indicates True used in this project
 USED_TRUE_CONDITIONS = ("y") 
 
-# presets used in preinitialising the database with records by randomly selecting
+# presets used in preinitialising the database with records
+# by randomly selecting one element from each presets
 PACKAGE_NAME_PRESETS = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package"]
 CUSTOMER_NAME_PRESETS = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles"]
 
@@ -60,7 +61,7 @@ def read_db_file():
             db = dill.load(f)
     else:
         # pre-initialize the database with 10 records
-        for i in range(10):
+        for _ in range(10):
             randPackage, randCust = preintialise_data()
             db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 

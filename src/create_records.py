@@ -31,7 +31,7 @@ def main():
         else:
             print("Invalid input. Please enter a number.")
     
-    for i in range(numOfRecords):
+    for _ in range(numOfRecords):
         randPackage, randCust = preintialise_data()
         hotelDB.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 
