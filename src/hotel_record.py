@@ -10,13 +10,19 @@ from functions import get_input, S_reset, format_price, print_record_data, conve
 from tree import AVLTree
 from noob_sorts import bogosort, stalinsort, slowsort, sleepsort
 
+# regex for handling user inputs
 NUM_REGEX = re.compile(r"^\d+$")
 COST_REGEX = re.compile(r"^\d+(\.\d+)?$")
+
+# header text for displaying records in a table and 
+# to indicate how the array is sorted by
 NOT_SORTED = "Not Sorted"
 CUST_NAME = "Customer Name"
 PACKAGE_NAME  = "Package Name"
 PAX_NUM = "Number of Pax"
 COST_PER_PAX = "Cost Per Pax"
+
+# info on what the various slow sorting algorithms sorts by
 NOOB_SORTS_INFO_DICT = {
     "bogosort": PACKAGE_NAME,
     "stalinsort": CUST_NAME,

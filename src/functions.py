@@ -9,10 +9,19 @@ from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
 
+# regex for handling user inputs
 RANGE_INPUT_REGEX = re.compile(r"^\d+(-)\d+|\d+$")
+
+# to get the path of the directory that the python is being executed from
 FILE_PATH = pathlib.Path(__file__).parent.resolve()
+
+# for persistent storage of the records
 PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
-USED_TRUE_CONDITIONS = ("y")
+
+# a tuple of strings that indicates True used in this project
+USED_TRUE_CONDITIONS = ("y") 
+
+# presets used in preinitialising the database with records by randomly selecting
 PACKAGE_NAME_PRESETS = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package"]
 CUSTOMER_NAME_PRESETS = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles"]
 
