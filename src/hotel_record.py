@@ -631,11 +631,11 @@ X. Exit
         Worst time complexity: O(n)
         Average time complexity: O(n)
         """
-        get_data = lambda d: d.get_customer_name() if (typeOfSearch == "customer") \
-                                                   else d.get_package_name()
+        get_val = lambda d: d.get_customer_name() if (typeOfSearch == "customer") \
+                                                  else d.get_package_name()
         arr = []
         for record in self.__db:
-            if (get_data(record) == target):
+            if (get_val(record) == target):
                 arr.append(record)
         return -1 if (len(arr) == 0) else arr
 
