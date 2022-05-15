@@ -3,7 +3,7 @@ import re
 from colorama import Fore as F
 
 # import standard library
-import math
+from math import ceil
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
@@ -1015,7 +1015,7 @@ X. Exit
             # initialise some variables
             counter = 0
             currentPage = 1
-            maxPages = math.ceil(len(arr) / rowsToPrint)
+            maxPages = ceil(len(arr) / rowsToPrint)
 
             lastPageRecordsToPrint = len(arr) % rowsToPrint
             if (lastPageRecordsToPrint == 0):
