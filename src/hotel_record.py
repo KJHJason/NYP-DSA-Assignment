@@ -1089,7 +1089,7 @@ X. Exit
                         else:
                             currentPage += 1
 
-                        for i in range(rowsToPrint + 8):
+                        for _ in range(rowsToPrint + 8):
                             print("\033[1A\x1b[2K", end="") # move up a line and deletes the whole line
                 else:
                     return
@@ -1168,7 +1168,7 @@ X. Exit
 if (__name__ == "__main__"):
     from random import randint, uniform
     h = HotelDatabase()
-    for i in range(1000):
+    for _ in range(1000):
         h.add_record(f"Customer {i}", f"Package {randint(1, 9999)}", randint(1, 9), uniform(50, 9999))
         
     # add main test code below
