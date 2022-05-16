@@ -404,8 +404,11 @@ X. Exit
                 if (index >= 0 and index < len(data)):
                     return index
                 else:
-                    print(f"{F.LIGHTRED_EX}Invalid input, please try again!")
-                    S_reset()
+                    print(f"{F.LIGHTRED_EX}Invalid input, please enter a number between 1 and {len(data)}!")
+                    S_reset(nl=True)
+            else:
+                print(f"{F.LIGHTRED_EX}Invalid input, please enter a number from the table \"No.\" column!")
+                S_reset(nl=True)
 
     def search_for_customer(self, customerName, mode="Edit"):
         """
