@@ -152,7 +152,7 @@ def print_sub_menu(typeOfMenu):
         print()
         print("-" * 45)
     else:
-        raise Exception(f"Unknown type of sub-menu argument, {typeOfMenu}...")
+        raise ValueError(f"Unknown type of sub-menu argument, {typeOfMenu}...")
 
 def get_input(prints=None, prompt=None, command=None, warning=None):
     """
@@ -175,7 +175,7 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
         prompt = ""
 
     if (not command): 
-        raise Exception("command keyword argument must be defined in the function, get_input")
+        raise ValueError("command keyword argument must be defined in the function, get_input")
 
     if (prints):
         print()

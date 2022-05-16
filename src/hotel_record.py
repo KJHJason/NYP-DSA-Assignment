@@ -372,8 +372,8 @@ X. Exit
         - typeOfOperations (str): operations such as "edit" and "delete"
         - target (str): the target data to be passed into such as the customer/package name
         """
-        if (not mode or not target or not typeOfOperations):
-            raise Exception(f"Invalid arguments, {mode} or {typeOfOperations} or {target}, in get_index_from_list()")
+        if (not target or typeOfOperations.lower() not in ("edit", "delete") or mode.lower() not in ("customer", "package")):
+            raise ValueError(f"Invalid arguments, {mode} or {typeOfOperations} or {target}, in get_index_from_list()")
 
         if (data == -1 or not data):
             # if data is equal to -1 or is an empty list
@@ -381,21 +381,27 @@ X. Exit
             S_reset()
             return -1
 
+        numIndexPrompt = ""
         if (len(data) > 1):
             print(f"\n{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
             print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!\n")
             S_reset()
             self.print_from_array(data)
+            numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel): No."
+            if (len(data) > 10):
+                numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel/v to view table): No."
         else:
             return 0
 
         index = 0
         while (1):
-            numIndexChoice = input(f"Which record would you like to {typeOfOperations.lower()}? (x to cancel): No.").strip()
+            numIndexChoice = input(numIndexPrompt).strip()
             if (numIndexChoice.lower() == "x"):
                 print(f"{F.LIGHTRED_EX}Cancelled {typeOfOperations.lower()} operation with {mode}, {target}!")
                 S_reset(nl=True)
                 return -1
+            elif (len(data) > 10 and numIndexChoice.lower() == "v"):
+                return self.get_index_from_list(data=data, mode=mode, typeOfOperations=typeOfOperations, target=target)
             elif (numIndexChoice == ""):
                 print(f"{F.LIGHTRED_EX}Please enter a number from the table!")
                 S_reset(nl=True)
@@ -1136,7 +1142,7 @@ X. Exit
         - typeOfSort (str) -> "bogosort", "stalinsort", "slowsort", "sleepsort"
         """
         if (not NOOB_SORTS_INFO_DICT.get(typeOfSort)):
-            raise Exception(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
+            raise ValueError(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
 
         if (NOOB_SORTS_INFO_DICT[typeOfSort] == self.__sort_order and self.__descending_order == False):
             print(f"{F.LIGHTRED_EX}Error: The database is already sorted by {NOOB_SORTS_INFO_DICT[typeOfSort].lower()}...")

@@ -226,7 +226,7 @@ class BinarySearchTree:
             elif (traversalType == 2):
                 self.root.postorder(printData)
             else:
-                raise Exception("Invalid traversal type passed into print_tree() function")
+                raise ValueError("Invalid traversal type passed into print_tree() function")
 
     def tree_sort(self, reverse=False):
         """
