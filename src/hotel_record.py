@@ -654,6 +654,19 @@ X. Exit
                 arr.append(record)
         return arr
 
+    def get_val(record, typeOfVal):
+        """
+        Get the respective attribute from the RecordData object based on the typeOfVal given.
+        
+        Used in the linear search function below.
+        
+        Requires 2 arguments:
+        - record (RecordData)
+        - typeOfVal (str): "customer" or "package"
+        """
+        return record.get_customer_name() if (typeOfVal == "customer") \
+                                              else record.get_package_name()
+
     def linear_search(self, target, typeOfSearch):
         """
         Do a linear search on the database for the customer name
@@ -669,13 +682,9 @@ X. Exit
         if (typeOfSearch not in ("customer", "package")):
             raise ValueError(f"Invalid search type, {typeOfSearch}, Must be either \"customer\" or \"package\"!")
 
-        def get_val(record, typeOfVal):
-            return record.get_customer_name() if (typeOfVal == "customer") \
-                                              else record.get_package_name()
-
         arr = []
         for record in self.__db:
-            if (get_val(record, typeOfSearch) == target):
+            if (self.get_val(record, typeOfSearch) == target):
                 arr.append(record)
         return -1 if (len(arr) == 0) else arr
 
