@@ -1,10 +1,33 @@
 class Node:
+    """
+    Creates a node object with next and prev pointers
+    for the doubly linked list implementation code
+
+    Requires one argument:
+    data: the data to be added to the node
+    """
     def __init__(self, data):
         self.data = data
         self.next = None
         self.prev = None
 
 class DoublyLinkedList:
+    """
+    This is a doubly linked list where each nodes are connected together like a chain.
+    Each node has a pointer to the previous node and the next node which allows
+    bidirectional traversal (i.e. from the head to the tail and from the tail to the head)
+    
+    Allows for O(1) time complexity for adding and removing nodes 
+    from the beginning or the end of the linked list
+    
+    Additionally, there is no need to shift all elements of the linked list 
+    when removing a node unlike a python list. Hence, it's faster when 
+    removing nodes that are not at the beginning or the end of the linked list.
+    
+    More details: 
+    - https://en.wikipedia.org/wiki/Doubly_linked_list
+    - https://www.programiz.com/dsa/doubly-linked-list
+    """
     def __init__(self):
         self.head = None
         self.tail = None
