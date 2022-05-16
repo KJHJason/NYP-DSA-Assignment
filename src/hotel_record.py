@@ -654,7 +654,7 @@ X. Exit
                 arr.append(record)
         return arr
 
-    def get_val(record, typeOfVal):
+    def get_val(self, record, typeOfVal):
         """
         Get the respective attribute from the RecordData object based on the typeOfVal given.
         
