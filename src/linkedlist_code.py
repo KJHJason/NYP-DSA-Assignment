@@ -21,7 +21,7 @@ class DoublyLinkedList:
     from the beginning or the end of the linked list
     
     Additionally, there is no need to shift all elements of the linked list 
-    when removing a node unlike a python list. Hence, it's faster when 
+    when removing a node unlike a python list/array. Hence, it's faster when 
     removing nodes that are not at the beginning or the end of the linked list.
     
     More details: 
