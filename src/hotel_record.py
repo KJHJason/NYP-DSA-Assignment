@@ -44,7 +44,10 @@ class RecordData:
             print()
             print(f"Current package name: {self.__packageName}")
             newPackageName = input("Enter a new package name (x to cancel): ").strip().lower()
-            if (newPackageName == ""):
+            if (newPackageName.title() == self.__packageName):
+                print(f"{F.LIGHTRED_EX}Package name cannot be the same as the current name!")
+                S_reset()
+            elif (newPackageName == ""):
                 print(f"{F.LIGHTRED_EX}Package name cannot be empty!")
                 S_reset()
             elif (newPackageName == "x"):
@@ -61,12 +64,17 @@ class RecordData:
 
     def set_customer_name(self, customerName):
         self.__customerName = customerName.title()
+    def get_customer_name(self):
+        return self.__customerName
     def update_customer_name(self):
         while (1):
             print()
             print(f"Current customer name: {self.__customerName}")
             newCustomerName = input("Enter a new customer name (x to cancel): ").strip().lower()
-            if (newCustomerName == ""):
+            if (newCustomerName.title() == self.__customerName):
+                print(f"{F.LIGHTRED_EX}Customer name cannot be the same as the current name!")
+                S_reset()
+            elif (newCustomerName == ""):
                 print(f"{F.LIGHTRED_EX}Customer name cannot be empty!")
                 S_reset()
             elif (newCustomerName == "x"):
@@ -78,11 +86,11 @@ class RecordData:
                     print(f"{F.LIGHTGREEN_EX}Customer name updated!")
                     S_reset()
                     return
-    def get_customer_name(self):
-        return self.__customerName
 
     def set_pax_num(self, paxNum):
         self.__paxNum = int(paxNum)
+    def get_pax_num(self):
+        return self.__paxNum
     def update_pax_num(self):
         while (1):
             print()
@@ -96,19 +104,22 @@ class RecordData:
             elif (not re.fullmatch(NUM_REGEX, newPaxNum) or int(newPaxNum) < 1):
                 print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax more than 0...")
                 S_reset()
-            else:
+            elif (int(newPaxNum) != self.__paxNum):
                 newPaxNum = int(newPaxNum)
                 confirmInput = get_input(prompt=f"Are you sure you want to change the number of pax to \"{newPaxNum}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
                     self.__paxNum = newPaxNum
-                    print(f"{F.LIGHTRED_EX}Number of pax updated!")
+                    print(f"{F.LIGHTGREEN_EX}Number of pax updated!")
                     S_reset()
                     return
-    def get_pax_num(self):
-        return self.__paxNum
+            else:
+                print(f"{F.LIGHTRED_EX}Number of pax cannot be the same as the current number of pax!")
+                S_reset()
 
     def set_package_cost_per_pax(self, packageCostPerPax):
         self.__packageCostPerPax = round(float(packageCostPerPax), 2)
+    def get_package_cost_per_pax(self):
+        return self.__packageCostPerPax
     def update_package_cost_per_pax(self):
         while (1):
             print()
@@ -122,7 +133,7 @@ class RecordData:
             elif (not re.fullmatch(COST_REGEX, newPackageCostPerPax)):
                 print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!")
                 S_reset()
-            else:
+            elif (round(float(newPackageCostPerPax), 2) != self.__packageCostPerPax):
                 newPackageCostPerPax = round(float(newPackageCostPerPax), 2)
                 confirmInput = get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
@@ -130,8 +141,9 @@ class RecordData:
                     print(f"{F.LIGHTGREEN_EX}Package cost per pax updated!")
                     S_reset()
                     return
-    def get_package_cost_per_pax(self):
-        return self.__packageCostPerPax
+            else:
+                print(f"{F.LIGHTRED_EX}Package cost per pax cannot be the same as the current package cost per pax!")
+                S_reset()
 
     def __repr__(self):
         return "(" + f"{self.__packageName}, " + f"{self.__customerName}, " + f"{self.__paxNum} pax, " + format_price(self.__packageCostPerPax) + ")"
@@ -224,21 +236,23 @@ X. Exit
                 res = record.update_package_name()
                 print()
                 if (res == -1):
-                    break
+                    return
 
                 res = record.update_customer_name()
                 print()
                 if (res == -1):
-                    break
+                    return
 
                 res = record.update_pax_num()
                 print()
                 if (res == -1):
-                    break
+                    return
 
-                record.update_package_cost_per_pax()
+                res = record.update_package_cost_per_pax()
+                if (res == -1):
+                    return
             elif (whichToEdit == "x"):
-                break
+                return
             else:
                 print(f"{F.LIGHTRED_EX}Invalid input...")
                 S_reset()
@@ -423,7 +437,10 @@ X. Exit
         print(data)
         inp = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
         if (inp == "y" and mode == "Edit"):
+            oldCustName = data.get_customer_name()
             self.edit_record(data)
+            if (oldCustName != data.get_customer_name()):
+                self.__bst_root.move_node(data)
         elif (inp == "y" and mode == "Delete"):
             self.delete_record(data)
             self.__bst_root.delete(data)
@@ -1168,7 +1185,7 @@ X. Exit
 if (__name__ == "__main__"):
     from random import randint, uniform
     h = HotelDatabase()
-    for _ in range(1000):
+    for i in range(1000):
         h.add_record(f"Customer {i}", f"Package {randint(1, 9999)}", randint(1, 9), uniform(50, 9999))
         
     # add main test code below

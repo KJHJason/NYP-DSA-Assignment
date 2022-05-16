@@ -118,6 +118,19 @@ class AVLTree:
         else:
             return root.data # If the target is equal to the current node, return a linkedlist of hotel record objects
 
+    def move_node(self, data):
+        """
+        Used when the user has changed the customer name in one of the nodes in the tree.
+        Hence, there will be a need to delete the old data in the linkedlist that may result 
+        in deletion of the tree node if there is only one data in the linkedlist.
+        Since, there is a new customer name, we will have to insert a node into the root with a new key.
+        
+        Requires one argument:
+        - data (RecordData): The data of the node to be deleted from the linkedlist
+        """
+        self.delete(data)
+        self.insert(data)
+
     def insert(self, data):
         """
         Insert a node into the tree or append the data to the linkedlist in the node

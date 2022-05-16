@@ -33,35 +33,6 @@ class DoublyLinkedList:
         self.size += 1
         return
 
-    def remove_back(self):
-        """
-        Remove a ndoe from the end of the linked list
-        
-        Similar to a queue's dequeue() method
-        
-        Returns the removed node.
-        
-        Time Complexity: O(1)
-        """
-        # case 1: if the linked list is empty
-        if (not self.head):
-            return
-
-        # case 2: if the linked list has only one node
-        if (self.head == self.tail):
-            temp = self.head
-            self.head = None
-            self.tail = None
-            self.size -= 1
-            return temp.data
-    
-        # case 3: if the linked list has multiple nodes
-        temp = self.tail
-        self.tail = self.tail.prev
-        self.tail.next = None
-        self.size -= 1
-        return temp.data
-
     def remove_node(self, data):
         """
         Remove a node from the linked list
@@ -163,7 +134,4 @@ if __name__ == "__main__":
     print(ll)
 
     ll.add_to_back(9)
-    print(ll)
-    
-    print("Removed back element:", ll.remove_back())
     print(ll)
