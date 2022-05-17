@@ -39,6 +39,8 @@ class RecordData:
 
     def set_package_name(self, packageName):
         self.__packageName = packageName.title()
+    def get_package_name(self):
+        return self.__packageName
     def update_package_name(self):
         while (1):
             print()
@@ -59,8 +61,6 @@ class RecordData:
                     print(f"{F.LIGHTGREEN_EX}Package name updated!")
                     S_reset()
                     return
-    def get_package_name(self):
-        return self.__packageName
 
     def set_customer_name(self, customerName):
         self.__customerName = customerName.title()
