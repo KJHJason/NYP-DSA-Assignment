@@ -1014,8 +1014,8 @@ X. Exit
         it is a float with a decimal place of 2
         """
         # Find the maximum number to know number of digits
-        maxCost = int(max(self.__db, key=lambda x: \
-                        x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
+        maxCost = int(max(self.__db, key=lambda x : \
+                                     x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
 
         # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
         # place is 10^i where i is current digit number
