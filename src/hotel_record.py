@@ -959,12 +959,12 @@ X. Exit
         Requires 1 argument:
         - place (int)
         
-        Best time complexity: O(n+k)
-        Worst time complexity: O(n+k)
-        Average time complexity: O(n+k)
+        Best time complexity: O(n+b)
+        Worst time complexity: O(n+b)
+        Average time complexity: O(n+b)
         
-        Space complexity: O(n+k)
-        Where n is the number of elements and k is the base number, 10
+        Space complexity: O(n+b)
+        Where n is the number of elements and b is the base number, 10
         """
         n = len(self.__db)
         outputArr = [0] * n
