@@ -7,7 +7,7 @@ from math import ceil
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
-from tree import AVLTree
+from tree_code import AVLTree
 from noob_sorts import bogosort, stalinsort, slowsort, sleepsort
 
 # regex for handling user inputs
