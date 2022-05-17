@@ -31,6 +31,23 @@ NOOB_SORTS_INFO_DICT = {
 }
 
 class RecordData:
+    """
+    Creates a RecordData object with methods to update each of its attributes.
+    
+    Used to hold each Staycation booking records information such as:
+    - package name
+    - customer name
+    - number of pax
+    - package cost per pax
+    
+    Requires 4 arguments to initialise the object:
+        - packageName: the name of the package
+        - customerName: the name of the customer
+        - paxNum: the number of pax in the package
+        - packageCostPerPax: the package cost per pax of the package
+    
+    Note that paxNum and packageCostPerPax will be converted to integers and floats respectively.
+    """
     def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
         self.__packageName = packageName.title()
         self.__customerName = customerName.title()
@@ -152,16 +169,31 @@ class RecordData:
         return print_record_data(self.__packageName, self.__customerName, self.__paxNum, self.__packageCostPerPax)
 
 class HotelDatabase:
+    """
+    Will create a HotelDatabase object responsible for storing and managing all hotel records.
+    
+    Upon initialisation, this object will create an empty array which would hold all hotel records
+    of RecordData objects.
+    """
     def __init__(self):
-        """
-        Constructor for the Hotel Database which will create an empty array and set the descending order flag to False
-        """
+        # Array of RecordData objects
         self.__db = []
-        self.__bst_root = AVLTree() # create an AVL tree based on customer names as the keys
-        self.__descending_order = False
-        self.__sort_order = NOT_SORTED
-        self.__table_headers = [CUST_NAME, PACKAGE_NAME, COST_PER_PAX, PAX_NUM]
-        self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), len(self.__table_headers[2]), len(self.__table_headers[3])]
+
+        # create an AVL tree based on customer names as the keys
+        self.__bst_root = AVLTree() 
+
+        # boolean to determine whether to sort the records in descending order
+        self.__descending_order = False 
+
+        # to determine the current sort order
+        self.__sort_order = NOT_SORTED 
+
+        # table headers
+        self.__table_headers = [CUST_NAME, PACKAGE_NAME, COST_PER_PAX, PAX_NUM] 
+        
+        # table lengths for padding
+        self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), \
+                            len(self.__table_headers[2]), len(self.__table_headers[3])] 
 
     def delete_record(self, record):
         """
