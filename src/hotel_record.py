@@ -964,7 +964,7 @@ X. Exit
         Average time complexity: O(n+k)
         
         Space complexity: O(n+k)
-        Where n is the number of elements and k is the range of the elements in the array
+        Where n is the number of elements and k is the base number, 10
         """
         n = len(self.__db)
         outputArr = [0] * n
@@ -999,22 +999,23 @@ X. Exit
 
     def radix_sort(self, reverse=False):
         """
-        Do a radix sort on the database by cost per pax
+        Do a radix sort (base 10) on the database by cost per pax
 
         Optional argument:
         - reverse (bool)
         
-        Best time complexity: O(nk)
-        Worst time complexity: O(nk)
-        Average time complexity: O(nk)
+        Best time complexity: O(d(n+b))
+        Worst time complexity: O(d(n+b))
+        Average time complexity: O(d(n+b))
+        where d is the number of digits in the largest number
+        and b is the base number, 10. 
         
-        Space complexity: O(n+k)
-        Where n is the number of keys and k is the range of keys
-        
-        Note that I multiplied the cost per pax by 100 as it is a float with a possible decimal place of up to 2
+        Note that I multiplied the cost per pax by 100 as 
+        it is a float with a decimal place of 2
         """
         # Find the maximum number to know number of digits
-        maxCost = int(max(self.__db, key=lambda x: x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
+        maxCost = int(max(self.__db, key=lambda x: \
+                        x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
 
         # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
         # place is 10^i where i is current digit number
