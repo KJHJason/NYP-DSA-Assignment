@@ -665,7 +665,7 @@ X. Exit
         - typeOfVal (str): "customer" or "package"
         """
         return record.get_customer_name() if (typeOfVal == "customer") \
-                                              else record.get_package_name()
+                                          else record.get_package_name()
 
     def linear_search(self, target, typeOfSearch):
         """
