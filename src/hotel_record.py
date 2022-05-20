@@ -869,20 +869,50 @@ X. Exit
 
             self.__db[j + 1] = el
 
-    def heapify(self, n, i, reverse): 
+    def heapify(self, n, i, reverse=False): 
         """
         To heapify subtree rooted at index i. 
         
+        Binary heap is a complete binary tree 
+        (all levels are completely filled, except possibly the last level 
+        and the last level has nodes that are filled from left to right)
+        
+        Binary heap properties:
+        - in ascending order (max-heap): 
+            - at any node, the value of the node is greater than or equal to the values of its children
+            - the value of the root node is the largest value in the subtree
+        - in descending order (min-heap): 
+            - at any node, the value of the node is less than or equal to the values of its children
+            - the value of the root node is the smallest value in the subtree
+        
         Requires 3 arguments:
-        - n (int) <-- the size of the array
-        - i (int) <-- the index of the root of the subtree
-        - reverse (bool)
+        - n (int): the size of the array
+        - i (int): the index of the root of the subtree
+        - reverse (bool): whether to make it a max-heap or a min-heap
         """
         l = (2 * i) + 1
         r = (2 * i) + 2
 
         if (reverse):
-            smallest = i  # Initialise smallest as root
+            """
+            e.g. of valid min heap:
+              55
+             /  \
+            57  63
+            
+            e.g. of Invalid min heap:
+            8         
+             \
+              9 
+            Reason: It is not a complete binary tree
+            
+            e.g. of invalid min heap:
+              3                           1
+             / \   --> Correct version:  / \
+            1   6                       3   6
+            Reason: 1 is smaller than 3 which violates the min-heap property
+            """
+            smallest = i # Initialise smallest as root
 
             # if left child of root exists and is smaller than root 
             if (l < n and self.__db[l].get_package_name() < self.__db[smallest].get_package_name()): 
@@ -896,10 +926,24 @@ X. Exit
             if (smallest != i): 
                 self.__db[i], self.__db[smallest] = self.__db[smallest], self.__db[i] 
                 
-                # recursively heapify the root.
+                # recursively heapify the affected sub-tree
                 self.heapify(n, smallest, reverse)
         else:
-            largest = i   # Initialise largest as root 
+            """
+            e.g. of valid max heap:
+             63
+            /  \
+            57  55
+            
+            e.g. of invalid max heap:
+                9                            9
+               / \                          / \
+              5   7  --> Correct version:  6   7
+             /                            /
+            6                            5
+            Reason: 6 is smaller than 5 which violates the max heap property
+            """
+            largest = i # Initialise largest as root 
 
             # See if left child of root exists and is greater than root 
             if (l < n and self.__db[largest].get_package_name() < self.__db[l].get_package_name()): 
@@ -913,7 +957,7 @@ X. Exit
             if (largest != i): 
                 self.__db[i], self.__db[largest] = self.__db[largest],self.__db[i]
         
-                # recursively heapify the root.
+                # recursively heapify the affected sub-tree
                 self.heapify(n, largest, reverse) 
 
     def heap_sort(self, reverse=False):
@@ -933,12 +977,18 @@ X. Exit
         # if in ascending order, then build a max heap
         # if in descending order, then build a min heap
         for i in range((n // 2) - 1, -1, -1): 
-            self.heapify(n, i, reverse) 
+            self.heapify(n, i, reverse=reverse) 
 
-        # extract elements individually starting from the end
+        # extract elements individually starting from the end of the heap
         for i in range(n - 1, -1, -1): 
-            self.__db[i], self.__db[0] = self.__db[0], self.__db[i] # swap the first element with the last node from the heap
-            self.heapify(i, 0, reverse) # call heapify on the reduced list
+            # Move current root to end by swapping with last ith element
+            # as the largest(max heap)/smallest(min heap) element in the heap is at the root of the heap,
+            # Hence, move it to the last ith element and call heapify 
+            # on the new root with the new reduced size
+            self.__db[i], self.__db[0] = self.__db[0], self.__db[i]
+
+            # call heapify on the reduced heap
+            self.heapify(i, 0, reverse=reverse) 
 
     def shellsort(self, reverse=False):
         """

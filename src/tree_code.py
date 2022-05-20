@@ -30,6 +30,7 @@ class AVLTree:
     More details: 
     - https://en.wikipedia.org/wiki/AVL_tree
     - https://www.programiz.com/dsa/avl-tree
+    - https://www.javatpoint.com/avl-tree
     """
     def __init__(self):
         self.root = None
@@ -66,8 +67,13 @@ class AVLTree:
         Worst Time complexity: O(n)
         Average Time complexity: O(n)
         
-        Space complexity: O(n)
-        Where n is the number of elements in the tree (not the number of nodes)
+        Note: It is O(n) in this case as in the HotelDatabase object, the AVLTree object is automatically
+        updated every time the user adds, changes, or deletes a customer name.
+        Hence, removing the need to insert the nodes into the tree when sorting using tree sort.
+        
+        Space complexity: O(m + n)
+        Where m is the number of nodes in the tree and 
+        n is the number of elements (inside all linkedlist) in the tree
         
         Requires one argument:
         - reverse (bool): Whether to return the nodes in ascending or descending order. Defaults to False
@@ -79,13 +85,14 @@ class AVLTree:
         self.inorder_return_node(arr, reverse=reverse) # will return a list of linkedlist nodes
 
         # convert the list of linkedlist nodes into a list of RecordData objects
-        newArr = []
+        sortedArr = []
         for node in arr:
+            # get the data from the linkedlist and append it to sortedArr
             for data in node.data.convert_to_array():
-                newArr.append(data)
+                sortedArr.append(data)
 
         # return the sorted list of RecordData objects by customer name
-        return newArr
+        return sortedArr
 
     def search(self, target):
         """
@@ -169,11 +176,59 @@ class AVLTree:
         if (balanceFactor > 1):
             # If the data key is less than the left child, rotate right
             if (data.get_customer_name() < root.left.key):
-                # Left left case
+                """
+                e.g. of left left case
+                            5 (bf:  2-0 = 2)
+                           /
+                          2 (bf: 1-0 = 1)
+                         /
+                (bf: 0) 1 
+                Afterwards, in this example, we will have to balance the tree with 
+                a right rotation on the subtree with root 5.
+
+                y = 5
+                initialise x and childSubtree
+                x = y.left (5.left = 2)
+                childSubtree = x.right (2.right = None)
+                
+                then we perform the rotation
+                2.right = y (5)
+                5.left = childSubtree (None)
+                
+                return x node (2)
+
+                After doing a right rotation (clockwise rotation), the balanced tree will look like this:
+                          2 (bf: 1-1 = 0)
+                         / \
+                (bf: 0) 1   5 (bf: 0)
+                """
                 return self.right_rotate(root)
             # If the data key is greater than the right child, rotate left and then rotate right
             else:
-                # Left right case
+                """
+                e.g. of left right case
+                
+                  5 (bf:  2-0 = 2)
+                 / 
+                2 (bf: 0-2 = -2)
+                 \
+                  3 (bf: 0-1 = -1)
+
+                Afterwards, in this example, we will have to balance the tree with a left rotation 
+                and then a right rotation (left right case).
+                
+                First left rotation (anti-clockwise rotation) on the left child of the subtree rooted at node 2:
+                    5 (bf:  2-0 = 2)
+                   / 
+                  3 (bf: 1-0 = 1) 
+                 /
+                2 (bf: 0
+
+                Then right rotation (clockwise rotation) on the subtree rooted at node 5:
+                          3 (bf:  1-1 = 0)
+                         / \
+                (bf: 0) 2   5 (bf: 0)
+                """
                 root.left = self.left_rotate(root.left)
                 return self.right_rotate(root)
 
@@ -181,11 +236,59 @@ class AVLTree:
         if (balanceFactor < -1):
             # If the data key is greater than the right child, rotate left
             if (data.get_customer_name() > root.right.key):
-                # Right right case
+                """
+                e.g. of right right case
+                        5 (bf:  0-2 = -2)
+                         \
+                          6 (bf: 0-1 = -1)
+                           \
+                            8 (bf: 0)
+                Afterwards, in this example, we will have to balance the tree with a left rotation
+                on the subtree with root 5.
+
+                x = 5
+                initialise y and childSubtree
+                y = x.right (5.right = 6)
+                childSubtree = y.left (6.left = None)
+
+                then we perform the rotation
+                6.left = x (5)
+                5.right = childSubtree (None)
+
+                return y node (6)
+
+                After doing a left rotation (anti-clockwise rotation), the balanced tree will look like this:
+                          6 (bf: 1-1 = 0)
+                         / \
+                (bf: 0) 5   8 (bf: 0)
+                """
                 return self.left_rotate(root)
             # If the data key is less than the left child, rotate right and then rotate left
             else:
-                # Right left case
+                """
+                e.g. of right left case
+                
+                  1 (bf:  0-2 = -2)
+                   \ 
+                    3 (bf: 1-0 = 1)
+                   /
+                  2(bf: 0)
+
+                Afterwards, in this example, we will have to balance the tree with a right rotation
+                and then a left rotation (right left case).
+
+                First right rotation (clockwise rotation) on the right child of the subtree rooted at node 3:
+                    1 (bf:  0-2 = -2)
+                     \
+                      2 (bf: -1-0 = -1)
+                       \
+                        3 (bf: 0)
+
+                Then left rotation (anti-clockwise rotation) on the subtree rooted at node 1:
+                          2 (bf:  1-1 = 0)
+                         / \
+                (bf: 0) 1   3 (bf: 0)
+                """
                 root.right = self.right_rotate(root.right)
                 return self.left_rotate(root)
 
@@ -222,7 +325,12 @@ class AVLTree:
                 root.data.remove_node(data)
                 return root
 
-            # if the node has only one child or no child, replace the node with its child or None
+            # if the node has no children (leaf node), return None to delete the node
+            if (not root.left and not root.right):
+                return None
+
+            # if the node has only one child, replace the node with its child
+            # and set the child's parent to None to delete the node
             if (not root.left):
                 temp = root.right
                 root = None
@@ -279,59 +387,11 @@ class AVLTree:
         if (balanceFactor > 1):
             # If the balance factor of the left child is greater than 1, rotate right
             if (self.get_balance(root.left) >= 0):
-                """
-                e.g. of left left case
-                            5 (bf:  2-0 = 2)
-                           /
-                          2 (bf: 1-0 = 1)
-                         /
-                (bf: 0) 1 
-                Afterwards, in this example, we will have to balance the tree with 
-                a right rotation on the subtree with root 5.
-
-                y = 5
-                initialise x and childSubtree
-                x = y.left (5.left = 2)
-                childSubtree = x.right (2.right = None)
-                
-                then we perform the rotation
-                2.right = y (5)
-                5.left = childSubtree (None)
-                
-                return x node (2)
-
-                After doing a right rotation (clockwise rotation), the balanced tree will look like this:
-                          2 (bf: 1-1 = 0)
-                         / \
-                (bf: 0) 1   5 (bf: 0)
-                """
+                # Left left case
                 return self.right_rotate(root)
             # If the balance factor of the left child is less than 0, rotate left and then rotate right
             else:
-                """
-                e.g. of left right case
-                
-                  5 (bf:  2-0 = 2)
-                 / 
-                2 (bf: 0-2 = -2)
-                 \
-                  3 (bf: 0-1 = -1)
-
-                Afterwards, in this example, we will have to balance the tree with a left rotation 
-                and then a right rotation (left right case).
-                
-                First left rotation (anti-clockwise rotation) on the left child of the subtree rooted at node 2:
-                    5 (bf:  2-0 = 2)
-                   / 
-                  3 (bf: 1-0 = 1) 
-                 /
-                2 (bf: 0
-
-                Then right rotation (clockwise rotation) on the subtree rooted at node 5:
-                          3 (bf:  1-1 = 0)
-                         / \
-                (bf: 0) 2   5 (bf: 0)
-                """
+                # Left right case
                 root.left = self.left_rotate(root.left)
                 return self.right_rotate(root)
 
@@ -339,59 +399,11 @@ class AVLTree:
         if (balanceFactor < -1):
             # If the balance factor of the right child is less than -1, rotate left
             if (self.get_balance(root.right) <= 0):
-                """
-                e.g. of right right case
-                        5 (bf:  0-2 = -2)
-                         \
-                          6 (bf: 0-1 = -1)
-                           \
-                            8 (bf: 0)
-                Afterwards, in this example, we will have to balance the tree with a left rotation
-                on the subtree with root 5.
-
-                x = 5
-                initialise y and childSubtree
-                y = x.right (5.right = 6)
-                childSubtree = y.left (6.left = None)
-
-                then we perform the rotation
-                6.left = x (5)
-                5.right = childSubtree (None)
-
-                return y node (6)
-
-                After doing a left rotation (anti-clockwise rotation), the balanced tree will look like this:
-                          6 (bf: 1-1 = 0)
-                         / \
-                (bf: 0) 5   8 (bf: 0)
-                """
+                # Right right case
                 return self.left_rotate(root)
             # If the balance factor of the right child is greater than 0, rotate right and then rotate left
             else:
-                """
-                e.g. of right left case
-                
-                  1 (bf:  0-2 = -2)
-                   \ 
-                    3 (bf: 1-0 = 1)
-                   /
-                  2(bf: 0)
-
-                Afterwards, in this example, we will have to balance the tree with a right rotation
-                and then a left rotation (right left case).
-
-                First right rotation (clockwise rotation) on the right child of the subtree rooted at node 3:
-                    1 (bf:  0-2 = -2)
-                     \
-                      2 (bf: -1-0 = -1)
-                       \
-                        3 (bf: 0)
-
-                Then left rotation (anti-clockwise rotation) on the subtree rooted at node 1:
-                          2 (bf:  1-1 = 0)
-                         / \
-                (bf: 0) 1   3 (bf: 0)
-                """
+                # Right left case
                 root.right = self.right_rotate(root.right)
                 return self.left_rotate(root)
 
