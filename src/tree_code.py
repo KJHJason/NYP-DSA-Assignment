@@ -346,8 +346,9 @@ class AVLTree:
                           6 (bf: 0-1 = -1)
                            \
                             8 (bf: 0)
-                Afterwards, in this example, we will have to balance the tree with a left rotation.
-                
+                Afterwards, in this example, we will have to balance the tree with a left rotation
+                on the subtree with root 5.
+
                 x = 5
                 initialise y and childSubtree
                 y = x.right (5.right = 6)
@@ -356,9 +357,9 @@ class AVLTree:
                 then we perform the rotation
                 6.left = x (5)
                 5.right = childSubtree (None)
-            
+
                 return y node (6)
-            
+
                 After doing a left rotation (anti-clockwise rotation), the balanced tree will look like this:
                           6 (bf: 1-1 = 0)
                          / \
@@ -378,7 +379,7 @@ class AVLTree:
 
                 Afterwards, in this example, we will have to balance the tree with a right rotation
                 and then a left rotation (right left case).
-                
+
                 First right rotation (clockwise rotation) on the right child of the subtree rooted at node 3:
                     1 (bf:  0-2 = -2)
                      \
