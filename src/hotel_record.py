@@ -7,7 +7,11 @@ from math import ceil
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
+
+# import data structures
 from data_structures.tree_code import AVLTree
+
+# import sorting algorithms
 from sorting_algorithms.noob_sorts import bogosort, stalinsort, slowsort, sleepsort
 from sorting_algorithms.radix_sort import radix_sort
 from sorting_algorithms.shellsort import shellsort
@@ -15,6 +19,8 @@ from sorting_algorithms.heap_sort import heap_sort
 from sorting_algorithms.insertion_sort import insertion_sort
 from sorting_algorithms.selection_sort import selection_sort
 from sorting_algorithms.bubble_sort import bubble_sort
+
+# import searching algorithms
 from searching_algorithms.binary_search import binary_search_for_package_name, binary_search_for_range_of_cost
 from searching_algorithms.linear_search import linear_search, linear_search_range_of_cost
 
