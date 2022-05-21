@@ -234,6 +234,40 @@ class HotelDatabase:
         self.__db.append(recordData)
         self.__bst_root.insert(recordData)
 
+    def edit_all_details_of_record(self, record):
+        """
+        Edits all details of a record and updates the sorting order if necessary.
+        
+        Requires 1 argument:
+        - record (RecordData)
+        """
+        res = record.update_package_name()
+        print()
+        if (res == -1):
+            return
+        elif (self.__sort_order == PACKAGE_NAME):
+            self.__sort_order = NOT_SORTED
+
+        res = record.update_customer_name()
+        print()
+        if (res == -1):
+            return
+        elif (self.__sort_order == CUST_NAME):
+            self.__sort_order = NOT_SORTED
+
+        res = record.update_pax_num()
+        print()
+        if (res == -1):
+            return
+        elif (self.__sort_order == PAX_NUM):
+            self.__sort_order = NOT_SORTED
+
+        res = record.update_package_cost_per_pax()
+        if (res == -1):
+            return
+        elif (self.__sort_order == COST_PER_PAX):
+            self.__sort_order = NOT_SORTED
+
     def edit_record(self, record):
         """
         Edit a record's data
@@ -253,40 +287,32 @@ A. All Fields
 X. Exit
 {'-' * len(header)}"""
 
-        # reset sort order as the user might have edited a reocrd in a sorted array
-        self.__sort_order = NOT_SORTED 
-
         while (1):
             whichToEdit = get_input(prompt="Which field do you want to edit?: ", command=("1", "2", "3", "4", "5", "a", "x"), prints=menu)
             if (whichToEdit == "1"):
-                record.update_package_name()
+                res = record.update_package_name()
+                if (res != -1 and self.__sort_order == PACKAGE_NAME):
+                    self.__sort_order = NOT_SORTED
+
             elif (whichToEdit == "2"):
-                record.update_customer_name()
+                res = record.update_customer_name()
+                if (res != -1 and self.__sort_order == CUST_NAME):
+                    self.__sort_order = NOT_SORTED
+
             elif (whichToEdit == "3"):
-                record.update_pax_num()
+                res = record.update_pax_num()
+                if (res != -1 and self.__sort_order == PAX_NUM):
+                    self.__sort_order = NOT_SORTED
+
             elif (whichToEdit == "4"):
-                record.update_package_cost_per_pax()
+                res = record.update_package_cost_per_pax()
+                if (res != -1 and self.__sort_order == COST_PER_PAX):
+                    self.__sort_order = NOT_SORTED
+
             elif (whichToEdit == "5"):
                 print(record, end="")
             elif (whichToEdit == "a"):
-                res = record.update_package_name()
-                print()
-                if (res == -1):
-                    return
-
-                res = record.update_customer_name()
-                print()
-                if (res == -1):
-                    return
-
-                res = record.update_pax_num()
-                print()
-                if (res == -1):
-                    return
-
-                res = record.update_package_cost_per_pax()
-                if (res == -1):
-                    return
+                self.edit_all_details_of_record(record)
             elif (whichToEdit == "x"):
                 return
             else:
@@ -502,10 +528,16 @@ X. Exit
         mode = mode.title()
         packageName = packageName.title()
         if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
-            alertMsg = (
-                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches...",
+            alertMsg = [
+                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches,",
                 "Otherwise, you can still search for a package and maintain the original order of the database..."
-            )
+            ]
+            if (mode == "Edit"):
+                alertMsg.append("assuming that the package name is unchanged when editing the record.")
+                alertMsg[1], alertMsg[2] = alertMsg[2], alertMsg[1]
+            
+            alertMsg = tuple(alertMsg)
+
             sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
             if (sortInput == "y"): 
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
