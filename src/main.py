@@ -33,12 +33,12 @@ def main():
                     # display all records
                     print(hotelDB)
                 elif (subInput == "2"):
-                    # display records range from $X to $Y. e.g $100-200
+                    # display records range from $X to $Y. e.g $100-200 (Not total cost but the cost per pax range)
                     print()
                     if (len(hotelDB) > 0):
                         while (1):
-                            print("Please enter the range of prices you want to display in the format, $100-200...")
-                            rangeInput = input("Enter the range of prices you want to display (x to cancel): $").lower().strip()
+                            print("Please enter the range of cost per pax number you want to display in the format, $100-200...")
+                            rangeInput = input("Enter the range of cost per pax number you want to display (x to cancel): $").lower().strip()
                             if (rangeInput == "x"):
                                 break
                             formattedRange = get_range(rangeInput)
