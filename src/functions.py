@@ -19,7 +19,7 @@ FILE_PATH = pathlib.Path(__file__).parent.resolve()
 PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
 
 # a tuple of strings that indicates True used in this project
-USED_TRUE_CONDITIONS = ("y") 
+USED_TRUE_CONDITIONS = ("y", "Y") 
 
 # presets used in preinitialising the database with records
 # by randomly selecting one element from each presets
@@ -338,7 +338,7 @@ def convert_var_to_bool(var):
         return var
     elif (isinstance(var, int)):
         return bool(var)
-    elif (isinstance(var, str) and var.lower() in USED_TRUE_CONDITIONS):
+    elif (isinstance(var, str) and var in USED_TRUE_CONDITIONS):
         return True
     else:
         False
