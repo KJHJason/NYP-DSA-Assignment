@@ -252,6 +252,10 @@ class HotelDatabase:
 A. All Fields
 X. Exit
 {'-' * len(header)}"""
+
+        # reset sort order as the user might have edited a reocrd in a sorted array
+        self.__sort_order = NOT_SORTED 
+
         while (1):
             whichToEdit = get_input(prompt="Which field do you want to edit?: ", command=("1", "2", "3", "4", "5", "a", "x"), prints=menu)
             if (whichToEdit == "1"):
