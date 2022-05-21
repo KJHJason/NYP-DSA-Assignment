@@ -176,7 +176,7 @@ class AVLTree:
         if (balanceFactor > 1):
             # If the data key is less than the left child, rotate right
             if (data.get_customer_name() < root.left.key):
-                """
+                r"""
                 e.g. of left left case
                             5 (bf:  2-0 = 2)
                            /
@@ -205,7 +205,7 @@ class AVLTree:
                 return self.right_rotate(root)
             # If the data key is greater than the right child, rotate left and then rotate right
             else:
-                """
+                r"""
                 e.g. of left right case
                 
                   5 (bf:  2-0 = 2)
@@ -236,7 +236,7 @@ class AVLTree:
         if (balanceFactor < -1):
             # If the data key is greater than the right child, rotate left
             if (data.get_customer_name() > root.right.key):
-                """
+                r"""
                 e.g. of right right case
                         5 (bf:  0-2 = -2)
                          \
@@ -265,7 +265,7 @@ class AVLTree:
                 return self.left_rotate(root)
             # If the data key is less than the left child, rotate right and then rotate left
             else:
-                """
+                r"""
                 e.g. of right left case
                 
                   1 (bf:  0-2 = -2)
@@ -340,7 +340,7 @@ class AVLTree:
                 root = None
                 return temp
 
-            """
+            r"""
             if the node has two childrens, find the inorder successor 
             (smallest value in the right subtree/
             the node with the smallest key greater than the key of the input node)
