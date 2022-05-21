@@ -1,3 +1,5 @@
+"""---------------------- LINEAR SEARCH FOR RANGE OF COST ----------------------"""
+
 def linear_search_range_of_cost(arr, low, high):
     """
     Do a linear search on the database for the range of cost specified by the user.
@@ -16,6 +18,10 @@ def linear_search_range_of_cost(arr, low, high):
         if (record.get_package_cost_per_pax() >= low and record.get_package_cost_per_pax() <= high):
             arr.append(record)
     return arr
+
+"""---------------------- END OF LINEAR SEARCH FOR RANGE OF COST ----------------------"""
+
+"""---------------------- LINEAR SEARCH FOR CUSTOMER NAME/PACKAGE NAME ----------------------"""
 
 def get_val(record, typeOfVal):
     """
@@ -51,3 +57,5 @@ def linear_search(arr, target, typeOfSearch):
         if (get_val(record, typeOfSearch) == target):
             arr.append(record)
     return -1 if (len(arr) == 0) else arr
+
+"""---------------------- END OF LINEAR SEARCH FOR CUSTOMER NAME/PACKAGE NAME ----------------------"""
