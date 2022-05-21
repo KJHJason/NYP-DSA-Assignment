@@ -53,6 +53,7 @@ class RecordData:
     - customer name
     - number of pax
     - package cost per pax
+    These attributes satisfy the basic function a
     
     Requires 4 arguments to initialise the object:
         - packageName: the name of the package

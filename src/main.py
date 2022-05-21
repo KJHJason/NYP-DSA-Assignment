@@ -30,9 +30,11 @@ def main():
                 print_sub_menu(1)
                 subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                 if (subInput == "1"):
+                    # To satisfy basic function c.1
                     # display all records
                     print(hotelDB)
                 elif (subInput == "2"):
+                    # To satisfy basic function c.7
                     # display records range from $X to $Y. e.g $100-200 (Not total cost but the cost per pax range)
                     print()
                     if (len(hotelDB) > 0):
@@ -61,6 +63,7 @@ def main():
                         S_reset(nl=True)
                         
                 elif (subInput == "3"):
+                    # newly added
                     # search for records that matches the specified customer name
                     print()
                     searchAgainPrompt = ""
@@ -80,7 +83,7 @@ def main():
                             searchAgainPrompt = "x"
 
         elif (uInput == "2"):
-            # add new record
+            # add new record (newly added)
             continueFlag = True
             while (continueFlag != 0):
                 packageName = customerName = ""
@@ -175,6 +178,7 @@ def main():
                 print_sub_menu(3)
                 subInput = get_input(prompt="Enter option: ", command=("1", "2", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                 if (subInput == "1"):
+                    # To satisfy basic function c.5
                     # Search record by Customer Name using Linear Search and update record
                     while (1):
                         customerName = input("Enter the customer name (F to cancel): ").lower().strip()
@@ -187,6 +191,7 @@ def main():
                             hotelDB.search_for_customer(customerName, mode="Edit")
 
                 elif (subInput == "2"):
+                    # To satisfy basic function c.6
                     # Search record by Package Name using Binary Search and update record
                     while (1):
                         packageName = input("Enter the package name (F to cancel): ").lower().strip()
@@ -210,11 +215,14 @@ def main():
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         if (len(hotelDB) < 5):
+                            # To satisfy basic function c.2
                             hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="bubble")
                         else:
+                            # newly added
                             hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="tree")
 
                 elif (subInput == "2"):
+                    # To satisfy basic function c.3
                     # sort by package name using selection sort
                     sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
@@ -222,6 +230,7 @@ def main():
                         hotelDB.sort_by_package_name(descendingFlag)
 
                 elif (subInput == "3"):
+                    # To satisfy basic function c.4
                     # sort by package cost using insertion sort
                     sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
@@ -229,13 +238,14 @@ def main():
                         hotelDB.sort_by_package_cost(descendingFlag)
 
                 elif (subInput == "4"):
+                    # newly added
                     # sort by package's number of pax
                     sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                         hotelDB.sort_by_pax_num(descendingFlag)
 
-                # easter egg menu
+                # easter egg menu (newly added)
                 elif (subInput == "noob"):
                     print(f"\n{F.LIGHTYELLOW_EX}Notice: You found the easter egg menu!")
                     S_reset()
@@ -268,7 +278,7 @@ def main():
                                 hotelDB.easter_egg_sorts(typeOfSort="sleepsort")
 
         elif (uInput == "5"):
-            # delete options
+            # delete options (newly added)
             subInput = ""
             while (subInput != "f"):
                 print_sub_menu(5)
@@ -299,7 +309,6 @@ def main():
                             S_reset()
                         else:
                             hotelDB.search_for_package(packageName, mode="Delete")
-    return 0
 
 if (__name__ == "__main__"):
     coloramaInit(autoreset=False, convert=True)
