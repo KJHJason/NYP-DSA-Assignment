@@ -712,7 +712,7 @@ X. Exit
         - low (int)
         - high (int)
         
-        Best time complexity: O(1)
+        Best time complexity: O(n)
         Worst time complexity: O(n)
         Average time complexity: O(n)
         """
