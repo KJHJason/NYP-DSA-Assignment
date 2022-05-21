@@ -7,8 +7,16 @@ from math import ceil
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
-from tree_code import AVLTree
-from noob_sorts import bogosort, stalinsort, slowsort, sleepsort
+from data_structures.tree_code import AVLTree
+from sorting_algorithms.noob_sorts import bogosort, stalinsort, slowsort, sleepsort
+from sorting_algorithms.radix_sort import radix_sort
+from sorting_algorithms.shellsort import shellsort
+from sorting_algorithms.heap_sort import heap_sort
+from sorting_algorithms.insertion_sort import insertion_sort
+from sorting_algorithms.selection_sort import selection_sort
+from sorting_algorithms.bubble_sort import bubble_sort
+from searching_algorithms.binary_search import binary_search_for_package_name, binary_search_for_range_of_cost
+from searching_algorithms.linear_search import linear_search, linear_search_range_of_cost
 
 # regex for handling user inputs
 NUM_REGEX = re.compile(r"^\d+$")
@@ -334,7 +342,7 @@ X. Exit
             return
 
         if (len(self.__db) > 1):
-            self.shellsort(reverse=reverse)
+            shellsort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PAX_NUM
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
@@ -362,7 +370,7 @@ X. Exit
             if (typeOfSort == "tree"):
                 self.__db = self.__bst_root.tree_sort(reverse=reverse)
             else:
-                self.bubble_sort(reverse=reverse)
+                bubble_sort(self.__db, reverse=reverse)
 
             self.__descending_order = reverse
             self.__sort_order = CUST_NAME
@@ -388,7 +396,7 @@ X. Exit
             return
 
         if (len(self.__db) > 1):
-            self.selection_sort(reverse=reverse)
+            selection_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PACKAGE_NAME
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
@@ -413,7 +421,7 @@ X. Exit
             return
 
         if (len(self.__db) > 1):
-            self.insertion_sort(reverse=reverse)
+            insertion_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = COST_PER_PAX
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
@@ -499,7 +507,7 @@ X. Exit
                 S_reset(nl=True)
                 return -1
 
-        data = self.linear_search(customerName, "customer")
+        data = linear_search(self.__db, customerName, "customer")
         index = self.get_index_from_list(data=data, mode="customer", typeOfOperations=mode, target=customerName)
         if (index == -1):
             return
@@ -543,9 +551,8 @@ X. Exit
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
 
                 reverseOrder = convert_var_to_bool(reverseOrder)
-                self.heap_sort(reverse=reverseOrder)
+                heap_sort(self.__db, reverse=reverseOrder)
                 self.__descending_order = reverseOrder
-
 
                 print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
                 S_reset(nl=True)
@@ -566,7 +573,7 @@ X. Exit
                 elif (userInput == "y" and mode == "Delete"):
                     self.delete_record(record)
         else:
-            lowIndex, highIndex = self.binary_search_for_package_name(packageName)
+            lowIndex, highIndex = binary_search_for_package_name(self.__db, packageName, self.__descending_order)
             records = self.__db[lowIndex:highIndex + 1]
             index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
             if (index == -1):
@@ -599,7 +606,7 @@ X. Exit
                 reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
 
                 reverseOrder = convert_var_to_bool(reverseOrder)
-                self.radix_sort(reverse=reverseOrder)
+                radix_sort(self.__db, reverse=reverseOrder)
                 self.__descending_order = reverseOrder
 
                 print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax!")
@@ -607,540 +614,19 @@ X. Exit
                 self.__sort_order = COST_PER_PAX
                 return self.search_for_range_of_cost(low, high)
             else:
-                arr = self.linear_search_range_of_cost(low, high)
+                arr = linear_search_range_of_cost(self.__db, low, high)
                 if (arr):
                     self.print_from_array(arr)
                 else:
                     print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!")
                     S_reset()
         else:
-            indexOne, indexTwo = self.binary_search_for_range_of_cost(low, high)
+            indexOne, indexTwo = binary_search_for_range_of_cost(self.__db, low, high, self.__descending_order)
             if (indexOne == -1 and indexTwo == -1):
                 print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!")
                 S_reset()
             else:
                 self.print_from_index(indexOne, indexTwo)
-
-    def costLowerIndex(self, i, lowerRange):
-        """
-        Search for any records within the lowerRange of the cost specified by the user starting from the index found from a search algorithm.
-        Limitations: Array must sorted by package cost per pax
-        
-        Requires 2 arguments:
-        - i (int) <-- refers to the index obtained from a search algorithm
-        - lowerRange (int)
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n)
-        Average time complexity: O(n)
-        """
-        if (not self.__descending_order):
-            while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() >= lowerRange):
-                i -= 1
-        else:
-            while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() >= lowerRange):
-                i += 1
-        return i
-
-    def costUpperIndex(self, i, upperRange):
-        """
-        Search for any records within the upperRange of the cost specified by the user starting from the index found from a search algorithm.
-        Limitations: Array must sorted by package cost per pax
-        
-        Requires 2 arguments:
-        - i (int) <-- refers to the index obtained from a search algorithm
-        - upperRange (int)
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n)
-        Average time complexity: O(n)
-        """
-        if (not self.__descending_order):
-            while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_cost_per_pax() <= upperRange):
-                i += 1
-        else:
-            while (i > 0 and self.__db[i - 1].get_package_cost_per_pax() <= upperRange):
-                i -= 1
-        return i
-
-    def binary_search_for_range_of_cost(self, lowRange, highRange):
-        """
-        Do a binary search on the database for the package name
-        
-        Requires 2 arguments:
-        - lowRange (int/float)
-        - highRange (int/float)
-        
-        Best time complexity: O(1)
-        Worst time complexity: O(log(n))
-        Average time complexity: O(log(n))
-        """
-        l = 0
-        r = len(self.__db) - 1
-        while (l <= r):
-            mid = (l + r) // 2
-            
-            # return mid if the range is found in the subarray
-            if (self.__db[mid].get_package_cost_per_pax() >= lowRange and self.__db[mid].get_package_cost_per_pax() <= highRange):
-                if (self.__descending_order):
-                    return self.costUpperIndex(mid, highRange), self.costLowerIndex(mid, lowRange)
-                else:
-                    return self.costLowerIndex(mid, lowRange), self.costUpperIndex(mid, highRange)
-
-            if (not self.__descending_order):
-                # if the lower range to find is greater than mid, search the right half
-                if (self.__db[mid].get_package_cost_per_pax() < lowRange):
-                    l = mid + 1
-                # if the upper range to find is less than mid, search the left half
-                else:
-                    r = mid - 1
-            else:
-                # if the upper range to find is greater than mid, search the right half
-                if (self.__db[mid].get_package_cost_per_pax() > highRange):
-                    l = mid + 1
-                # if the lower range to find is less than mid, search the left half
-                else:
-                    r = mid - 1
-
-        return -1, -1 # return -1 if the package name is not found
-
-    def linear_search_range_of_cost(self, low, high):
-        """
-        Do a linear search on the database for the range of cost specified by the user.
-        
-        Requires 2 arguments:
-        - low (int)
-        - high (int)
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n)
-        Average time complexity: O(n)
-        """
-        arr = []
-        for record in self.__db:
-            if (record.get_package_cost_per_pax() >= low and record.get_package_cost_per_pax() <= high):
-                arr.append(record)
-        return arr
-
-    def get_val(self, record, typeOfVal):
-        """
-        Get the respective attribute from the RecordData object based on the typeOfVal given.
-        
-        Used in the linear search function below.
-        
-        Requires 2 arguments:
-        - record (RecordData)
-        - typeOfVal (str): "customer" or "package"
-        """
-        return record.get_customer_name() if (typeOfVal == "customer") \
-                                          else record.get_package_name()
-
-    def linear_search(self, target, typeOfSearch):
-        """
-        Do a linear search on the database for the customer name
-        
-        Requires 2 arguments:
-        - target (string)
-        - typeOfSearch (string) <-- "customer" or "package"
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n)
-        Average time complexity: O(n)
-        """
-        if (typeOfSearch not in ("customer", "package")):
-            raise ValueError(f"Invalid search type, {typeOfSearch}, Must be either \"customer\" or \"package\"!")
-
-        arr = []
-        for record in self.__db:
-            if (self.get_val(record, typeOfSearch) == target):
-                arr.append(record)
-        return -1 if (len(arr) == 0) else arr
-
-    def findAllNameOccurrences(self, i, name):
-        """
-        Search for all occurrences of the target name specified by the user starting from the index found from a search algorithm.
-        Limitations: Array must sorted by target name type
-        
-        Requires 2 arguments:
-        - i (int) <-- refers to the index obtained from a search algorithm
-        - name (string) <-- package name
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n)
-        Average time complexity: O(n)
-        """
-        iCopy = i
-        # search the right
-        while (i < len(self.__db) - 1 and self.__db[i + 1].get_package_name() == name):
-            i += 1
-
-        # search the left
-        while (iCopy > 0 and self.__db[iCopy - 1].get_package_name() == name):
-            iCopy -= 1
-
-        return iCopy, i
-
-    def binary_search_for_package_name(self, packageName):
-        """
-        Do a binary search on the database for the package name
-        
-        Requires 1 argument:
-        - packageName (string)
-        
-        Best time complexity: O(1)
-        Worst time complexity: O(log(n))
-        Average time complexity: O(log(n))
-        """
-        l = 0
-        r = len(self.__db) - 1
-        while (l <= r):
-            mid = (l + r) // 2
-            
-            # return mid if the package name is found in the subarray
-            if (self.__db[mid].get_package_name() == packageName):
-                # will return the index of the first and last occurrence of the package name in a tuple
-                return self.findAllNameOccurrences(mid, packageName) 
-
-            if (not self.__descending_order):
-                # if the package name to find is greater than mid, search the right half
-                if (self.__db[mid].get_package_name() < packageName):
-                    l = mid + 1
-                # if the package name to find is smaller than mid, search the left half
-                else:
-                    r = mid - 1
-            else:
-                # if the package name to find is smaller than mid, search the right half
-                if (self.__db[mid].get_package_name() > packageName):
-                    l = mid + 1
-                # if the package name to find is greater than mid, search the left half
-                else:
-                    r = mid - 1
-
-        return -1, -1 # return -1 if the package name is not found
-
-    def bubble_sort(self, reverse=False):
-        """
-        Do a bubble sort on the database by customer name
-        
-        Optional argument:
-        - reverse (bool)
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n^2)
-        Average time complexity: O(n^2)
-        """
-        for i in range(len(self.__db) - 1): # -1 to stop at last element since the last element will be the highest element after an iteration from the nested for loop
-            swapFlag = 0
-            for j in range(len(self.__db) - i - 1): # -i to stop at last i element since they are already sorted and -1 to account for the indexing starting from 0
-                if (reverse):
-                    # swap the elements if the jth customer name is smaller than the next customer name
-                    if (self.__db[j].get_customer_name() < self.__db[j + 1].get_customer_name()):
-                        self.__db[j], self.__db[j + 1] = self.__db[j + 1], self.__db[j]
-                        swapFlag = 1
-                else:
-                    # swap the elements if the jth customer name is greater than the next customer name
-                    if (self.__db[j].get_customer_name() > self.__db[j + 1].get_customer_name()):
-                        self.__db[j], self.__db[j + 1] = self.__db[j + 1], self.__db[j]
-                        swapFlag = 1
-
-            if (not swapFlag):
-                break # break when the array is already sorted
-
-    def selection_sort(self, reverse=False):
-        """
-        Do a selection sort by package name
-        
-        Optional argument:
-        - reverse (bool)
-        
-        Best time complexity: O(n^2)
-        Worst time complexity: O(n^2)
-        Average time complexity: O(n^2)
-        """
-        dbSize = len(self.__db)
-        for i in range(dbSize):
-            # initialise the element at ith index and assume that it is the smallest/biggest element based on the reverse
-            index = i
-
-            for j in range(i + 1, dbSize):
-                if (reverse):
-                    # find the next biggest element to compare with index
-                    if (self.__db[j].get_package_name() > self.__db[index].get_package_name()):
-                        index = j
-                else:
-                    # find the next smallest element to compare with index
-                    if (self.__db[j].get_package_name() < self.__db[index].get_package_name()):
-                        index = j
-
-            if (index != i):
-                # swap the found minimum/maximum element with the element at index i if the smallest/biggest elemment is not in its proper position
-                self.__db[i], self.__db[index] = self.__db[index], self.__db[i]
-
-    def insertion_sort(self, reverse=False):
-        """
-        Do a insertion sort by package cost
-        
-        Optional argument:
-        - reverse (bool)
-        
-        Best time complexity: O(n)
-        Worst time complexity: O(n^2)
-        Average time complexity: O(n^2)
-        """
-        dbSize = len(self.__db)
-        for i in range(1, dbSize):
-            el = self.__db[i] # save the value to be positioned
-            
-            j = i - 1
-            if (reverse):
-                # Compare el with each element on the left of it and move the smaller element to the right ahead of their current position
-                while (j >= 0 and self.__db[j].get_package_cost_per_pax() < el.get_package_cost_per_pax()):
-                    self.__db[j + 1] = self.__db[j]
-                    j -= 1
-            else:
-                # Compare el with each element on the left of it and move the bigger element to the right ahead of their current position
-                while (j >= 0 and self.__db[j].get_package_cost_per_pax() > el.get_package_cost_per_pax()):
-                    self.__db[j + 1] = self.__db[j ]
-                    j -= 1
-
-            self.__db[j + 1] = el
-
-    def heapify(self, n, i, reverse=False): 
-        """
-        To heapify subtree rooted at index i. 
-        
-        Binary heap is a complete binary tree 
-        (all levels are completely filled, except possibly the last level 
-        and the last level has nodes that are filled from left to right)
-        
-        Binary heap properties:
-        - in ascending order (max-heap): 
-            - at any node, the value of the node is greater than or equal to the values of its children
-            - the value of the root node is the largest value in the subtree
-        - in descending order (min-heap): 
-            - at any node, the value of the node is less than or equal to the values of its children
-            - the value of the root node is the smallest value in the subtree
-        
-        Requires 3 arguments:
-        - n (int): the size of the array
-        - i (int): the index of the root of the subtree
-        - reverse (bool): whether to make it a max-heap or a min-heap
-        """
-        l = (2 * i) + 1
-        r = (2 * i) + 2
-
-        if (reverse):
-            """
-            e.g. of valid min heap:
-              55
-             /  \
-            57  63
-            
-            e.g. of Invalid min heap:
-            8         
-             \
-              9 
-            Reason: It is not a complete binary tree
-            
-            e.g. of invalid min heap:
-              3                           1
-             / \   --> Correct version:  / \
-            1   6                       3   6
-            Reason: 1 is smaller than 3 which violates the min-heap property
-            """
-            smallest = i # Initialise smallest as root
-
-            # if left child of root exists and is smaller than root 
-            if (l < n and self.__db[l].get_package_name() < self.__db[smallest].get_package_name()): 
-                smallest = l 
-
-            # if right child of root exists and is smaller than smallest 
-            if (r < n and self.__db[r].get_package_name() < self.__db[smallest].get_package_name()): 
-                smallest = r
-            
-            # Change root if smallest is not root
-            if (smallest != i): 
-                self.__db[i], self.__db[smallest] = self.__db[smallest], self.__db[i] 
-                
-                # recursively heapify the affected sub-tree
-                self.heapify(n, smallest, reverse)
-        else:
-            """
-            e.g. of valid max heap:
-             63
-            /  \
-            57  55
-            
-            e.g. of invalid max heap:
-                9                            9
-               / \                          / \
-              5   7  --> Correct version:  6   7
-             /                            /
-            6                            5
-            Reason: 6 is smaller than 5 which violates the max heap property
-            """
-            largest = i # Initialise largest as root 
-
-            # See if left child of root exists and is greater than root 
-            if (l < n and self.__db[largest].get_package_name() < self.__db[l].get_package_name()): 
-                largest = l 
-        
-            # See if right child of root exists and is greater than largest 
-            if (r < n and self.__db[largest].get_package_name() < self.__db[r].get_package_name()): 
-                largest = r 
-        
-            # Change root if largest is not root
-            if (largest != i): 
-                self.__db[i], self.__db[largest] = self.__db[largest],self.__db[i]
-        
-                # recursively heapify the affected sub-tree
-                self.heapify(n, largest, reverse) 
-
-    def heap_sort(self, reverse=False):
-        """
-        Do a heap sort on the database by package name
-        
-        Optional argument:
-        - reverse (bool)
-        
-        Best time complexity: O(n log(n))
-        Worst time complexity: O(n log(n))
-        Average time complexity: O(n log(n))
-        """
-        n = len(self.__db) 
-
-        # Build a min or max heap depending on the reverse condition
-        # if in ascending order, then build a max heap
-        # if in descending order, then build a min heap
-        for i in range((n // 2) - 1, -1, -1): 
-            self.heapify(n, i, reverse=reverse) 
-
-        # extract elements individually starting from the end of the heap
-        for i in range(n - 1, -1, -1): 
-            # Move current root to end by swapping with last ith element
-            # as the largest(max heap)/smallest(min heap) element in the heap is at the root of the heap,
-            # Hence, move it to the last ith element and call heapify 
-            # on the new root with the new reduced size
-            self.__db[i], self.__db[0] = self.__db[0], self.__db[i]
-
-            # call heapify on the reduced heap
-            self.heapify(i, 0, reverse=reverse) 
-
-    def shellsort(self, reverse=False):
-        """
-        Shellsort algorithm works like the insertion sort algorithm but
-        shellsort will sort the elements that are far apart from each other,
-        and progressively reduces the interval gap between the elements to be compared.
-        
-        Sorts by pax number
-        
-        Best Time Complexity: O(n log n)
-        Average Time Complexity: O(n log n)
-        Worst Time Complexity: O(n^2)
-        """
-        # initialise the gap by halving the array size first
-        arr = self.__db
-        gap = len(arr) // 2
-
-        while (gap > 0):
-            # loop through the elements in the array in intervals of the gap
-            for i in range(gap, len(arr)):
-                temp = arr[i] # store the current element as temp
-                j = i # initialise j to be the value of i
-
-                # rearrange the elements at n/2, n/4, n/8, ... intervals
-
-                # if j is still greater or equal to the gap,
-                # checks if the value at j-gap is greater than temp,
-                # where j - gap is the element at the first element of the gap
-                while (not reverse and j >= gap and arr[j - gap].get_pax_num() > temp.get_pax_num()):
-                    arr[j] = arr[j - gap] # if it is, replace the value at j with the value at j-gap
-                    j -= gap
-
-                # same as the previous while loop, but checks if the value at j-gap is less than temp
-                while (reverse and j >= gap and arr[j - gap].get_pax_num() < temp.get_pax_num()):
-                    arr[j] = arr[j - gap]
-                    j -= gap
-
-                # finally, replace the value at j with temp 
-                # in the case where arr[j] was replaced by arr[j - gap]
-                # j would be pointed to the first element of the gap
-                # hence, effectively swapping the elements
-                arr[j] = temp 
-
-            gap //= 2 # halve the gap
-
-    def counting_sort_for_radix_sort(self, place, reverse):
-        """
-        Counting sort for radix sort
-        
-        Requires 1 argument:
-        - place (int)
-        
-        Best time complexity: O(n+b)
-        Worst time complexity: O(n+b)
-        Average time complexity: O(n+b)
-        
-        Space complexity: O(n+b)
-        Where n is the number of elements and b is the base number, 10
-        """
-        n = len(self.__db)
-        outputArr = [0] * n
-        countArr = [0] * 10
-
-        # Calculate count of elements
-        for i in range(n):
-            index = int(self.__db[i].get_package_cost_per_pax() * 100) // place
-            countArr[index % 10] += 1
-
-        # Calculate cumulative count...
-        if (reverse):
-            # in a descending order
-            for i in range(8, -1, -1):
-                countArr[i] += countArr[i + 1]
-        else:
-            # in an ascending order
-            for i in range(1, 10):
-                countArr[i] += countArr[i - 1]
-
-        # Place the elements in sorted order
-        i = n - 1
-        while (i >= 0):
-            index = int(self.__db[i].get_package_cost_per_pax() * 100) // place
-            outputArr[countArr[index % 10] - 1] = self.__db[i]
-            countArr[index % 10] -= 1
-            i -= 1
-
-        # Copy the sorted elements into original array
-        for i in range(n):
-            self.__db[i] = outputArr[i]
-
-    def radix_sort(self, reverse=False):
-        """
-        Do a radix sort (base 10) on the database by cost per pax
-
-        Optional argument:
-        - reverse (bool)
-        
-        Best time complexity: O(d(n+b))
-        Worst time complexity: O(d(n+b))
-        Average time complexity: O(d(n+b))
-        where d is the number of digits in the largest number
-        and b is the base number, 10. 
-        
-        Note that I multiplied the cost per pax by 100 as 
-        it is a float with a decimal place of 2
-        """
-        # Find the maximum number to know number of digits
-        maxCost = int(max(self.__db, key=lambda x : \
-                                     x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
-
-        # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
-        # place is 10^i where i is current digit number
-        place = 1
-        while (maxCost // place > 0):
-            self.counting_sort_for_radix_sort(place, reverse=reverse)
-            place *= 10
 
     def print_from_array(self, arr):
         """

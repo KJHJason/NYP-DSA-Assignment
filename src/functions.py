@@ -1,7 +1,7 @@
 # import third-party libraries
 from colorama import Fore as F
 from colorama import Style as S
-import dill
+import pickle
 
 # import standard libraries
 import re, pathlib, logging
@@ -58,7 +58,7 @@ def read_db_file():
     db = HotelDatabase()
     if (check_if_db_file_exists()):
         with open(PICKLE_FILE_PATH, "rb") as f:
-            db = dill.load(f)
+            db = pickle.load(f)
     else:
         # pre-initialize the database with 10 records
         for _ in range(10):
@@ -72,7 +72,7 @@ def save_db_file(db):
     Function to save the database file for future runs
     """
     with open(PICKLE_FILE_PATH, "wb") as f:
-        dill.dump(db, f)
+        pickle.dump(db, f)
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
     S_reset()
 

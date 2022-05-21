@@ -1,5 +1,5 @@
 # import local python files
-from linkedlist_code import DoublyLinkedList
+from .linkedlist_code import DoublyLinkedList
 
 class TreeNode:
     """
@@ -512,12 +512,25 @@ class AVLTree:
         return ""
 
 if __name__ == "__main__":
-    from hotel_record import RecordData
+    # remember to edit the import at line two as it is a relative import (remove the .)
+    # when testing the AVL tree code
+
+    from uuid import uuid4
+    class TestData:
+        def __init__(self, name):
+            self.__customer_name = name
+            self.id = uuid4().hex
+        
+        def get_customer_name(self):
+            return self.__customer_name
+        
+        def __repr__(self):
+            return f"{self.__customer_name} ({self.id})"
 
     nodeList = []
     for i in range(0, 20, 4):
         for j in range(3):
-            nodeList.append(RecordData(f"Product {j}", f"Customer {i}", 12, 1000))
+            nodeList.append(TestData(f"Customer {i}"))
 
     tree = AVLTree()
     for node in nodeList:
