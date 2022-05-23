@@ -567,7 +567,7 @@ X. Exit
 
                 return self.search_for_package(packageName, mode=mode)
             else:
-                records = self.linear_search(packageName, "package")
+                records = linear_search(self.__db, packageName, "package")
                 index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
                 if (index == -1):
                     return

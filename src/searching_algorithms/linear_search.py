@@ -13,11 +13,11 @@ def linear_search_range_of_cost(arr, low, high):
     Worst time complexity: O(n)
     Average time complexity: O(n)
     """
-    arr = []
+    matchedArr = []
     for record in arr:
         if (record.get_package_cost_per_pax() >= low and record.get_package_cost_per_pax() <= high):
-            arr.append(record)
-    return arr
+            matchedArr.append(record)
+    return matchedArr
 
 """---------------------- END OF LINEAR SEARCH FOR RANGE OF COST ----------------------"""
 
@@ -34,7 +34,7 @@ def get_val(record, typeOfVal):
     - typeOfVal (str): "customer" or "package"
     """
     return record.get_customer_name() if (typeOfVal == "customer") \
-                                        else record.get_package_name()
+                                      else record.get_package_name()
 
 def linear_search(arr, target, typeOfSearch):
     """
@@ -52,10 +52,10 @@ def linear_search(arr, target, typeOfSearch):
     if (typeOfSearch not in ("customer", "package")):
         raise ValueError(f"Invalid search type, {typeOfSearch}, Must be either \"customer\" or \"package\"!")
 
-    arr = []
+    matchedArr = []
     for record in arr:
         if (get_val(record, typeOfSearch) == target):
-            arr.append(record)
-    return -1 if (len(arr) == 0) else arr
+            matchedArr.append(record)
+    return -1 if (len(matchedArr) == 0) else matchedArr
 
 """---------------------- END OF LINEAR SEARCH FOR CUSTOMER NAME/PACKAGE NAME ----------------------"""
