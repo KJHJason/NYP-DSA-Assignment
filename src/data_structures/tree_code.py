@@ -355,10 +355,10 @@ class AVLTree:
             If we want to delete the node with value 4, we will find 
             the inorder successor in the right subtree which will be the node with value 5.
 
-                       5 (inorder successor, bf: 2-0 = 2)
-                      /
-                     2 (bf: 1-1 = 0)
-                    / \
+                        5 (inorder successor, bf: 2-0 = 2)
+                       /
+                      2 (bf: 1-1 = 0)
+                     / \
             (bf: 0) 1   3 (bf: 0)
 
             We will then replace the node that we wanted to delete with the inorder successor as shown above.
