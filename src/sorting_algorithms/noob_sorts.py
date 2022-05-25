@@ -38,7 +38,7 @@ def bogosort(arr, variant=False):
     Requires two arguments:
     - arr: the array to be sorted
     - variant: if True, the array will be sorted using bozosort, a variant of bogosort
-        - Bozosort works by randomly swap two elements in the array until it is sorted by package name.
+        - Bozosort works by randomly swapping two elements in the array until it is sorted by package name.
     """
     c = 0
     while (not is_sorted(arr)):
