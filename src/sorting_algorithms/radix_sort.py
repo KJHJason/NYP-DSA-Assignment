@@ -33,13 +33,11 @@ def counting_sort_for_radix_sort(arr, place, reverse):
         for i in range(1, 10):
             countArr[i] += countArr[i - 1]
 
-    # Place the elements in sorted order
-    i = n - 1
-    while (i >= 0):
+    # Find the index of each element and place it in the output array
+    for i in range(n-1, -1, -1):
         index = int(arr[i].get_package_cost_per_pax() * 100) // place
         outputArr[countArr[index % 10] - 1] = arr[i]
         countArr[index % 10] -= 1
-        i -= 1
 
     # Copy the sorted elements into original array
     for i in range(n):
@@ -63,11 +61,10 @@ def radix_sort(arr, reverse=False):
     it is a float with a decimal place of 2
     """
     # Find the maximum number to know number of digits
-    maxCost = int(max(arr, key=lambda x : \
-                                    x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
+    maxCostEl = max(arr, key=lambda x : x.get_package_cost_per_pax())
+    maxCost = int(maxCostEl.get_package_cost_per_pax() * 100)
 
-    # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
-    # place is 10^i where i is current digit number
+    # Do counting sort for every digit based on palce value
     place = 1
     while (maxCost // place > 0):
         counting_sort_for_radix_sort(arr, place, reverse=reverse)

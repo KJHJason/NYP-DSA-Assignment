@@ -27,5 +27,6 @@ def selection_sort(arr, reverse=False):
                     index = j
 
         if (index != i):
-            # swap the found minimum/maximum element with the element at index i if the smallest/biggest elemment is not in its proper position
+            # swap the found minimum/maximum element with the element at index i if the smallest/biggest 
+            # elemment is not in its proper position
             arr[i], arr[index] = arr[index], arr[i]
