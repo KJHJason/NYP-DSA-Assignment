@@ -12,7 +12,7 @@ Algorithms in this file:
 """
 
 # import python standard libraries
-from random import shuffle
+from random import shuffle, sample
 from time import sleep
 from threading import Timer
 
@@ -20,27 +20,35 @@ def is_sorted(arr):
     """
     Checks if the array is sorted.
     
-    Function is used for bogosort.
+    Function is used for bogosort and bozosort.
     """
     for i in range(len(arr) - 1):
         if (arr[i].get_package_name() > arr[i + 1].get_package_name()):
             return False
     return True
 
-def bogosort(arr):
+def bogosort(arr, variant=False):
     """
     Randomly shuffles the array until it is sorted by package name.
     
     Best Time Complexity: O(n)
     Worst Time Complexity: O(inf) as this algorithm has no upper bound
     Average Time Complexity: O(n*n!)
-    """
-    i = 0
 
+    Requires two arguments:
+    - arr: the array to be sorted
+    - variant: if True, the array will be sorted using bozosort, a variant of bogosort
+        - Bozosort works by randomly swap two elements in the array until it is sorted by package name.
+    """
+    c = 0
     while (not is_sorted(arr)):
-        i += 1
-        shuffle(arr)
-    return arr, i
+        if (not variant):
+            shuffle(arr)
+        else:
+            idxA, idxB = sample(range(0, len(arr)), 2)
+            arr[idxA], arr[idxB] = arr[idxB], arr[idxA]
+        c += 1
+    return arr, c
 
 def stalinsort(arr):
     """

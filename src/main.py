@@ -254,7 +254,7 @@ def main():
                     WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very slow and may take a long time to sort the records...\nPlease use with caution, especially if you have a large number of records...{S.RESET_ALL}"
                     while (easterInput != "q"):
                         print_sub_menu(6)
-                        easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                        easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "5", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
 
                         if (easterInput == "1"):
                             # sort by customer name using stalin sort
@@ -267,11 +267,16 @@ def main():
                             if (sortConfirmation == "y"):
                                 hotelDB.easter_egg_sorts(typeOfSort="bogosort")
                         elif (easterInput == "3"):
+                            # sort by package name using bozo sort
+                            sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                            if (sortConfirmation == "y"):
+                                hotelDB.easter_egg_sorts(typeOfSort="bozosort")
+                        elif (easterInput == "4"):
                             # sort by package cost using slow sort
                             sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"), prints=WarningMessage)
                             if (sortConfirmation == "y"):
                                 hotelDB.easter_egg_sorts(typeOfSort="slowsort")
-                        elif (easterInput == "4"):
+                        elif (easterInput == "5"):
                             # sort by package's number of pax using sleep sort
                             sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"), prints=WarningMessage)
                             if (sortConfirmation == "y"):
