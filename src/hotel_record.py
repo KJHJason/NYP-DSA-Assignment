@@ -39,6 +39,7 @@ COST_PER_PAX = "Cost Per Pax"
 # info on what the various slow sorting algorithms sorts by
 NOOB_SORTS_INFO_DICT = {
     "bogosort": PACKAGE_NAME,
+    "bozosort": PACKAGE_NAME,
     "stalinsort": CUST_NAME,
     "slowsort": COST_PER_PAX,
     "sleepsort": PAX_NUM
@@ -755,7 +756,7 @@ X. Exit
         self.print_from_array(self.__db[startIndex:endIndex + 1])
         print()
     
-    def easter_egg_sorts(self, typeOfSort="bogosort"):
+    def easter_egg_sorts(self, typeOfSort=None):
         """
         Method to sort the database using different non-sensical sorts such as bogosort
         
@@ -770,10 +771,12 @@ X. Exit
             S_reset()
             return
 
-        if (typeOfSort == "bogosort"):
+        if (typeOfSort == "bogosort" or typeOfSort == "bozosort"):
             # sorts by package name
+            sortByBozosort = True if (typeOfSort == "bozosort") else False
+
             print("\nSorting...", end="")
-            self.__db, iterNums = bogosort(self.__db)
+            self.__db, iterNums = bogosort(self.__db, variant=sortByBozosort)
             print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name!")
             S_reset(nl=True)
         elif (typeOfSort == "stalinsort"):

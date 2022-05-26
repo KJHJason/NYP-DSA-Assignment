@@ -33,13 +33,18 @@ def counting_sort_for_radix_sort(arr, place, reverse):
         for i in range(1, 10):
             countArr[i] += countArr[i - 1]
 
-    # Place the elements in sorted order
-    i = n - 1
-    while (i >= 0):
-        index = int(arr[i].get_package_cost_per_pax() * 100) // place
-        outputArr[countArr[index % 10] - 1] = arr[i]
-        countArr[index % 10] -= 1
-        i -= 1
+    for i in range(n-1, -1, -1):
+        # finding the index of the element in the count array by calculating the cost divided by the 
+        # place value modulo 10 to get the remainder as to avoid index out of range error
+        countArrIdx = (int(arr[i].get_package_cost_per_pax() * 100) // place) % 10
+
+        # we will retrieve the element from the countArr using the countArrIdx we calculated above.
+        # the retrieved element minus one (to account for indexing) will be the index of the element 
+        # in the output array
+        outputArr[countArr[countArrIdx] - 1] = arr[i]
+
+        # decrement the count array by 1 for the next element
+        countArr[countArrIdx] -= 1
 
     # Copy the sorted elements into original array
     for i in range(n):
@@ -63,11 +68,10 @@ def radix_sort(arr, reverse=False):
     it is a float with a decimal place of 2
     """
     # Find the maximum number to know number of digits
-    maxCost = int(max(arr, key=lambda x : \
-                                    x.get_package_cost_per_pax()).get_package_cost_per_pax() * 100)
+    maxCostEl = max(arr, key=lambda x : x.get_package_cost_per_pax())
+    maxCost = int(maxCostEl.get_package_cost_per_pax() * 100)
 
-    # Do counting sort for every digit. Note that instead of passing digit number, place is passed. 
-    # place is 10^i where i is current digit number
+    # Do counting sort for every digit based on palce value
     place = 1
     while (maxCost // place > 0):
         counting_sort_for_radix_sort(arr, place, reverse=reverse)
