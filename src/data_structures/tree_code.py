@@ -330,14 +330,14 @@ class AVLTree:
                 return None
 
             # if the node has only one child, replace the node with its child
-            # and set the child's parent to None to delete the node
+            # and delete the child's parent (the node to be deleted from the tree)
             if (not root.left):
                 temp = root.right
-                root = None
+                del root
                 return temp
             elif (not root.right):
                 temp = root.left
-                root = None
+                del root
                 return temp
 
             r"""
