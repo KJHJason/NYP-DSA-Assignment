@@ -378,9 +378,9 @@ X. Exit
             self.__sort_order = PAX_NUM
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
+            print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+            print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
     def sort_by_customer_name(self, reverse=False, typeOfSort="tree"):
@@ -407,9 +407,9 @@ X. Exit
             self.__sort_order = CUST_NAME
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
+            print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+            print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
     def sort_by_package_name(self, reverse=False):
@@ -432,9 +432,9 @@ X. Exit
             self.__sort_order = PACKAGE_NAME
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
+            print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+            print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
     def sort_by_package_cost(self, reverse=False):
@@ -457,9 +457,9 @@ X. Exit
             self.__sort_order = COST_PER_PAX
             print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
         elif (len(self.__db) == 1):
-            print(f"{F.LIGHTRED_EX}Warning: There is no need to sort the database as there is only one record!")
+            print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
-            print(f"{F.LIGHTRED_EX}Warning: There are no records to sort!")
+            print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
     def get_index_from_list(self, data=-1, mode=None, typeOfOperations=None, target=None):
@@ -798,7 +798,7 @@ X. Exit
                 else:
                     return
         else:
-            print(f"{F.LIGHTRED_EX}Error: There is no records...")
+            print(f"{F.LIGHTRED_EX}Notice: There are no records to display...")
             S_reset()
 
     def print_from_index(self, startIndex, endIndex):

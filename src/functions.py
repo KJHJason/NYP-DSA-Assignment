@@ -26,8 +26,8 @@ USED_TRUE_CONDITIONS = ("y", "Y")
 
 # presets used in preinitialising the database with records
 # by randomly selecting one element from each presets
-PACKAGE_NAME_PRESETS = ["Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package"]
-CUSTOMER_NAME_PRESETS = ["John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles"]
+PACKAGE_NAME_PRESETS = ("Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package")
+CUSTOMER_NAME_PRESETS = ("John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles")
 
 def S_reset(nl=0):
     """
@@ -64,9 +64,10 @@ def read_db_file():
             db = pickle.load(f)
     else:
         # pre-initialize the database with 10 records to satisfy basic function b
-        for _ in range(10):
-            randPackage, randCust = preintialise_data()
-            db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
+        # for _ in range(10):
+        #     randPackage, randCust = preintialise_data()
+        #     db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
+        pass
 
     return db
 
