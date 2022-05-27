@@ -1,3 +1,4 @@
 *.pyc
 src/hotel_records.pickle
 *.log
+test/*
