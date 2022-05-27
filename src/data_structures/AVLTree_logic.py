@@ -23,14 +23,17 @@ class TreeNode:
 
         self.data.add_to_back(data)
 
-def get_height(root):
+def get_height(node):
     """
     Get the height of the tree from the node
+    
+    Requires one argument:
+    - node (TreeNode): the node to get the height from
     """
-    if (root is None):
+    if (node is None):
         return 0
 
-    return root.height
+    return node.height
 
 def get_balance(root):
     """
@@ -54,6 +57,9 @@ def get_balance(root):
 def get_min_value(root):
     """
     Find the minimum value node in the tree
+    
+    Requires one argument:
+    - root (TreeNode): The root node of the tree/subtree
     """
     current = root
 
@@ -67,6 +73,9 @@ def get_min_value(root):
 def left_rotate(x):
     """
     To perform left rotation on the subtree rooted with x
+    
+    Requires one argument:
+    - x (TreeNode): The root node of the subtree
     """
     y = x.right
     childSubtree = y.left
@@ -84,6 +93,9 @@ def left_rotate(x):
 def right_rotate(y):
     """
     To perform right rotation on the subtree rooted with y
+    
+    Requires one argument:
+    - y (TreeNode): The root node of the subtree
     """
     x = y.left
     childSubtree = x.right
@@ -106,7 +118,8 @@ def search_node(root, target):
     Worst Time complexity: O(log n)
     Average Time complexity: O(log n)
 
-    Requires one argument:
+    Requires two arguments:
+    - root (TreeNode): The root node of the tree/subtree
     - target (string): The target value to search for (customer name)
     """
     # If the target is less than the current node, search the left subtree
@@ -134,7 +147,8 @@ def insert_node(root, data):
     Worst Time complexity: O(log n)
     Average Time complexity: O(log n)
     
-    Requires one argument:
+    Requires two arguments:
+    - root (TreeNode): The root node of the tree/subtree
     - data (RecordData): The data of the node to be inserted into the tree
     """
     # If the tree is empty, return a new node as the root
@@ -287,7 +301,8 @@ def delete_node(root, data):
     Worst Time complexity: O(log n)
     Average Time complexity: O(log n)
     
-    Requires one argument:
+    Requires two argument:
+    - root (TreeNode): The root node of the tree/subtree
     - data (RecordData): The data of the node to be deleted from the linkedlist
     """
     # if the root is None, return None.
