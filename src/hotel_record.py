@@ -9,7 +9,7 @@ from math import ceil
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
 
 # import data structures
-from data_structures.tree_code import AVLTree
+from data_structures.AVLTree import AVLTree
 
 # import sorting algorithms
 from sorting_algorithms.noob_sorts import bogosort, stalinsort, slowsort, sleepsort
@@ -655,22 +655,26 @@ X. Exit
                 noLen = len(noHeader)
 
             print("Numbers of results found:", len(arr))
-            header = f"| {noHeader.ljust(noLen)} | {'Customer Name'.ljust(self.__table_len[0])} | {'Package Name'.ljust(self.__table_len[1])} | {'Cost Per Pax'.ljust(self.__table_len[2])} | {'Number of Pax'.ljust(self.__table_len[3])} |"
+            header = f"| {noHeader:^{noLen}} | {'Customer Name':<{self.__table_len[0]}} | {'Package Name':<{self.__table_len[1]}} | {'Cost Per Pax':>{self.__table_len[2]}} | {'Number of Pax':>{self.__table_len[3]}} |"
 
             # default rows to print per page, change at own will
             rowsToPrint = 10
             
             # initialise some variables
-            counter = 0
-            currentPage = 1
-            maxPages = ceil(len(arr) / rowsToPrint)
+            counter = 0 # used for the for loop range arguments
+            currentPage = 1 # used to indicate the current page
+            maxPages = ceil(len(arr) / rowsToPrint) # number of pages to print
 
+            # calculate the amount of records to print for the last page
             lastPageRecordsToPrint = len(arr) % rowsToPrint
             if (lastPageRecordsToPrint == 0):
+                # set the lastPageRecordsToPrint to the rowsToPrint as it means that
+                # there is no remainder, i.e. the length of the array 
+                # is 10, 20, 30, and so on...
                 lastPageRecordsToPrint = rowsToPrint
 
             # for the no. header numbers for the last page as the last page is using negative indexing
-            noLastPageArr = [str(i + 1) for i in range(len(arr) - lastPageRecordsToPrint, len(arr))]
+            noLastPageArr = [i + 1 for i in range(len(arr) - lastPageRecordsToPrint, len(arr))]
 
             while (1):
                 print("-" * len(header))
@@ -690,11 +694,11 @@ X. Exit
                 if (currentPage != maxPages):
                     for i in range(counter, counter + rowsToPrint):
                         record = arr[i]
-                        print(f"| {str(i + 1).ljust(noLen)}", end=" | ")
-                        print(f"{record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
-                        print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
-                        print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
-                        print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
+                        print(f"| {i+1:^{noLen}}", end=" | ")
+                        print(f"{record.get_customer_name():<{self.__table_len[0]}}", end=" | ")
+                        print(f"{record.get_package_name():<{self.__table_len[1]}}", end=" | ")
+                        print(f"{format_price(record.get_package_cost_per_pax()):>{self.__table_len[2]}}", end=" | ")
+                        print(f"{str(record.get_pax_num()):>{self.__table_len[3]}} |")
 
                         counter += 1
                         if (counter >= len(arr)):
@@ -703,18 +707,18 @@ X. Exit
                 else:
                     for i in range(-lastPageRecordsToPrint, 0, 1):
                         record = arr[i]
-                        print(f"| {noLastPageArr[i].ljust(noLen)}", end=" | ")
-                        print(f"{record.get_customer_name().ljust(self.__table_len[0])}", end=" | ")
-                        print(f"{record.get_package_name().ljust(self.__table_len[1])}", end=" | ")
-                        print(format_price(record.get_package_cost_per_pax()).ljust(self.__table_len[2]), end=" | ")
-                        print(f"{str(record.get_pax_num()).ljust(self.__table_len[3])} |")
-                    
+                        print(f"| {noLastPageArr[i]:^{noLen}}", end=" | ")
+                        print(f"{record.get_customer_name():<{self.__table_len[0]}}", end=" | ")
+                        print(f"{record.get_package_name():<{self.__table_len[1]}}", end=" | ")
+                        print(f"{format_price(record.get_package_cost_per_pax()):>{self.__table_len[2]}}", end=" | ")
+                        print(f"{str(record.get_pax_num()):>{self.__table_len[3]}} |")
+
+                    # calculate counter for the other pages, which will use positive indexing
                     counter = len(arr) - lastPageRecordsToPrint - rowsToPrint
 
                 print("-" * len(header))
 
-                pageStatus = f"Page {currentPage} of {maxPages}"
-                print(f"{' ' * (len(header) - len(pageStatus))}{pageStatus}", end="\n\n")
+                print(f"Page {currentPage} of {maxPages}".rjust(len(header)), end="\n\n")
 
                 if (len(arr) > 10):
                     try:
@@ -729,12 +733,19 @@ X. Exit
                     else:
                         # continue and calculate the counter and current page
                         if (continuePrompt == "b"):
+                            # go back a page
                             if (currentPage != maxPages):
+                                # if the current page is not the last page, minus 1 from the current page
+                                # and calculate the counter
                                 counter -= (rowsToPrint * 2)
                                 currentPage -= 1
                             else:
+                                # if the current page is the last page, 
+                                # minus the current page but do not calculate the counter as it is already calculated
+                                # after the for loop for the last page.
                                 currentPage -= 1
                         else:
+                            # go to the next page
                             currentPage += 1
 
                         for _ in range(rowsToPrint + 8):
@@ -761,7 +772,7 @@ X. Exit
         Method to sort the database using different non-sensical sorts such as bogosort
         
         Requires 1 argument:
-        - typeOfSort (str) -> "bogosort", "stalinsort", "slowsort", "sleepsort"
+        - typeOfSort (str) -> "bogosort", "bozosort", "stalinsort", "slowsort", "sleepsort"
         """
         if (not NOOB_SORTS_INFO_DICT.get(typeOfSort)):
             raise ValueError(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")

@@ -10,7 +10,7 @@ import re
 from functions import *
 from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
-DEBUG_FLAG = True
+DEBUG_FLAG = False
 
 def main():
     hotelDB = read_db_file()
@@ -317,13 +317,6 @@ def main():
 
 if (__name__ == "__main__"):
     coloramaInit(autoreset=False, convert=True)
-
-    header = "Welcome to Waffle Hotel's Booking Records"
-    print("*" * len(header))
-    print(f"{F.LIGHTYELLOW_EX}{header}")
-    print(" " * 16, "System", sep="")
-    S_reset()
-    print("*" * len(header))
 
     if (not DEBUG_FLAG):
         try:

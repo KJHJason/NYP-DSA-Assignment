@@ -9,6 +9,9 @@ from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
 
+# Welcome header message
+HEADER = "Welcome to Waffle Hotel's Booking Records"
+
 # regex for handling user inputs
 RANGE_INPUT_REGEX = re.compile(r"^\d+(-)\d+|\d+$")
 
@@ -80,6 +83,13 @@ def print_main_menu(numOfRecords):
     """
     Print the menu for user to choose their next action
     """
+    
+    print()
+    print("*" * len(HEADER))
+    print(f"{F.LIGHTYELLOW_EX}{HEADER}")
+    print(f"{'System':^{len(HEADER)}}")
+    S_reset()
+    print("*" * len(HEADER))
     print()
     print("-" * 13, "Menu Options", "-" * 13)
     print()
