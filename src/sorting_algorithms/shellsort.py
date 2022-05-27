@@ -23,7 +23,7 @@ def shellsort(arr, reverse=False):
             temp = arr[i] # store the current element as temp
             j = i # initialise j to be the value of i
 
-            # rearrange the elements at n/2, n/4, n/8, ... intervals
+            # rearrange the elements at n/2, n/4, n/8,... intervals
 
             # if j is still greater or equal to the gap,
             # checks if the value at j-gap is greater than temp,

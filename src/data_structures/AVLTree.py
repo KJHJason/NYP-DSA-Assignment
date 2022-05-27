@@ -127,7 +127,7 @@ class AVLTree:
         self.visualise_tree(self.root)
         return ""
 
-if __name__ == "__main__":
+if (__name__ == "__main__"):
     from uuid import uuid4
     class TestData:
         def __init__(self, name):

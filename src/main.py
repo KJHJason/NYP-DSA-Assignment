@@ -4,7 +4,7 @@ from colorama import init as coloramaInit
 # import standard libraries
 from sys import exit as sysExit
 from sys import exc_info
-import re
+import re, platform
 
 # import local python files
 from functions import *
@@ -214,12 +214,8 @@ def main():
                     sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
                     if (sortConfirmation == "y"):
                         descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
-                        if (len(hotelDB) < 5):
-                            # To satisfy basic function c.2
-                            hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="bubble")
-                        else:
-                            # newly added
-                            hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="tree")
+                        # To satisfy basic function c.2
+                        hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="bubble")
 
                 elif (subInput == "2"):
                     # To satisfy basic function c.3
@@ -318,7 +314,9 @@ def main():
                             hotelDB.search_for_package(packageName, mode="Delete")
 
 if (__name__ == "__main__"):
-    coloramaInit(autoreset=False, convert=True)
+    if (platform.system() == "Windows"):
+        # colorama to escape the ANSI escape sequences for Windows systems
+        coloramaInit(autoreset=False, convert=True)
 
     if (not DEBUG_FLAG):
         try:
@@ -327,7 +325,7 @@ if (__name__ == "__main__"):
             shutdown(nl=True, program="Main")
         except:
             print()
-            print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")
+            print(f"{F.LIGHTRED_EX}Unexpected error caught:\n{exc_info()}")
             print(f"Please refer to the generated error log file for more details...")
             S_reset()
             log_error()

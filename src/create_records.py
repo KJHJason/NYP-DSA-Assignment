@@ -7,7 +7,7 @@ from colorama import init as coloramaInit
 from colorama import Fore as F
 
 # import standard libraries
-import re
+import re, platform
 from random import randint, uniform
 from sys import exit as sysExit
 from sys import exc_info
@@ -39,7 +39,10 @@ def main():
     return 0
 
 if (__name__ == "__main__"):
-    coloramaInit(autoreset=False, convert=True)
+    if (platform.system() == "Windows"):
+        # colorama to escape the ANSI escape sequences for Windows systems
+        coloramaInit(autoreset=False, convert=True)
+
     try:
         print(f"{F.LIGHTGREEN_EX}Welcome to the Hotel Records Generator meant for development use!")
         S_reset()

@@ -21,7 +21,8 @@ from sorting_algorithms.selection_sort import selection_sort
 from sorting_algorithms.bubble_sort import bubble_sort
 
 # import searching algorithms
-from searching_algorithms.binary_search import binary_search_for_package_name, binary_search_for_range_of_cost
+from searching_algorithms.binary_search import binary_search_for_name, binary_search_for_range_of_cost
+from searching_algorithms.exponential_search import exponential_search_for_customer
 from searching_algorithms.linear_search import linear_search, linear_search_range_of_cost
 
 # regex for handling user inputs
@@ -177,6 +178,28 @@ class RecordData:
             else:
                 print(f"{F.LIGHTRED_EX}Package cost per pax cannot be the same as the current package cost per pax!")
                 S_reset()
+
+    def get_val(self, attribute=None):
+        """
+        Returns the value of the specified attribute.
+        
+        Requires one argument:
+        - attribute(str): The attribute to get the value of.
+            - "packageName"
+            - "customerName"
+            - "paxNum"
+            - "packageCostPerPax"
+        """
+        if (attribute == "packageName"):
+            return self.get_package_name()
+        elif (attribute == "customerName"):
+            return self.get_customer_name()
+        elif (attribute == "paxNum"):
+            return self.get_pax_num()
+        elif (attribute == "packageCostPerPax"):
+            return self.get_package_cost_per_pax()
+        else:
+            raise ValueError(f"Invalid attribute \"{attribute}\" in get_val in RecordData object!")
 
     def __repr__(self):
         return "(" + f"{self.__packageName}, " + f"{self.__customerName}, " + f"{self.__paxNum} pax, " + format_price(self.__packageCostPerPax) + ")"
@@ -515,7 +538,36 @@ X. Exit
                 S_reset(nl=True)
                 return -1
 
-        data = linear_search(self.__db, customerName, "customer")
+        if (self.__sort_order != CUST_NAME and len(self.__db) > 1):
+            alertMsg = [
+                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by customer name for a faster search time in future searches,",
+                "Otherwise, you can still search for a customer and maintain the original order of the database..."
+            ]
+            if (mode == "Edit"):
+                alertMsg.append("assuming that the customer name is unchanged when editing the record.")
+                alertMsg[1], alertMsg[2] = alertMsg[2], alertMsg[1]
+
+            alertMsg = tuple(alertMsg)
+
+            sortInput = get_input(prompt="Do you want to sort the database by customer name? (Y/N): ", prints=alertMsg, command=("y", "n"))
+            if (sortInput == "y"): 
+                reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+
+                reverseOrder = convert_var_to_bool(reverseOrder)
+                self.__db = self.__bst_root.tree_sort(reverse=reverseOrder)
+                self.__descending_order = reverseOrder
+
+                print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
+                S_reset(nl=True)
+                self.__sort_order = CUST_NAME
+
+                return self.search_for_customer(customerName, mode=mode)
+            else:
+                data = linear_search(self.__db, customerName, "customerName")
+        else:
+            lowIndex, highIndex = exponential_search_for_customer(self.__db, customerName, self.__descending_order)
+            data = self.__db[lowIndex:highIndex + 1]
+
         index = self.get_index_from_list(data=data, mode="customer", typeOfOperations=mode, target=customerName)
         if (index == -1):
             return
@@ -551,7 +603,7 @@ X. Exit
             if (mode == "Edit"):
                 alertMsg.append("assuming that the package name is unchanged when editing the record.")
                 alertMsg[1], alertMsg[2] = alertMsg[2], alertMsg[1]
-            
+
             alertMsg = tuple(alertMsg)
 
             sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
@@ -568,33 +620,26 @@ X. Exit
 
                 return self.search_for_package(packageName, mode=mode)
             else:
-                records = linear_search(self.__db, packageName, "package")
-                index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
-                if (index == -1):
-                    return
-
-                record = records[index]
-                print(record)
-                userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
-                if (userInput == "y" and mode == "Edit"):
-                    self.edit_record(record)
-                elif (userInput == "y" and mode == "Delete"):
-                    self.delete_record(record)
+                records = linear_search(self.__db, packageName, "packageName")
         else:
-            lowIndex, highIndex = binary_search_for_package_name(self.__db, packageName, self.__descending_order)
+            lowIndex, highIndex = binary_search_for_name(self.__db, packageName, self.__descending_order, "packageName")
             records = self.__db[lowIndex:highIndex + 1]
-            index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
-            if (index == -1):
-                return
 
-            record = records[index]
-            print(record)
-            userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
-            if (userInput == "y" and mode == "Edit"):
-                self.edit_record(record)
-            elif (userInput == "y" and mode == "Delete"):
-                self.delete_record(record)
-                self.__bst_root.delete(record)
+        index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
+        if (index == -1):
+            return
+
+        record = records[index]
+        print(record)
+        userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
+        if (userInput == "y" and mode == "Edit"):
+            oldCustName = record.get_customer_name()
+            self.edit_record(record)
+            if (oldCustName != record.get_customer_name()):
+                self.__bst_root.move_node(record)
+        elif (userInput == "y" and mode == "Delete"):
+            self.delete_record(record)
+            self.__bst_root.delete(record)
 
     def search_for_range_of_cost(self, low, high):
         """

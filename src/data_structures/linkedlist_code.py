@@ -142,7 +142,7 @@ class DoublyLinkedList:
         return f"- [{', '.join(arr)}]"
 
 # test codes for doubly linked list
-if __name__ == "__main__":
+if (__name__ == "__main__"):
     ll = DoublyLinkedList()
     for i in range(10):
         ll.add_to_back(i)
