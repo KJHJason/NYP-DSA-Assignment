@@ -12,7 +12,7 @@ Algorithms in this file:
 """
 
 # import python standard libraries
-from random import shuffle, sample
+from random import randint, sample, shuffle
 from time import sleep
 from threading import Timer
 
@@ -46,8 +46,14 @@ def bogosort(arr, variant=False):
     c = 0
     while (not is_sorted(arr)):
         if (not variant):
-            shuffle(arr)
+            # shuffle the whole array
+            for i in range(len(arr)):
+                # 0 and n-1 as they are inclusive and to avoid IndexError
+                idx = randint(0, len(arr) - 1)
+                # swap the elements with the randomised index
+                arr[i], arr[idx] = arr[idx], arr[i]
         else:
+            # swap two random elements in the array
             idxA, idxB = sample(range(0, len(arr)), 2)
             arr[idxA], arr[idxB] = arr[idxB], arr[idxA]
         c += 1
