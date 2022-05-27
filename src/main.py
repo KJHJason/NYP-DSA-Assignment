@@ -251,13 +251,15 @@ def main():
                     S_reset()
                     # sort by using non-sensical sorting algorithm such as bogosort
                     easterInput = ""
-                    WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very slow and may take a long time to sort the records...\nPlease use with caution, especially if you have a large number of records...{S.RESET_ALL}"
+                    WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very SLOW and may take a long time to sort the records...\nPlease use with CAUTION, especially if you have a large number of records...{S.RESET_ALL}"
                     while (easterInput != "q"):
                         print_sub_menu(6)
                         easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "5", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
 
                         if (easterInput == "1"):
                             # sort by customer name using stalin sort
+                            WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is fast when sorting the records...\nHowever, please use with CAUTION as it will result in DELETION of records that are not in the correct order...{S.RESET_ALL}"
+
                             sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"), prints=WarningMessage)
                             if (sortConfirmation == "y"):
                                 hotelDB.easter_egg_sorts(typeOfSort="stalinsort")
