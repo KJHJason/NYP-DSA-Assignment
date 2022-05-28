@@ -98,9 +98,9 @@ def heap_sort(arr, reverse=False):
     - arr (list): The array of elements to sort by package name
     - reverse (bool): True if the list is to be sorted in descending order (Default: False)
     
-    Best time complexity: O(n log(n))
-    Worst time complexity: O(n log(n))
-    Average time complexity: O(n log(n))
+    Best time complexity: O(n log n)
+    Worst time complexity: O(n log n)
+    Average time complexity: O(n log n)
     """
     n = len(arr) 
 

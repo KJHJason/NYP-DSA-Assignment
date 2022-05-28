@@ -1,8 +1,8 @@
 # import local python files
 if (__package__ is None or __package__ == ""):
-    from AVLTree_logic import search_node, insert_node, delete_node
+    from AVLTree_utility_functions import search_node, insert_node, delete_node
 else:
-    from .AVLTree_logic import search_node, insert_node, delete_node
+    from .AVLTree_utility_functions import search_node, insert_node, delete_node
 
 class AVLTree:
     """
