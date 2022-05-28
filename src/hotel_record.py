@@ -875,7 +875,7 @@ X. Exit
         """
         self.print_from_array(self.__db[startIndex:endIndex + 1])
         print()
-    
+
     def easter_egg_sorts(self, typeOfSort=None):
         """
         Method to sort the database using different non-sensical sorts such as bogosort
