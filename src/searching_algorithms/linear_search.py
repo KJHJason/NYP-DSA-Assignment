@@ -40,9 +40,9 @@ def linear_search(arr, target, typeOfSearch):
         raise ValueError(f"Invalid search type, {typeOfSearch}, Must be either 'customerName' or 'packageName'!")
 
     matchedArr = []
-    for record in arr:
+    for i, record in enumerate(arr):
         if (record.get_val(typeOfSearch) == target):
-            matchedArr.append(record)
+            matchedArr.append((record, i))
     return -1 if (len(matchedArr) == 0) else matchedArr
 
 """---------------------- END OF LINEAR SEARCH FOR CUSTOMER NAME/PACKAGE NAME ----------------------"""

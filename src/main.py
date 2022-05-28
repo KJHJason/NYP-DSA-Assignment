@@ -85,7 +85,7 @@ def main():
         elif (uInput == "2"):
             # add new record (newly added)
             continueFlag = True
-            while (continueFlag != 0):
+            while (continueFlag != False):
                 packageName = customerName = ""
                 paxNum = costperPax = 0
 
@@ -301,29 +301,41 @@ def main():
                     
                     if (subInput == "1"):
                         # Delete record by customer name
-                        while (1):
-                            print()
-                            customerName = input("Enter the customer name (F to cancel): ").lower().strip()
-                            if (customerName == "f"):
-                                break
-                            elif (customerName == ""):
-                                print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
-                                S_reset()
-                            else:
-                                hotelDB.search_for_customer(customerName, mode="Delete")
+                        if (len(hotelDB) < 1):
+                            print(f"{F.LIGHTRED_EX}Notice: There are no records to delete...")
+                            S_reset(nl=True)
+                        else:
+                            while (1):
+                                print()
+                                customerName = input("Enter the customer name (F to cancel): ").lower().strip()
+                                if (customerName == "f"):
+                                    break
+                                elif (customerName == ""):
+                                    print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
+                                    S_reset()
+                                else:
+                                    hotelDB.search_for_customer(customerName, mode="Delete")
+                                    if (len(hotelDB) < 1):
+                                        break
 
                     elif (subInput == "2"):
                         # Delete record by package name
-                        while (1):
-                            print()
-                            packageName = input("Enter the package name (F to cancel): ").lower().strip()
-                            if (packageName == "f"):
-                                break
-                            elif (packageName == ""):
-                                print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
-                                S_reset()
-                            else:
-                                hotelDB.search_for_package(packageName, mode="Delete")
+                        if (len(hotelDB) < 1):
+                            print(f"{F.LIGHTRED_EX}Notice: There are no records to delete...")
+                            S_reset(nl=True)
+                        else:
+                            while (1):
+                                print()
+                                packageName = input("Enter the package name (F to cancel): ").lower().strip()
+                                if (packageName == "f"):
+                                    break
+                                elif (packageName == ""):
+                                    print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
+                                    S_reset()
+                                else:
+                                    hotelDB.search_for_package(packageName, mode="Delete")
+                                    if (len(hotelDB) < 1):
+                                        break
 
 if (__name__ == "__main__"):
     if (platform.system() == "Windows"):

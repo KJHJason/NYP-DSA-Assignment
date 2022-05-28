@@ -234,14 +234,18 @@ class HotelDatabase:
         self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), \
                             len(self.__table_headers[2]), len(self.__table_headers[3])] 
 
-    def delete_record(self, record):
+    def delete_record(self, record=None, index=None):
         """
         Deletes a record from the database
         
-        Args:
-        record: The record to be deleted
+        Requires either one of the two arguments:
+        record: The record to be deleted (defaults to None)
+        index: The index of the record to be deleted (defaults to None)
         """
-        self.__db.remove(record)
+        if (index is None):
+            self.__db.remove(record)
+        else:
+            self.__db.pop(index)
         print(f"{F.LIGHTGREEN_EX}Record deleted!")
         S_reset()
 
@@ -462,13 +466,14 @@ X. Exit
             print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
-    def get_index_from_list(self, data=-1, mode=None, typeOfOperations=None, target=None):
+    def get_index_from_list(self, data=-1, dataOrigIndex=[], mode=None, typeOfOperations=None, target=None):
         """
         Function to get the index from a list of data.
         Used to when there is duplicate data in the search results.
         
-        Requires 4 arguments:
+        Requires 5 arguments:
         - data (list/int): if int, it must be -1 to indicate no results found
+        - dataOrigIndex (list): the original index of the data in self.__db
         - mode (str): mode is defined as what type of data, e.g. "customer" and "package".
         - typeOfOperations (str): operations such as "edit" and "delete"
         - target (str): the target data to be passed into such as the customer/package name
@@ -480,19 +485,23 @@ X. Exit
             # if data is equal to -1 or is an empty list
             print(f"{F.LIGHTRED_EX}{mode.title()} \"{target}\" not found!")
             S_reset()
-            return -1
+            return -1, -1
+
+        if (len(data) != len(dataOrigIndex)):
+            raise ValueError("The length of data and dataOrigIndex arrays must be the same in get_index_from_list() function!")
 
         numIndexPrompt = ""
-        if (len(data) > 1):
-            print(f"\n{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
-            print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!\n")
-            S_reset()
-            self.print_from_array(data)
-            numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel): No."
-            if (len(data) > 10):
-                numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel/v to view table): No."
-        else:
-            return 0
+        if (len(data) == 1):
+            return 0, dataOrigIndex[0]
+
+        print(f"\n{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
+        print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!\n")
+        S_reset()
+
+        self.print_from_array(data)
+        numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel): No."
+        if (len(data) > 10):
+            numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel/v to view table): No."
 
         index = 0
         while (1):
@@ -500,16 +509,16 @@ X. Exit
             if (numIndexChoice.lower() == "x"):
                 print(f"{F.LIGHTRED_EX}Cancelled {typeOfOperations.lower()} operation with {mode}, {target}!")
                 S_reset(nl=True)
-                return -1
+                return -1, -1
             elif (len(data) > 10 and numIndexChoice.lower() == "v"):
-                return self.get_index_from_list(data=data, mode=mode, typeOfOperations=typeOfOperations, target=target)
+                return self.get_index_from_list(data=data, dataOrigIndex=dataOrigIndex, mode=mode, typeOfOperations=typeOfOperations, target=target)
             elif (numIndexChoice == ""):
                 print(f"{F.LIGHTRED_EX}Please enter a number from the table!")
                 S_reset(nl=True)
             elif (re.fullmatch(NUM_REGEX, numIndexChoice)):
                 index = int(numIndexChoice) - 1
                 if (index >= 0 and index < len(data)):
-                    return index
+                    return index, dataOrigIndex[index]
                 else:
                     print(f"{F.LIGHTRED_EX}Invalid input, please enter a number between 1 and {len(data)}!")
                     S_reset(nl=True)
@@ -563,12 +572,19 @@ X. Exit
 
                 return self.search_for_customer(customerName, mode=mode)
             else:
-                data = linear_search(self.__db, customerName, "customerName")
+                dataTuple = linear_search(self.__db, customerName, "customerName")
+                data = []
+                dataOrigIndex = []
+                if (dataTuple != -1):
+                    for matchedData in dataTuple:
+                        data.append(matchedData[0])
+                        dataOrigIndex.append(matchedData[1])
         else:
             lowIndex, highIndex = exponential_search_for_customer(self.__db, customerName, self.__descending_order)
             data = self.__db[lowIndex:highIndex + 1]
+            dataOrigIndex = list(range(lowIndex, highIndex + 1))
 
-        index = self.get_index_from_list(data=data, mode="customer", typeOfOperations=mode, target=customerName)
+        index, dbIndex = self.get_index_from_list(data=data, dataOrigIndex=dataOrigIndex, mode="customer", typeOfOperations=mode, target=customerName)
         if (index == -1):
             return
 
@@ -581,7 +597,7 @@ X. Exit
             if (oldCustName != data.get_customer_name()):
                 self.__bst_root.move_node(data)
         elif (inp == "y" and mode == "Delete"):
-            self.delete_record(data)
+            self.delete_record(index=dbIndex)
             self.__bst_root.delete(data)
 
     def search_for_package(self, packageName, mode="Edit"):
@@ -620,12 +636,19 @@ X. Exit
 
                 return self.search_for_package(packageName, mode=mode)
             else:
-                records = linear_search(self.__db, packageName, "packageName")
+                recordsTuple = linear_search(self.__db, packageName, "packageName")
+                records = []
+                recordsOrigIndex = []
+                if (recordsTuple != -1):
+                    for matchedData in recordsTuple:
+                        records.append(matchedData[0])
+                        recordsOrigIndex.append(matchedData[1])
         else:
             lowIndex, highIndex = binary_search_for_name(self.__db, packageName, self.__descending_order, "packageName")
             records = self.__db[lowIndex:highIndex + 1]
+            recordsOrigIndex = list(range(lowIndex, highIndex + 1))
 
-        index = self.get_index_from_list(data=records, mode="package", typeOfOperations=mode, target=packageName)
+        index, dbIndex = self.get_index_from_list(data=records, dataOrigIndex=recordsOrigIndex, mode="package", typeOfOperations=mode, target=packageName)
         if (index == -1):
             return
 
@@ -638,7 +661,7 @@ X. Exit
             if (oldCustName != record.get_customer_name()):
                 self.__bst_root.move_node(record)
         elif (userInput == "y" and mode == "Delete"):
-            self.delete_record(record)
+            self.delete_record(index=dbIndex)
             self.__bst_root.delete(record)
 
     def search_for_range_of_cost(self, low, high):
@@ -699,7 +722,6 @@ X. Exit
             else:
                 noLen = len(noHeader)
 
-            print("Numbers of results found:", len(arr))
             header = f"| {noHeader:^{noLen}} | {'Customer Name':<{self.__table_len[0]}} | {'Package Name':<{self.__table_len[1]}} | {'Cost Per Pax':>{self.__table_len[2]}} | {'Number of Pax':>{self.__table_len[3]}} |"
 
             # default rows to print per page, change at own will
@@ -722,6 +744,7 @@ X. Exit
             noLastPageArr = [i + 1 for i in range(len(arr) - lastPageRecordsToPrint, len(arr))]
 
             while (1):
+                print("Number of records:", len(arr))
                 print("-" * len(header))
                 print(header)
                 print("-" * len(header))

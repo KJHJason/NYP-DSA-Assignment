@@ -18,7 +18,7 @@ def exponential_search_for_customer(arr, target, descendingOrder=False):
     """
     # if the array is empty
     if (len(arr) == 0):
-        return -1
+        return -1, -1
 
     # if the target is the first element of the array
     if (arr[0] == target):

@@ -64,10 +64,9 @@ def read_db_file():
             db = pickle.load(f)
     else:
         # pre-initialize the database with 10 records to satisfy basic function b
-        # for _ in range(10):
-        #     randPackage, randCust = preintialise_data()
-        #     db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
-        pass
+        for _ in range(10):
+            randPackage, randCust = preintialise_data()
+            db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 
     return db
 
