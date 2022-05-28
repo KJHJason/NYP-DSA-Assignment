@@ -1,4 +1,5 @@
-from .binary_search import binary_search_for_name, find_all_name_occurrences
+from .binary_search import binary_search_for_name
+from .search_utility_functions import find_all_name_occurrences
 
 def exponential_search_for_customer(arr, target, descendingOrder=False):
     """
@@ -10,7 +11,7 @@ def exponential_search_for_customer(arr, target, descendingOrder=False):
     Requires 2 arguments:
     - arr (list): The array of elements to search
     - target (int/float): The target to search for
-    - descendingOrder (bool): Indicates the order of the array (True if descending order)
+    - descendingOrder (bool): Indicates the order of the array (True if descending order, defaults to False)
     
     Best time complexity: O(log(n))
     Worst time complexity: O(log(n))

@@ -32,7 +32,7 @@ def main():
                 subInput = ""
                 while (subInput != "f"):
                     print_sub_menu(1)
-                    subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                    subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                     if (subInput == "1"):
                         # To satisfy basic function c.1
                         # display all records
@@ -75,6 +75,25 @@ def main():
                                 S_reset(nl=True)
                             elif (custInp.lower() != "x"):
                                 success = hotelDB.search_for_customer(custInp, mode="Display")
+                                if (success != -1):
+                                    searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
+                                    if (searchAgainPrompt == "n"):
+                                        searchAgainPrompt = "x"
+                            else:
+                                searchAgainPrompt = "x"
+                    elif (subInput == "4"):
+                        # newly added
+                        # search for records that matches the specified package name
+                        print()
+                        searchAgainPrompt = ""
+                        while (searchAgainPrompt != "x"):
+                            packageInput = input("Enter package name (x to cancel): ").strip()
+
+                            if (packageInput == ""):
+                                print(f"{F.LIGHTRED_EX}Error: Please provide a package name...")
+                                S_reset(nl=True)
+                            elif (packageInput.lower() != "x"):
+                                success = hotelDB.search_for_package(packageInput, mode="Display")
                                 if (success != -1):
                                     searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
                                     if (searchAgainPrompt == "n"):

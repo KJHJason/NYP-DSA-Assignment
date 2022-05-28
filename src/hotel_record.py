@@ -16,14 +16,16 @@ from sorting_algorithms.noob_sorts import bogosort, stalinsort, slowsort, sleeps
 from sorting_algorithms.radix_sort import radix_sort
 from sorting_algorithms.shellsort import shellsort
 from sorting_algorithms.heap_sort import heap_sort
+from sorting_algorithms.pancake_sort import pancake_sort
 from sorting_algorithms.insertion_sort import insertion_sort
 from sorting_algorithms.selection_sort import selection_sort
 from sorting_algorithms.bubble_sort import bubble_sort
 
 # import searching algorithms
 from searching_algorithms.binary_search import binary_search_for_name, binary_search_for_range_of_cost
+from searching_algorithms.linear_search import linear_search_for_name, linear_search_range_of_cost
 from searching_algorithms.exponential_search import exponential_search_for_customer
-from searching_algorithms.linear_search import linear_search, linear_search_range_of_cost
+from searching_algorithms.fibonacci_search import fibonacci_search_for_package_name
 
 # regex for handling user inputs
 NUM_REGEX = re.compile(r"^\d+$")
@@ -530,7 +532,7 @@ X. Exit
         """
         Do a linear search on the database for the customer name to satisfy the basic function c.5. criteria
         
-        Requires 1 argument:
+        Requires 2 argument:
         - customerName (string)
         - mode (string): "Edit" or "Display" or "Delete", defaults to "Edit"
         """
@@ -572,7 +574,7 @@ X. Exit
 
                 return self.search_for_customer(customerName, mode=mode)
             else:
-                dataTuple = linear_search(self.__db, customerName, "customerName")
+                dataTuple = linear_search_for_name(self.__db, customerName, "customerName")
                 data = []
                 dataOrigIndex = []
                 if (dataTuple != -1):
@@ -606,11 +608,50 @@ X. Exit
         
         Note: Depending on the user's preference, the package name can be searched using linear search algorithm if the user wish to perserve the order of the database.
         
-        Requires 1 argument:
+        Requires 2 arguments:
         - packageName (string)
+        - mode (string): "Edit" or "Display" or "Delete", defaults to "Edit"
         """
         mode = mode.title()
         packageName = packageName.title()
+
+        if (mode == "Display"):
+            if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
+                alertMsg = (
+                    f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches,",
+                    "Otherwise, you can still search for a package and maintain the original order of the database..."
+                )
+                sortInp = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", command=("y", "n"), prints=alertMsg)
+                if (sortInp == "y"):
+                    reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+
+                    reverseOrder = convert_var_to_bool(reverseOrder)
+                    pancake_sort(self.__db, reverseOrder)
+                    self.__descending_order = reverseOrder
+                    self.__sort_order = PACKAGE_NAME
+
+                    print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
+                    S_reset(nl=True)
+                    return self.search_for_package(packageName, mode=mode)
+                else:
+                    recordsTuple = linear_search_for_name(self.__db, packageName, "packageName")
+                    if (recordsTuple != -1):
+                        records = [record[0] for record in recordsTuple]
+                        return self.print_from_array(records)
+                    else:
+                        print(f"{F.LIGHTRED_EX}No records found with the package name, {packageName}!")
+                        S_reset(nl=True)
+                        return -1
+            else:
+                lowIndex, highIndex = fibonacci_search_for_package_name(self.__db, packageName, descendingOrder=self.__descending_order)
+
+                if (lowIndex == -1 and highIndex == -1):
+                    print(f"{F.LIGHTRED_EX}No records found with the package name, {packageName}!")
+                    S_reset(nl=True)
+                    return -1
+
+                return self.print_from_index(lowIndex, highIndex)
+        
         if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
             alertMsg = [
                 f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches,",
@@ -636,7 +677,7 @@ X. Exit
 
                 return self.search_for_package(packageName, mode=mode)
             else:
-                recordsTuple = linear_search(self.__db, packageName, "packageName")
+                recordsTuple = linear_search_for_name(self.__db, packageName, "packageName")
                 records = []
                 recordsOrigIndex = []
                 if (recordsTuple != -1):
@@ -709,7 +750,7 @@ X. Exit
         Print records from the given array (to satisfy the basic function c.1. criteria)
         Pagination is an added feature.
         
-        Requires 1 argument:
+        Requires one argument:
         - arr (list)
         """
         print()

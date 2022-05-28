@@ -2,7 +2,7 @@ def counting_sort_for_radix_sort(arr, place, reverse):
     """
     Counting sort for radix sort
     
-    Requires 3 argument:
+    Requires 3 arguments:
     - arr (list): The array of elements to sort by package cost per pax
     - place (int): The current digit number
     - reverse (bool): True if the list is to be sorted in descending order
