@@ -118,7 +118,7 @@ def print_sub_menu(typeOfMenu):
         print("1. Display all records")
         print("2. List records by cost (linear search/binary search + radix sort)")
         print("3. List records by customer name (binary search tree)")
-        print("4. List records by package name (fibonacci search + pancake sort)")
+        print("4. List records by package name (linear search/fibonacci search + pancake sort)")
         print("F. Back to main menu")
         print()
         print("-" * 33)
