@@ -1,8 +1,8 @@
 # import local python files
 if (__package__ is None or __package__ == ""):
-    from linkedlist_code import DoublyLinkedList
+    from DoublyLinkedList import DoublyLinkedList
 else:
-    from .linkedlist_code import DoublyLinkedList
+    from .DoublyLinkedList import DoublyLinkedList
 
 class TreeNode:
     """
