@@ -13,6 +13,9 @@ from sys import exit as sysExit
 from sys import exc_info
 
 def main():
+    """
+    This program helps to generate nth number of records for testing purposes!
+    """
     hotelDB = HotelDatabase()
     if (check_if_db_file_exists()):
         loadExisting = get_input(prompt="Load existing records? (y/n): ", command=("y", "n"))
