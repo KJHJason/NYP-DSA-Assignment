@@ -1,10 +1,10 @@
-# import local python files
-from hotel_record import HotelDatabase, NUM_REGEX
-from functions import read_db_file, save_db_file, check_if_db_file_exists, get_input, shutdown, S_reset, preintialise_data
-
 # import third-party libraries
 from colorama import init as coloramaInit
 from colorama import Fore as F
+
+# import local python files
+from hotel_record import HotelDatabase, NUM_REGEX
+from functions import read_db_file, save_db_file, check_if_db_file_exists, get_input, shutdown, S_reset, preintialise_data
 
 # import standard libraries
 import re, platform

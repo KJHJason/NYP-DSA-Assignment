@@ -1,10 +1,9 @@
 # import third-party libraries
 from colorama import Fore as F
 from colorama import Style as S
-import pickle
 
 # import standard libraries
-import re, pathlib, logging
+import re, pathlib, logging, pickle
 from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice

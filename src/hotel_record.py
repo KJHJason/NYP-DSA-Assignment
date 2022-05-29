@@ -1,8 +1,8 @@
 # import third party libraries
-import re
 from colorama import Fore as F
 
 # import standard library
+import re
 from math import ceil
 
 # import local python files
