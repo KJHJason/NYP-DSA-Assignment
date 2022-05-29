@@ -59,22 +59,20 @@ def read_db_file(preintialiseData=None):
     """
     Function to load the database file
     """
-    from hotel_record import HotelDatabase
+    if (check_if_db_file_exists()):
+        with open(PICKLE_FILE_PATH, "rb") as f:
+            return pickle.load(f)
 
+    from hotel_record import HotelDatabase
     numOfRecords = 0
     if (preintialiseData):
         numOfRecords = 10
 
+    # pre-initialize the database with 10 records to satisfy basic function b
     db = HotelDatabase()
-    if (check_if_db_file_exists()):
-        with open(PICKLE_FILE_PATH, "rb") as f:
-            db = pickle.load(f)
-    else:
-        # pre-initialize the database with 10 records to satisfy basic function b
-        for _ in range(numOfRecords):
-            randPackage, randCust = preintialise_data()
-            db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
-
+    for _ in range(numOfRecords):
+        randPackage, randCust = preintialise_data()
+        db.add_record(randPackage, randCust, randint(1,9), uniform(50,1000))
     return db
 
 def save_db_file(db):

@@ -48,7 +48,7 @@ def main():
 
     for _ in range(numOfRecords):
         randPackage, randCust = preintialise_data()
-        hotelDB.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
+        hotelDB.add_record(randPackage, randCust, randint(1,9), uniform(50,1000))
 
     save_db_file(hotelDB)
     return 0
