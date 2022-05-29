@@ -8,10 +8,10 @@ from math import ceil
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
 
-# import data structures
+# import data structures (import local python files)
 from data_structures.AVLTree import AVLTree
 
-# import sorting algorithms
+# import sorting algorithms (import local python files)
 from sorting_algorithms.noob_sorts import bogosort, stalinsort, slowsort, sleepsort
 from sorting_algorithms.radix_sort import radix_sort
 from sorting_algorithms.shellsort import shellsort
@@ -21,7 +21,7 @@ from sorting_algorithms.insertion_sort import insertion_sort
 from sorting_algorithms.selection_sort import selection_sort
 from sorting_algorithms.bubble_sort import bubble_sort
 
-# import searching algorithms
+# import searching algorithms (import local python files)
 from searching_algorithms.binary_search import binary_search_for_name, binary_search_for_range_of_cost
 from searching_algorithms.linear_search import linear_search_for_name, linear_search_range_of_cost
 from searching_algorithms.exponential_search import exponential_search_for_customer
