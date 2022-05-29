@@ -88,7 +88,6 @@ def print_main_menu(numOfRecords):
     """
     Print the menu for user to choose their next action
     """
-    
     print()
     print("*" * len(HEADER))
     print(f"{F.LIGHTYELLOW_EX}{HEADER}")
