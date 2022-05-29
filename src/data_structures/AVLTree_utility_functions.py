@@ -152,6 +152,8 @@ def insert_node(root, data):
     - data (RecordData): The data of the node to be inserted into the tree
     """
     # If the tree is empty, return a new node as the root
+    # or if we have reached the child of a leaf node, change the child to 
+    # the new node with the data inserted instead of pointing to None
     if (root is None):
         return TreeNode(data)
     # If the data key is less than the current node, insert the node to the left subtree
