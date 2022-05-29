@@ -28,20 +28,24 @@ USED_TRUE_CONDITIONS = ("y", "Y")
 PACKAGE_NAME_PRESETS = ("Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package")
 CUSTOMER_NAME_PRESETS = ("John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles")
 
-def S_reset(nl=0):
+def S_reset(nl=False):
     """
     Function to reset colorama foreground, background colors and styles.
     
     Param:
     - nl (bool): If True, will print a new line after resetting colorama. Defaults to False.
     """
-    if (nl): end = "\n"
-    else: end = ""
+    end = ""
+    if (nl): 
+        end = "\n"
+
     print(f"{S.RESET_ALL}", end=end)
 
 def check_if_db_file_exists():
     """
-    Check if the db pickle file exists
+    Check if the db pickle file exists...
+    
+    Used in this python script and in create_records.py
     """
     return PICKLE_FILE_PATH.is_file()
 
@@ -51,11 +55,15 @@ def preintialise_data():
     """
     return choice(PACKAGE_NAME_PRESETS), choice(CUSTOMER_NAME_PRESETS)
 
-def read_db_file():
+def read_db_file(preintialiseData=None):
     """
     Function to load the database file
     """
     from hotel_record import HotelDatabase
+
+    numOfRecords = 0
+    if (preintialiseData):
+        numOfRecords = 10
 
     db = HotelDatabase()
     if (check_if_db_file_exists()):
@@ -63,7 +71,7 @@ def read_db_file():
             db = pickle.load(f)
     else:
         # pre-initialize the database with 10 records to satisfy basic function b
-        for _ in range(10):
+        for _ in range(numOfRecords):
             randPackage, randCust = preintialise_data()
             db.add_record(randPackage, randCust, randint(1,9), uniform(50,10000))
 
@@ -255,11 +263,14 @@ def shutdown(nl=0, program="Main"):
     - nl (int/bool, optional): Whether to print a newline before the shutdown messages. Defaults to 0/False.
     - program (str, optional): Print the corresponding program shutdown messages. Defaults to "Main".
     """
-    if (nl): print()
+    if (nl): 
+        print()
+
     if (program.title() == "Main"): 
         print(f"\n{F.LIGHTYELLOW_EX}Thank you for using Waffle Hotel's Booking Records System!")
     else:
         print(f"\n{F.LIGHTRED_EX}Exiting program...")
+
     S_reset()
     countdown()
 

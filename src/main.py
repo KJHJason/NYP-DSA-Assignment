@@ -11,9 +11,10 @@ from functions import *
 from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
 DEBUG_FLAG = False
+PREINIT_TEN_RECORDS_FLAG = True
 
 def main():
-    hotelDB = read_db_file()
+    hotelDB = read_db_file(preintialiseData=PREINIT_TEN_RECORDS_FLAG)
     uInput = ""
     while (uInput != "x"):
         print_main_menu(len(hotelDB))
