@@ -735,6 +735,12 @@ X. Exit
             else:
                 arr = linear_search_range_of_cost(self.__db, low, high)
                 if (arr):
+                    foundRecordsStr = "One record"
+                    if (len(arr) > 1):
+                        foundRecordsStr = "Multiple records"
+                    print(f"\n{F.LIGHTGREEN_EX}{foundRecordsStr} found within the specified range of cost, {format_price(low)} to {format_price(high)}!")
+                    S_reset(nl=True)
+
                     self.print_from_array(arr)
                 else:
                     print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
@@ -745,6 +751,11 @@ X. Exit
                 print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
                 S_reset()
             else:
+                foundRecordsStr = "One record"
+                if (indexTwo - indexOne >= 1):
+                    foundRecordsStr = "Multiple records"
+                print(f"\n{F.LIGHTGREEN_EX}{foundRecordsStr} found within the specified range of cost, {format_price(low)} to {format_price(high)}!")
+                S_reset(nl=True)
                 self.print_from_index(indexOne, indexTwo)
 
     def print_from_array(self, arr):

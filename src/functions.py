@@ -285,7 +285,7 @@ def get_range(userInput):
     """
     Used for retreiving a range from the user's input.
     
-    Returns an integer or a list of integers
+    Returns a list of integers
     
     Note: It uses the regex, "\d+(-)\d+|\d+" to check for input validity such as "1-2", or "1" which are valid.
     
@@ -297,7 +297,8 @@ def get_range(userInput):
         return "error"
 
     if ("-" not in userInput):
-        return round(float(userInput), 2)
+        numRange = round(float(userInput), 2)
+        return [numRange, numRange]
     userInput = userInput.split("-")
     rangeList = [round(float(i), 2) for i in userInput]
 

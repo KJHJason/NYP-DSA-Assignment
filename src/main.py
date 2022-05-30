@@ -55,10 +55,7 @@ def main():
                                 print(f"{F.LIGHTRED_EX}Invalid range input, please enter in a \"$10-100\" format...")
                                 S_reset(nl=True)
                             else:
-                                if (isinstance(formattedRange, int)):
-                                    hotelDB.search_for_range_of_cost(formattedRange, formattedRange)
-                                else:
-                                    hotelDB.search_for_range_of_cost(formattedRange[0], formattedRange[1])
+                                hotelDB.search_for_range_of_cost(formattedRange[0], formattedRange[1])
 
                                 searchAgainPrompt = get_input(prompt="Would you like to search again? (y/n): ", command=("y", "n"))
                                 if (searchAgainPrompt == "n"):
