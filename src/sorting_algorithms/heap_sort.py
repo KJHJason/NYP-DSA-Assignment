@@ -19,6 +19,10 @@ def heapify(arr, n, i, reverse=False):
     - n (int): the size of the array
     - i (int): the index of the root of the subtree
     - reverse (bool): whether to make it a max-heap or a min-heap (Default: False)
+    
+    Best time complexity: O(log n)
+    Worst time complexity: O(log n)
+    Average time complexity: O(log n)
     """
     l = (2 * i) + 1
     r = (2 * i) + 2
