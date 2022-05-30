@@ -35,13 +35,13 @@ def fibonacci_search_for_package_name(arr, target, descendingOrder=False):
                            # calculated in the while loop below
 
     # Calculate fib(m)
-    while fibM < n:
+    while (fibM < n):
         fibMm2 = fibMm1
         fibMm1 = fibM
         fibM = fibMm2 + fibMm1
 
     offset = -1 # to use for discarding elements from front of the array for searching
-    while fibM > 1:
+    while (fibM > 1):
         i = min(offset + fibMm2, n - 1) # min() is used to avoid index out of range error
         if (arr[i].get_package_name() == target):
             return find_all_name_occurrences(arr, i, target, "packageName")
@@ -59,10 +59,10 @@ def fibonacci_search_for_package_name(arr, target, descendingOrder=False):
                 offset = i
             else: # if (arr[i] > target)
                 # if the target is less than the current element,
-                # lower the fibonacci term two down to search
+                # lower the fibonacci term by two to search
                 # in the left side of the array as to search in the left side of the array
                 fibM = fibMm2
-                fibMm1 = fibMm1 - fibMm2
+                fibMm1 -= fibMm2
                 fibMm2 = fibM - fibMm1
         else:
             # for descendingOrder
@@ -77,13 +77,21 @@ def fibonacci_search_for_package_name(arr, target, descendingOrder=False):
                 offset = i
             else: # if (arr[i] < target)
                 # if the target is greater than the current element,
-                # lower the fibonacci term two down to search
+                # lower the fibonacci term by two to search
                 # in the left side of the array as to search in the left side of the arrayw
                 fibM = fibMm2
                 fibMm1 = fibMm1 - fibMm2
                 fibMm2 = fibM - fibMm1
 
     # to compare with the last element with the target
+    # happens in instances such as when the target is the last element but fibn(m) is not > 1
+    # e.g. arr = [1, 2, 3, 4, 5], target = 5,
+    # before loop,    fibM = 5, fibMm1 = 3, fibMm2 = 2, offset = -1, i = undefined
+    # after 1st loop, fibM = 3, fibMm1 = 2, fibMm2 = 1, offset = 1, i = 1
+    # after 2nd loop, fibM = 2, fibMm1 = 1, fibMm2 = 0, offset = 2, i = 2
+    # After 3rd loop, fibM = 1, fibMm1 = 0, fibMm2 = -1, offset = 3, i = 3
+    # Since fibM is not more than 1, the loop stops and is unable to find the target in the last position
+    # and thus the if statement below checks if the target is the last element
     if (fibMm1 and arr[n-1].get_package_name() == target):
         return find_all_name_occurrences(arr, n-1, target, "packageName")
 

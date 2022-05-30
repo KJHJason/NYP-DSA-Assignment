@@ -6,6 +6,7 @@ Used for the easter egg menu in the assignment.
 
 Algorithms in this file:
 - bogosort
+- bozosort
 - stalinsort
 - slowsort
 - sleepsort

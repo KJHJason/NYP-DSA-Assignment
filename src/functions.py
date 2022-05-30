@@ -8,6 +8,9 @@ from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
 
+# String to indicate that the records are not sorted
+NOT_SORTED = "Not Sorted"
+
 # Welcome header message
 HEADER = "Welcome to Waffle Hotel's Booking Records"
 
@@ -21,7 +24,7 @@ FILE_PATH = pathlib.Path(__file__).parent.resolve()
 PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
 
 # a tuple of strings that indicates True used in this project
-USED_TRUE_CONDITIONS = ("y", "Y") 
+USED_TRUE_CONDITIONS = ("y", "Y", "d") 
 
 # presets used in preinitialising the database with records
 # by randomly selecting one element from each presets
@@ -91,7 +94,7 @@ def save_db_file(db):
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
     S_reset()
 
-def print_main_menu(numOfRecords):
+def print_main_menu(numOfRecords, sortOrder="Not Sorted"):
     """
     Print the menu for user to choose their next action
     
@@ -108,6 +111,7 @@ def print_main_menu(numOfRecords):
     print("-" * 13, "Menu Options", "-" * 13)
     print()
     print(f"> Number of records: {numOfRecords}")
+    print(f"> Sort Order: {sortOrder}")
     print()
     print("1. Display records options")
     print("2. Add a new record")
@@ -130,9 +134,9 @@ def print_sub_menu(typeOfMenu):
         print("-" * 10, "Display Options", "-" * 10)
         print()
         print("1. Display all records")
-        print("2. Display records by cost (linear search/binary search + radix sort)")
+        print("2. Display records by cost (binary search + radix sort)")
         print("3. Display records by customer name (binary search tree)")
-        print("4. Display records by package name (linear search/fibonacci search + pancake sort)")
+        print("4. Display records by package name (fibonacci search + pancake sort)")
         print("F. Back to main menu")
         print()
         print("-" * 37)
@@ -140,8 +144,8 @@ def print_sub_menu(typeOfMenu):
         print()
         print("-" * 13, "Edit Options", "-" * 13)
         print()
-        print("1. Edit record by customer name (linear search/binary search + tree sort)")
-        print("2. Edit record by package name (linear search/binary search + heap sort)")
+        print("1. Edit record by customer name (linear search)")
+        print("2. Edit record by package name (binary search + heap sort)")
         print("F. Back to main menu")
         print()
         print("-" * 40)
@@ -160,8 +164,8 @@ def print_sub_menu(typeOfMenu):
         print()
         print("-" * 13, "Delete Options", "-" * 13)
         print()
-        print("1. Delete record by customer name (linear search/binary search + tree sort)")
-        print("2. Delete record by package name (linear search/binary search + heap sort)")
+        print("1. Delete record by customer name (exponential search + tree sort)")
+        print("2. Delete record by package name (binary search + heap sort)")
         print("F. Back to main menu")
         print()
         print("-" * 42)
@@ -220,7 +224,7 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
             return userInput
         else: 
             if (warning): 
-                print(f"{F.LIGHTRED_EX}Error: {warning}")
+                print(f"{F.LIGHTRED_EX}Input Error: {warning}")
             else:
                 if (not isinstance(command, tuple)):
                     print(f"{F.LIGHTRED_EX}Input Error: Please enter {command}.")
@@ -374,3 +378,21 @@ def convert_var_to_bool(var):
         return True
 
     return False
+
+def get_descending_flag(msg=None):
+    """
+    Asks the user if he/she wishes to sort in descending order...
+    
+    Optional argument:
+    msg (str): The message to be displayed to the user before prompting
+    
+    Returns True if the user wants to sort in descending order, False otherwise
+    """
+    if (msg):
+        print(msg)
+
+    print(f"{F.LIGHTYELLOW_EX}This program will proceed to sort in an ascending order...")
+    S_reset()
+    reverseOrder = get_input(prompt="Press ENTER to continue, or \"d\" to sort in descending order: ", command=("", "d"), warning="Please press ENTER to continue or \"d\" to sort in descending order!")
+
+    return convert_var_to_bool(reverseOrder)

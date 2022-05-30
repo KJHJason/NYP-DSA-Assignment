@@ -9,7 +9,7 @@ import re, platform
 
 # import local python files
 from functions import S_reset, read_db_file, print_main_menu, print_sub_menu, \
-                      get_input, log_error, countdown, shutdown, get_range, save_db_file
+                      get_input, log_error, countdown, shutdown, get_range, save_db_file, get_descending_flag
 from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
 DEBUG_FLAG = False
@@ -19,7 +19,7 @@ def main():
     hotelDB = read_db_file(preintialiseData=PREINIT_TEN_RECORDS_FLAG)
     uInput = ""
     while (uInput != "x"):
-        print_main_menu(len(hotelDB))
+        print_main_menu(len(hotelDB), sortOrder=hotelDB.sort_order())
         uInput = get_input(prompt="Enter command: ", command=("1", "2", "3", "4", "5", "x"), warning="Invalid command input, please enter a valid command from the menu above...")
         
         if (uInput == "x"): 
@@ -211,7 +211,7 @@ def main():
                                 print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
                                 S_reset()
                             else:
-                                hotelDB.search_for_customer(customerName, mode="Edit")
+                                hotelDB.search_for_customer(customerName, mode="Edit", bonus=False)
 
                     elif (subInput == "2"):
                         # To satisfy basic function c.6
@@ -240,33 +240,29 @@ def main():
                         # sort by customer name using bubble sort or tree sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
                             # To satisfy basic function c.2
-                            hotelDB.sort_by_customer_name(descendingFlag, typeOfSort="bubble")
+                            hotelDB.sort_by_customer_name(get_descending_flag(), typeOfSort="bubble")
 
                     elif (subInput == "2"):
                         # To satisfy basic function c.3
                         # sort by package name using selection sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
-                            hotelDB.sort_by_package_name(descendingFlag)
+                            hotelDB.sort_by_package_name(get_descending_flag())
 
                     elif (subInput == "3"):
                         # To satisfy basic function c.4
                         # sort by package cost using insertion sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
-                            hotelDB.sort_by_package_cost(descendingFlag)
+                            hotelDB.sort_by_package_cost(get_descending_flag())
 
                     elif (subInput == "4"):
                         # newly added
                         # sort by package's number of pax
                         sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            descendingFlag = get_input(prompt="Do you want to sort in descending order? (y/n): ", command=("y", "n"))
-                            hotelDB.sort_by_pax_num(descendingFlag)
+                            hotelDB.sort_by_pax_num(get_descending_flag())
 
                     # easter egg menu (newly added)
                     elif (subInput == "noob"):
@@ -335,7 +331,7 @@ def main():
                                     print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
                                     S_reset()
                                 else:
-                                    hotelDB.search_for_customer(customerName, mode="Delete")
+                                    hotelDB.search_for_customer(customerName, mode="Delete", bonus=True)
                                     if (len(hotelDB) < 1):
                                         break
 

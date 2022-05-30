@@ -6,7 +6,7 @@ import re
 from math import ceil
 
 # import local python files
-from functions import get_input, S_reset, format_price, print_record_data, convert_var_to_bool
+from functions import get_input, S_reset, format_price, print_record_data, get_descending_flag, NOT_SORTED
 
 # import data structures (import local python files)
 from data_structures.AVLTree import AVLTree
@@ -33,11 +33,10 @@ COST_REGEX = re.compile(r"^\d+(\.\d+)?$")
 
 # header text for displaying records in a table and 
 # to indicate how the array is sorted by
-NOT_SORTED = "Not Sorted"
 CUST_NAME = "Customer Name"
 PACKAGE_NAME  = "Package Name"
 PAX_NUM = "Number of Pax"
-COST_PER_PAX = "Cost Per Pax"
+COST_PER_PAX = "Package Cost Per Pax"
 
 # info on what the various slow sorting algorithms sorts by
 NOOB_SORTS_INFO_DICT = {
@@ -371,8 +370,6 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
-        reverse = convert_var_to_bool(reverse)
-
         if (self.__sort_order == PAX_NUM and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's number of pax!")
             S_reset()
@@ -396,8 +393,6 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
-        reverse = convert_var_to_bool(reverse)
-
         if (self.__sort_order == CUST_NAME and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the customer's name!")
             S_reset()
@@ -425,8 +420,6 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
-        reverse = convert_var_to_bool(reverse)
-
         if (self.__sort_order == PACKAGE_NAME and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's name!")
             S_reset()
@@ -450,8 +443,6 @@ X. Exit
         Optional parameter:
         - reverse (bool)
         """
-        reverse = convert_var_to_bool(reverse)
-
         if (self.__sort_order == COST_PER_PAX and self.__descending_order == reverse):
             print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's cost!")
             S_reset()
@@ -530,18 +521,21 @@ X. Exit
                 print(f"{F.LIGHTRED_EX}Invalid input, please enter a number from the table \"No.\" column!")
                 S_reset(nl=True)
 
-    def search_for_customer(self, customerName, mode="Edit"):
+    def search_for_customer(self, customerName, mode="Edit", bonus=False):
         """
         Do a linear search on the database for the customer name to satisfy the basic function c.5. criteria
+        or do a exponential search if bonus argument is True
         
         Requires 2 argument:
         - customerName (string)
         - mode (string): "Edit" or "Display" or "Delete", defaults to "Edit"
+        - bonus (bool): True if bonus search (exponential search) is to be done, defaults to False
         """
         mode = mode.title()
         customerName = customerName.title()
 
         if (mode == "Display"):
+            # search using AVL tree
             dataList = self.__bst_root.search(customerName)
             if (dataList != -1):
                 self.print_from_array(dataList.convert_to_array())
@@ -551,22 +545,20 @@ X. Exit
                 S_reset(nl=True)
                 return -1
 
-        if (self.__sort_order != CUST_NAME and len(self.__db) > 1):
-            alertMsg = [
-                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by customer name for a faster search time in future searches,",
-                "Otherwise, you can still search for a customer and maintain the original order of the database..."
-            ]
-            if (mode == "Edit"):
-                alertMsg.append("assuming that the customer name is unchanged when editing the record.")
-                alertMsg[1], alertMsg[2] = alertMsg[2], alertMsg[1]
+        data = []
+        dataOrigIndex = []
+        if (not bonus):
+            # linear search to satisfy the basic function c.5. criteria
+            dataTuple = linear_search_for_name(self.__db, customerName, "customerName")
+            if (dataTuple != -1):
+                for matchedData in dataTuple:
+                    data.append(matchedData[0])
+                    dataOrigIndex.append(matchedData[1])
 
-            alertMsg = tuple(alertMsg)
-
-            sortInput = get_input(prompt="Do you want to sort the database by customer name? (Y/N): ", prints=alertMsg, command=("y", "n"))
-            if (sortInput == "y"): 
-                reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
-
-                reverseOrder = convert_var_to_bool(reverseOrder)
+        if (bonus):
+            if (self.__sort_order != CUST_NAME and len(self.__db) > 1):
+                # sort and call itself again
+                reverseOrder = get_descending_flag(msg=f"\n{F.LIGHTYELLOW_EX}Note: This action will trigger the program to sort the records by customer name as it is currently not sorted in the correct order!")
                 self.__db = self.__bst_root.tree_sort(reverse=reverseOrder)
                 self.__descending_order = reverseOrder
 
@@ -574,16 +566,9 @@ X. Exit
                 S_reset(nl=True)
                 self.__sort_order = CUST_NAME
 
-                return self.search_for_customer(customerName, mode=mode)
-            else:
-                dataTuple = linear_search_for_name(self.__db, customerName, "customerName")
-                data = []
-                dataOrigIndex = []
-                if (dataTuple != -1):
-                    for matchedData in dataTuple:
-                        data.append(matchedData[0])
-                        dataOrigIndex.append(matchedData[1])
-        else:
+                return self.search_for_customer(customerName, mode=mode, bonus=bonus)
+
+            # if it's already sorted, do exponential search
             lowIndex, highIndex = exponential_search_for_customer(self.__db, customerName, self.__descending_order)
             data = self.__db[lowIndex:highIndex + 1]
             dataOrigIndex = list(range(lowIndex, highIndex + 1))
@@ -617,95 +602,51 @@ X. Exit
         mode = mode.title()
         packageName = packageName.title()
 
-        if (mode == "Display"):
-            if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
-                alertMsg = (
-                    f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches,",
-                    "Otherwise, you can still search for a package and maintain the original order of the database..."
-                )
-                sortInp = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", command=("y", "n"), prints=alertMsg)
-                if (sortInp == "y"):
-                    reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
-
-                    reverseOrder = convert_var_to_bool(reverseOrder)
-                    pancake_sort(self.__db, reverseOrder)
-                    self.__descending_order = reverseOrder
-                    self.__sort_order = PACKAGE_NAME
-
-                    print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
-                    S_reset(nl=True)
-                    return self.search_for_package(packageName, mode=mode)
-                else:
-                    recordsTuple = linear_search_for_name(self.__db, packageName, "packageName")
-                    if (recordsTuple != -1):
-                        records = [record[0] for record in recordsTuple]
-                        return self.print_from_array(records)
-                    else:
-                        print(f"{F.LIGHTRED_EX}No records found with the package name, {packageName}!")
-                        S_reset(nl=True)
-                        return -1
-            else:
-                lowIndex, highIndex = fibonacci_search_for_package_name(self.__db, packageName, descendingOrder=self.__descending_order)
-
-                if (lowIndex == -1 and highIndex == -1):
-                    print(f"{F.LIGHTRED_EX}No records found with the package name, {packageName}!")
-                    S_reset(nl=True)
-                    return -1
-
-                return self.print_from_index(lowIndex, highIndex)
-        
         if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
-            alertMsg = [
-                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package name for a faster search time in future searches,",
-                "Otherwise, you can still search for a package and maintain the original order of the database..."
-            ]
-            if (mode == "Edit"):
-                alertMsg.append("assuming that the package name is unchanged when editing the record.")
-                alertMsg[1], alertMsg[2] = alertMsg[2], alertMsg[1]
-
-            alertMsg = tuple(alertMsg)
-
-            sortInput = get_input(prompt="Do you want to sort the database by package name? (Y/N): ", prints=alertMsg, command=("y", "n"))
-            if (sortInput == "y"): 
-                reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
-
-                reverseOrder = convert_var_to_bool(reverseOrder)
+            # sort and call itself again
+            reverseOrder = get_descending_flag(msg=f"\n{F.LIGHTYELLOW_EX}Note: This action will trigger the program to sort the records by package name as it is currently not sorted in the correct order!")
+            if (mode == "Display"):
+                pancake_sort(self.__db, descendingOrder=reverseOrder)
+            else: # edit/delete
                 heap_sort(self.__db, reverse=reverseOrder)
-                self.__descending_order = reverseOrder
-
-                print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
-                S_reset(nl=True)
-                self.__sort_order = PACKAGE_NAME
-
-                return self.search_for_package(packageName, mode=mode)
-            else:
-                recordsTuple = linear_search_for_name(self.__db, packageName, "packageName")
-                records = []
-                recordsOrigIndex = []
-                if (recordsTuple != -1):
-                    for matchedData in recordsTuple:
-                        records.append(matchedData[0])
-                        recordsOrigIndex.append(matchedData[1])
+            self.__descending_order = reverseOrder
+            self.__sort_order = PACKAGE_NAME
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
+            S_reset(nl=True)
+            return self.search_for_package(packageName, mode=mode)
         else:
-            lowIndex, highIndex = binary_search_for_name(self.__db, packageName, self.__descending_order, "packageName")
+            if (mode == "Display"):
+                lowIndex, highIndex = fibonacci_search_for_package_name(self.__db, packageName, descendingOrder=self.__descending_order)
+            else: # edit/delete
+                lowIndex, highIndex = binary_search_for_name(self.__db, packageName, self.__descending_order, "packageName")
+
+            if (lowIndex == -1 and highIndex == -1):
+                print(f"{F.LIGHTRED_EX}No records found with the package name, {packageName}!")
+                S_reset(nl=True)
+                return -1
+
+            if (mode == "Display"):
+                return self.print_from_index(lowIndex, highIndex)
+
+            # edit/delete
             records = self.__db[lowIndex:highIndex + 1]
             recordsOrigIndex = list(range(lowIndex, highIndex + 1))
 
-        index, dbIndex = self.get_index_from_list(data=records, dataOrigIndex=recordsOrigIndex, mode="package", typeOfOperations=mode, target=packageName)
-        if (index == -1):
-            return
+            index, dbIndex = self.get_index_from_list(data=records, dataOrigIndex=recordsOrigIndex, mode="package", typeOfOperations=mode, target=packageName)
+            if (index == -1):
+                return
 
-        record = records[index]
-        print(record)
-        userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
-        if (userInput == "y" and mode == "Edit"):
-            oldCustName = record.get_customer_name()
-            self.edit_record(record)
-            if (oldCustName != record.get_customer_name()):
-                self.__bst_root.move_node(record)
-        elif (userInput == "y" and mode == "Delete"):
-            self.delete_record(index=dbIndex)
-            self.__bst_root.delete(record)
+            record = records[index]
+            print(record)
+            userInput = get_input(prompt=f"Do you want to {mode.lower()} this record? (Y/N): ", command=("y", "n"))
+            if (userInput == "y" and mode == "Edit"):
+                oldCustName = record.get_customer_name()
+                self.edit_record(record)
+                if (oldCustName != record.get_customer_name()):
+                    self.__bst_root.move_node(record)
+            elif (userInput == "y" and mode == "Delete"):
+                self.delete_record(index=dbIndex)
+                self.__bst_root.delete(record)
 
     def search_for_range_of_cost(self, low, high):
         """
@@ -716,35 +657,15 @@ X. Exit
         - high (int)
         """
         if (self.__sort_order != COST_PER_PAX and len(self.__db) > 1):
-            alertMsg = (
-                f"{F.LIGHTYELLOW_EX}Note: You can first sort the database by package cost per pax for a faster search time in future searches...",
-                "Otherwise, you can still search for packages that fits within the specified range of cost and maintain the original order of the database..."
-            )
-            sortInput = get_input(prompt="Do you want to sort the database by package cost per pax? (Y/N): ", prints=alertMsg, command=("y", "n"))
-            if (sortInput == "y"):
-                reverseOrder = get_input(prompt="Do you want to sort the database in descending order? (Y/N): ", command=("y", "n"))
+            # sort and call itself again
+            reverseOrder = get_descending_flag(msg=f"\n{F.LIGHTYELLOW_EX}Note: This action will trigger the program to sort the records by package cost per pax as it is currently not sorted in the correct order!")
+            radix_sort(self.__db, reverse=reverseOrder)
+            self.__descending_order = reverseOrder
 
-                reverseOrder = convert_var_to_bool(reverseOrder)
-                radix_sort(self.__db, reverse=reverseOrder)
-                self.__descending_order = reverseOrder
-
-                print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax!")
-                S_reset(nl=True)
-                self.__sort_order = COST_PER_PAX
-                return self.search_for_range_of_cost(low, high)
-            else:
-                arr = linear_search_range_of_cost(self.__db, low, high)
-                if (arr):
-                    foundRecordsStr = "One record"
-                    if (len(arr) > 1):
-                        foundRecordsStr = "Multiple records"
-                    print(f"\n{F.LIGHTGREEN_EX}{foundRecordsStr} found within the specified range of cost, {format_price(low)} to {format_price(high)}!")
-                    S_reset(nl=True)
-
-                    self.print_from_array(arr)
-                else:
-                    print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
-                    S_reset()
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax!")
+            S_reset(nl=True)
+            self.__sort_order = COST_PER_PAX
+            return self.search_for_range_of_cost(low, high)
         else:
             indexOne, indexTwo = binary_search_for_range_of_cost(self.__db, low, high, self.__descending_order)
             if (indexOne == -1 and indexTwo == -1):
@@ -752,8 +673,11 @@ X. Exit
                 S_reset()
             else:
                 foundRecordsStr = "One record"
-                if (indexTwo - indexOne >= 1):
+                if (indexTwo - indexOne >= 1): 
+                    # >= 1 since if the difference is 0, it means there is only one record, 
+                    # but if the difference is 1 or more, there are 2 or more records matched
                     foundRecordsStr = "Multiple records"
+
                 print(f"\n{F.LIGHTGREEN_EX}{foundRecordsStr} found within the specified range of cost, {format_price(low)} to {format_price(high)}!")
                 S_reset(nl=True)
                 self.print_from_index(indexOne, indexTwo)
@@ -939,6 +863,15 @@ X. Exit
         list: get the array of records
         """
         return self.__db
+
+    def sort_order(self):
+        """
+        Return the sort order of the current database
+
+        Returns:
+        str: get the sort order
+        """
+        return self.__sort_order
 
     def __str__(self):
         self.print_from_array(self.__db)
