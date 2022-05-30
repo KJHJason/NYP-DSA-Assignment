@@ -94,7 +94,7 @@ def save_db_file(db):
     print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
     S_reset()
 
-def print_main_menu(numOfRecords, sortOrder="Not Sorted"):
+def print_main_menu(numOfRecords, sortOrder=NOT_SORTED):
     """
     Print the menu for user to choose their next action
     
