@@ -494,11 +494,13 @@ X. Exit
 
         numIndexPrompt = ""
         if (len(data) == 1):
+            print(f"\n{F.LIGHTGREEN_EX}Found one record found with the {mode} name, {target}!")
+            S_reset(nl=True)
             return 0, dataOrigIndex[0]
 
         print(f"\n{F.LIGHTGREEN_EX}Multiple records found with the {mode} name, {target}!")
-        print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!\n")
-        S_reset()
+        print(f"{F.LIGHTGREEN_EX}Please select the record you wish to {typeOfOperations.lower()} after looking at the search results!")
+        S_reset(nl=True)
 
         self.print_from_array(data)
         numIndexPrompt = f"Which record would you like to {typeOfOperations.lower()}? (x to cancel): No."
@@ -735,12 +737,12 @@ X. Exit
                 if (arr):
                     self.print_from_array(arr)
                 else:
-                    print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!")
+                    print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
                     S_reset()
         else:
             indexOne, indexTwo = binary_search_for_range_of_cost(self.__db, low, high, self.__descending_order)
             if (indexOne == -1 and indexTwo == -1):
-                print(f"{F.LIGHTRED_EX}No packages found with a cost between {low} and {high}!")
+                print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
                 S_reset()
             else:
                 self.print_from_index(indexOne, indexTwo)

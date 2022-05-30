@@ -63,7 +63,7 @@ if (__name__ == "__main__"):
         S_reset()
         print()
         main()
-    except (KeyboardInterrupt):
+    except (KeyboardInterrupt, EOFError):
         pass
     except:
         print()

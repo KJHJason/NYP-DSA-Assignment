@@ -1,5 +1,6 @@
 # import third-party libraries
 from colorama import init as coloramaInit
+from colorama import Fore as F
 
 # import standard libraries
 from sys import exit as sysExit
@@ -7,7 +8,8 @@ from sys import exc_info
 import re, platform
 
 # import local python files
-from functions import *
+from functions import S_reset, read_db_file, print_main_menu, print_sub_menu, \
+                      get_input, log_error, countdown, shutdown, get_range, save_db_file
 from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
 DEBUG_FLAG = False
@@ -275,14 +277,16 @@ def main():
                         S_reset()
                         # sort by using non-sensical sorting algorithm such as bogosort
                         easterInput = ""
-                        WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very SLOW and may take a long time to sort the records...\nPlease use with CAUTION, especially if you have a large number of records...{S.RESET_ALL}"
+                        WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very SLOW and may take a long time to sort the records...\nPlease use with CAUTION, especially if you have a large number of records..."
+                        S_reset()
                         while (easterInput != "q"):
                             print_sub_menu(6)
                             easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "5", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
 
                             if (easterInput == "1"):
                                 # sort by customer name using stalin sort
-                                WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is fast when sorting the records...\nHowever, please use with CAUTION as it will result in DELETION of records that are not in the correct order...{S.RESET_ALL}"
+                                WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is fast when sorting the records...\nHowever, please use with CAUTION as it will result in DELETION of records that are not in the correct order..."
+                                S_reset()
 
                                 sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"), prints=WarningMessage)
                                 if (sortConfirmation == "y"):
@@ -365,7 +369,7 @@ if (__name__ == "__main__"):
     if (not DEBUG_FLAG):
         try:
             main()
-        except (KeyboardInterrupt):
+        except (KeyboardInterrupt, EOFError):
             shutdown(nl=True, program="Main")
         except:
             print()

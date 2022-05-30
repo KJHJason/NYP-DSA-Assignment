@@ -12,7 +12,7 @@ from random import randint, uniform, choice
 HEADER = "Welcome to Waffle Hotel's Booking Records"
 
 # regex for handling user inputs
-RANGE_INPUT_REGEX = re.compile(r"^\d+(-)\d+|\d+$")
+RANGE_INPUT_REGEX = re.compile(r"^\d+(\.\d+)?(-)\d+(\.\d+)?$|^\d+(\.\d+)?$")
 
 # to get the path of the directory that the python is being executed from
 FILE_PATH = pathlib.Path(__file__).parent.resolve()
@@ -55,9 +55,13 @@ def preintialise_data():
     """
     return choice(PACKAGE_NAME_PRESETS), choice(CUSTOMER_NAME_PRESETS)
 
-def read_db_file(preintialiseData=None):
+def read_db_file(preintialiseData=False):
     """
     Function to load the database file
+    
+    Requires 1 argument:
+    - preintialiseData (bool): to preinitialise the database with 10 records 
+                               if pickle file doesn't exist, defaults to False
     """
     if (check_if_db_file_exists()):
         with open(PICKLE_FILE_PATH, "rb") as f:
@@ -78,6 +82,9 @@ def read_db_file(preintialiseData=None):
 def save_db_file(db):
     """
     Function to save the database file for future runs
+    
+    Requires 1 argument:
+    - db (HotelDatabase)
     """
     with open(PICKLE_FILE_PATH, "wb") as f:
         pickle.dump(db, f)
@@ -87,6 +94,9 @@ def save_db_file(db):
 def print_main_menu(numOfRecords):
     """
     Print the menu for user to choose their next action
+    
+    Requires 1 argument:
+    - numOfRecords (int): to indicate the number of records in the database
     """
     print()
     print("*" * len(HEADER))
@@ -279,23 +289,23 @@ def get_range(userInput):
     
     Note: It uses the regex, "\d+(-)\d+|\d+" to check for input validity such as "1-2", or "1" which are valid.
     
-    Requires one argument to be defined:
+    Requires one argument:
     - The user's URL input (string or list)
     """
     userInput = userInput.replace(" ", "")
-    if re.fullmatch(RANGE_INPUT_REGEX, userInput):
-        if ("-" not in userInput):
-            return int(userInput)
-        userInput = userInput.split("-")
-        rangeList = [int(i) for i in userInput]
-        
-        # Check if the list in ascending order to make sure the range is valid
-        if (rangeList[0] > rangeList[1]):
-            # If not, swap the values
-            rangeList = [rangeList[1], rangeList[0]]
-        return rangeList
-    else:
+    if (not re.fullmatch(RANGE_INPUT_REGEX, userInput)):
         return "error"
+
+    if ("-" not in userInput):
+        return round(float(userInput), 2)
+    userInput = userInput.split("-")
+    rangeList = [round(float(i), 2) for i in userInput]
+
+    # Check if the list in ascending order to make sure the range is valid
+    if (rangeList[0] > rangeList[1]):
+        # If not, swap the values
+        rangeList = [rangeList[1], rangeList[0]]
+    return rangeList
 
 def format_price(price):
     """
@@ -355,9 +365,11 @@ def convert_var_to_bool(var):
     """
     if (isinstance(var, bool)):
         return var
-    elif (isinstance(var, int)):
+
+    if (isinstance(var, int)):
         return bool(var)
-    elif (isinstance(var, str) and var in USED_TRUE_CONDITIONS):
+
+    if (isinstance(var, str) and var in USED_TRUE_CONDITIONS):
         return True
-    else:
-        False
+
+    return False
