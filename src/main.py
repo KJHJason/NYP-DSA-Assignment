@@ -180,7 +180,7 @@ def main():
                     print()
 
                 if (continueFlag):
-                    print(print_record_data(packageName, customerName, paxNum, costperPax))
+                    print(print_record_data(packageName.title(), customerName.title(), paxNum, costperPax))
                     addConfirmation = get_input(prompt="Is this information correct? (y/n): ", command=("y", "n"), warning="Invalid confirmation input, please enter a valid confirmation command...")
                     if (addConfirmation == "y"):
                         hotelDB.add_record(packageName, customerName, paxNum, costperPax)
