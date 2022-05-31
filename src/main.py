@@ -8,8 +8,8 @@ from sys import exc_info
 import re, platform
 
 # import local python files
-from functions import S_reset, read_db_file, print_main_menu, print_sub_menu, \
-                      get_input, log_error, countdown, shutdown, get_range, save_db_file, get_descending_flag
+from functions import S_reset, read_db_file, print_main_menu, print_sub_menu, get_input, log_error, \
+                      countdown, shutdown, get_range, save_db_file, get_descending_flag, format_price
 from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
 DEBUG_FLAG = False
@@ -118,7 +118,7 @@ def main():
                         print(f"{F.LIGHTRED_EX}Customer name cannot be empty, please enter a valid customer name...")
                         S_reset()
                     else:
-                        confirmInput = get_input(prompt=f"Please confirm the customer name, \"{customerNameInput}\" (y/n): ", command=("y", "n"))
+                        confirmInput = get_input(prompt=f"Please confirm the customer name, \"{customerNameInput.title()}\" (y/n): ", command=("y", "n"))
                         if (confirmInput == "y"):
                             customerName = customerNameInput
                             print()
@@ -134,7 +134,7 @@ def main():
                         print(f"{F.LIGHTRED_EX}Package name cannot be empty, please enter a valid package name...")
                         S_reset()
                     else:
-                        confirmInput = get_input(prompt=f"Please confirm the package name, \"{packageNameInput}\" (y/n): ", command=("y", "n"))
+                        confirmInput = get_input(prompt=f"Please confirm the package name, \"{packageNameInput.title()}\" (y/n): ", command=("y", "n"))
                         if (confirmInput == "y"):
                             packageName = packageNameInput
                             print()
@@ -172,7 +172,7 @@ def main():
                         print(f"{F.LIGHTRED_EX}Invalid package cost per pax, please enter a valid cost per pax...")
                         S_reset()
                     else:
-                        confirmInput = get_input(prompt=f"Please confirm the package cost per pax, \"{costperPaxInput}\" (y/n): ", command=("y", "n"))
+                        confirmInput = get_input(prompt=f"Please confirm the package cost per pax, \"{format_price(costperPaxInput)}\" (y/n): ", command=("y", "n"))
                         if (confirmInput == "y"):
                             costperPax = costperPaxInput
                             print()
