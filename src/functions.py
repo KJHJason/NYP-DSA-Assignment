@@ -379,15 +379,19 @@ def convert_var_to_bool(var):
 
     return False
 
-def get_descending_flag(msg=None):
+def get_descending_flag(msg=None, nl=False):
     """
     Asks the user if he/she wishes to sort in descending order...
     
     Optional argument:
-    msg (str): The message to be displayed to the user before prompting
+    - msg (str): The message to be displayed to the user before prompting
+    - nl (bool): Whether to print a newline before the prompt. Defaults to False.
     
     Returns True if the user wants to sort in descending order, False otherwise
     """
+    if (nl):
+        print() # print a newline
+
     if (msg):
         print(msg)
 

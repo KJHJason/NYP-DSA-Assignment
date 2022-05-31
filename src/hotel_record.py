@@ -23,7 +23,7 @@ from sorting_algorithms.bubble_sort import bubble_sort
 
 # import searching algorithms (import local python files)
 from searching_algorithms.binary_search import binary_search_for_name, binary_search_for_range_of_cost
-from searching_algorithms.linear_search import linear_search_for_name, linear_search_range_of_cost
+from searching_algorithms.linear_search import linear_search_for_name
 from searching_algorithms.exponential_search import exponential_search_for_customer
 from searching_algorithms.fibonacci_search import fibonacci_search_for_package_name
 
@@ -379,7 +379,7 @@ X. Exit
             shellsort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PAX_NUM
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -406,7 +406,7 @@ X. Exit
 
             self.__descending_order = reverse
             self.__sort_order = CUST_NAME
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -429,7 +429,7 @@ X. Exit
             selection_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PACKAGE_NAME
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -452,7 +452,7 @@ X. Exit
             insertion_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = COST_PER_PAX
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -562,7 +562,7 @@ X. Exit
                 self.__db = self.__bst_root.tree_sort(reverse=reverseOrder)
                 self.__descending_order = reverseOrder
 
-                print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
+                print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
                 S_reset(nl=True)
                 self.__sort_order = CUST_NAME
 
@@ -611,7 +611,7 @@ X. Exit
                 heap_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
             self.__sort_order = PACKAGE_NAME
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if reverseOrder else 'a descending'} order!")
             S_reset(nl=True)
             return self.search_for_package(packageName, mode=mode)
         else:
@@ -662,7 +662,7 @@ X. Exit
             radix_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
 
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset(nl=True)
             self.__sort_order = COST_PER_PAX
             return self.search_for_range_of_cost(low, high)
@@ -834,22 +834,22 @@ X. Exit
 
             print("\nSorting...", end="")
             self.__db, iterNums = bogosort(self.__db, variant=sortByBozosort)
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name in an ascending order!")
             S_reset(nl=True)
         elif (typeOfSort == "stalinsort"):
             # sorts by customer name
             self.__db = stalinsort(self.__db)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in an ascending order!")
             S_reset()
         elif (typeOfSort == "slowsort"):
             # sorts by package cost per pax
             slowsort(self.__db, 0, len(self.__db) - 1)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost in an ascending order!")
             S_reset()
         elif (typeOfSort == "sleepsort"):
             # sorts by pax number
             self.__db = sleepsort(self.__db)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax!")
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax in an ascending order!")
             S_reset()
 
         self.__descending_order = False

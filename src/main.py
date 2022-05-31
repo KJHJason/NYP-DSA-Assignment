@@ -241,28 +241,28 @@ def main():
                         sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
                             # To satisfy basic function c.2
-                            hotelDB.sort_by_customer_name(get_descending_flag(), typeOfSort="bubble")
+                            hotelDB.sort_by_customer_name(get_descending_flag(nl=True), typeOfSort="bubble")
 
                     elif (subInput == "2"):
                         # To satisfy basic function c.3
                         # sort by package name using selection sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            hotelDB.sort_by_package_name(get_descending_flag())
+                            hotelDB.sort_by_package_name(get_descending_flag(nl=True))
 
                     elif (subInput == "3"):
                         # To satisfy basic function c.4
                         # sort by package cost using insertion sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            hotelDB.sort_by_package_cost(get_descending_flag())
+                            hotelDB.sort_by_package_cost(get_descending_flag(nl=True))
 
                     elif (subInput == "4"):
                         # newly added
                         # sort by package's number of pax
                         sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
-                            hotelDB.sort_by_pax_num(get_descending_flag())
+                            hotelDB.sort_by_pax_num(get_descending_flag(nl=True))
 
                     # easter egg menu (newly added)
                     elif (subInput == "noob"):
