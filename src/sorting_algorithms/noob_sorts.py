@@ -200,7 +200,8 @@ def sleep_sort(arr, reverse=False):
         # return sorted array (in ascending order)
         return newArr
 
-    # treat the array like a stack using .pop() to reverse it and return it
+    # treat the array like a stack using .pop() to reverse it and return a new list
+    # instead of using python's in-built .reverse() or [::-1]
     return [newArr.pop() for _ in range(len(newArr))]
 
 def gnome_sort(arr, reverse=False):
