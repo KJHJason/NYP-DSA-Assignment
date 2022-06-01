@@ -46,7 +46,7 @@ NOOB_SORTS_INFO_DICT = {
     "stalinsort": CUST_NAME,
     "slowsort": COST_PER_PAX,
     "sleepsort": PAX_NUM,
-    "gnomesort": PAX_NUM,
+    "gnomesort": PAX_NUM
 }
 
 class RecordData:
