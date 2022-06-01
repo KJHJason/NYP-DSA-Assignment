@@ -35,7 +35,7 @@ def S_reset(nl=False):
     """
     Function to reset colorama foreground, background colors and styles.
     
-    Param:
+    Requires one argument:
     - nl (bool): If True, will print a new line after resetting colorama. Defaults to False.
     """
     end = ""
@@ -62,7 +62,7 @@ def read_db_file(preintialiseData=False):
     """
     Function to load the database file
     
-    Requires 1 argument:
+    Requires one argument:
     - preintialiseData (bool): to preinitialise the database with 10 records 
                                if pickle file doesn't exist, defaults to False
     """
@@ -93,7 +93,7 @@ def save_db_file(db, printSuccessMsg=True):
     """
     Function to save the database file for future runs
     
-    Requires 1 argument:
+    Requires two arguments:
     - db (HotelDatabase)
     - printSuccessMsg (bool): to print a success message if True, defaults to True
     """
@@ -108,7 +108,7 @@ def print_main_menu(numOfRecords, sortOrder=NOT_SORTED):
     """
     Print the menu for user to choose their next action
     
-    Requires 1 argument:
+    Requires one argument:
     - numOfRecords (int): to indicate the number of records in the database
     """
     print()
@@ -278,13 +278,13 @@ def countdown():
         if (i != 0): 
             sleep(1)
 
-def shutdown(nl=0, program="Main"):
+def shutdown(nl=False, program="Main"):
     """
     Print some messages before shutting down the program
 
-    Args:
-    - nl (int/bool, optional): Whether to print a newline before the shutdown messages. Defaults to 0/False.
-    - program (str, optional): Print the corresponding program shutdown messages. Defaults to "Main".
+    Requires two arguments:
+    - nl (bool): Whether to print a newline before the shutdown messages. Defaults to False.
+    - program (str): Print the corresponding program shutdown messages. Defaults to "Main".
     """
     if (nl): 
         print()
@@ -328,7 +328,7 @@ def format_price(price):
     """
     Format the price to 2 decimal places and return a string
     
-    Requires 1 argument:
+    Requires one argument:
     - price (int/float)
     """
     return f"${round(float(price), 2):.2f}"
