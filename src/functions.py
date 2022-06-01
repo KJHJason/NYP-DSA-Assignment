@@ -1,5 +1,4 @@
 # import third-party libraries
-from os import read
 from colorama import Fore as F
 from colorama import Style as S
 
