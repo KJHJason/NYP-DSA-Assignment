@@ -72,7 +72,7 @@ def read_db_file(preintialiseData=False):
                 return pickle.load(f)
         except (EOFError):
             # if pickle file is empty or has some errors, delete it and call itself again
-            pathlib.Path(PICKLE_FILE_PATH).unlink()
+            PICKLE_FILE_PATH.unlink()
             print(f"{F.LIGHTRED_EX}Error: Pickle file is empty or has some errors.\nOld pickle file will be deleted and a new one will be created with {'10 pre-initialised records' if (preintialiseData) else 'no records pre-initialised'}.")
             S_reset()
             return read_db_file(preintialiseData=preintialiseData)
