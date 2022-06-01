@@ -1,4 +1,5 @@
 # import third-party libraries
+from os import read
 from colorama import Fore as F
 from colorama import Style as S
 
@@ -67,8 +68,15 @@ def read_db_file(preintialiseData=False):
                                if pickle file doesn't exist, defaults to False
     """
     if (check_if_db_file_exists()):
-        with open(PICKLE_FILE_PATH, "rb") as f:
-            return pickle.load(f)
+        try:
+            with open(PICKLE_FILE_PATH, "rb") as f:
+                return pickle.load(f)
+        except (EOFError):
+            # if pickle file is empty or has some errors, delete it and call itself again
+            pathlib.Path(PICKLE_FILE_PATH).unlink()
+            print(f"{F.LIGHTRED_EX}Error: Pickle file is empty or has some errors.\nOld pickle file will be deleted and a new one will be created with {'10 pre-initialised records' if (preintialiseData) else 'no records pre-initialised'}.")
+            S_reset()
+            return read_db_file(preintialiseData=preintialiseData)
 
     from hotel_record import HotelDatabase
     numOfRecords = 0
@@ -82,17 +90,20 @@ def read_db_file(preintialiseData=False):
         db.add_record(randPackage, randCust, randint(1,9), uniform(50,1000))
     return db
 
-def save_db_file(db):
+def save_db_file(db, printSuccessMsg=True):
     """
     Function to save the database file for future runs
     
     Requires 1 argument:
     - db (HotelDatabase)
+    - printSuccessMsg (bool): to print a success message if True, defaults to True
     """
     with open(PICKLE_FILE_PATH, "wb") as f:
         pickle.dump(db, f)
-    print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
-    S_reset()
+
+    if (printSuccessMsg):
+        print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
+        S_reset()
 
 def print_main_menu(numOfRecords, sortOrder=NOT_SORTED):
     """

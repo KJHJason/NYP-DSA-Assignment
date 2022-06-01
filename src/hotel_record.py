@@ -373,15 +373,17 @@ X. Exit
         - reverse (bool)
         """
         if (self.__sort_order == PAX_NUM and self.__descending_order == reverse):
-            print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the package's number of pax!")
+            print(f"{F.LIGHTRED_EX}Notice: The database is already sorted by the number of pax!")
             S_reset()
             return
 
         if (len(self.__db) > 1):
+            print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+            S_reset()
             shellsort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PAX_NUM
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -401,6 +403,8 @@ X. Exit
             return
 
         if (len(self.__db) > 1):
+            print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+            S_reset()
             if (typeOfSort == "tree"):
                 self.__db = self.__bst_root.tree_sort(reverse=reverse)
             else:
@@ -408,7 +412,7 @@ X. Exit
 
             self.__descending_order = reverse
             self.__sort_order = CUST_NAME
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -428,10 +432,12 @@ X. Exit
             return
 
         if (len(self.__db) > 1):
+            print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+            S_reset()
             selection_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PACKAGE_NAME
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -451,10 +457,12 @@ X. Exit
             return
 
         if (len(self.__db) > 1):
+            print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+            S_reset()
             insertion_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = COST_PER_PAX
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverse) else 'a descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
@@ -561,10 +569,12 @@ X. Exit
             if (self.__sort_order != CUST_NAME and len(self.__db) > 1):
                 # sort and call itself again
                 reverseOrder = get_descending_flag(msg=f"\n{F.LIGHTYELLOW_EX}Note: This action will trigger the program to sort the records by customer name as it is currently not sorted in the correct order!")
+                print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+                S_reset()
                 self.__db = self.__bst_root.tree_sort(reverse=reverseOrder)
                 self.__descending_order = reverseOrder
 
-                print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+                print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
                 S_reset(nl=True)
                 self.__sort_order = CUST_NAME
 
@@ -607,13 +617,15 @@ X. Exit
         if (self.__sort_order != PACKAGE_NAME and len(self.__db) > 1):
             # sort and call itself again
             reverseOrder = get_descending_flag(msg=f"\n{F.LIGHTYELLOW_EX}Note: This action will trigger the program to sort the records by package name as it is currently not sorted in the correct order!")
+            print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+            S_reset()
             if (mode == "Display"):
                 pancake_sort(self.__db, descendingOrder=reverseOrder)
             else: # edit/delete
                 heap_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
             self.__sort_order = PACKAGE_NAME
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if reverseOrder else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if reverseOrder else 'a descending'} order!")
             S_reset(nl=True)
             return self.search_for_package(packageName, mode=mode)
         else:
@@ -661,10 +673,12 @@ X. Exit
         if (self.__sort_order != COST_PER_PAX and len(self.__db) > 1):
             # sort and call itself again
             reverseOrder = get_descending_flag(msg=f"\n{F.LIGHTYELLOW_EX}Note: This action will trigger the program to sort the records by package cost per pax as it is currently not sorted in the correct order!")
+            print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+            S_reset()
             radix_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
 
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset(nl=True)
             self.__sort_order = COST_PER_PAX
             return self.search_for_range_of_cost(low, high)
@@ -832,11 +846,12 @@ X. Exit
             S_reset()
             return
 
+        print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+        S_reset()
         if (typeOfSort == "bogosort" or typeOfSort == "bozosort"):
             # sorts by package name
             sortByBozosort = True if (typeOfSort == "bozosort") else False
 
-            print("\nSorting...", end="")
             try:
                 iterNums = bogo_sort(self.__db, variant=sortByBozosort, reverse=reverseOrder)
                 print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
@@ -850,20 +865,29 @@ X. Exit
         elif (typeOfSort == "stalinsort"):
             # sorts by customer name
             self.__db = stalin_sort(self.__db, reverse=reverseOrder)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset()
         elif (typeOfSort == "slowsort"):
             # sorts by package cost per pax
             slow_sort(self.__db, 0, len(self.__db) - 1, reverse=reverseOrder)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset()
         elif (typeOfSort == "sleepsort" or typeOfSort == "gnomesort"):
             # sorts by pax number
             if (typeOfSort == "sleepsort"):
-                self.__db = sleep_sort(self.__db, reverse=reverseOrder)
+                try:
+                    self.__db = sleep_sort(self.__db, reverse=reverseOrder)
+                except (KeyboardInterrupt):
+                    # ctrl + c to stop sorting by sleep sort as it can take 
+                    # a very long time since its time complexity depends on 
+                    # the maximum element in the array, i.e. O(max(arr))
+                    print(f"\r{F.LIGHTRED_EX}Cancelled sorting by number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order...")
+                    S_reset(nl=True)
+                    return
             else:
                 gnome_sort(self.__db, reverse=reverseOrder)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset()
 
         self.__descending_order = reverseOrder
