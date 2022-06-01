@@ -157,6 +157,7 @@ def print_sub_menu(typeOfMenu):
         print("2. Sort records by package name (selection sort)")
         print("3. Sort records by package cost (insertion sort)")
         print("4. Sort records by package's number of pax (shellsort)")
+        print("Noob. Take a look at non-sensical sorting algorithms!")
         print("F. Back to main menu")
         print()
         print("-" * 44)
