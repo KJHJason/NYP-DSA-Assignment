@@ -268,7 +268,7 @@ def main():
                     elif (subInput == "noob"):
                         print(f"\n{F.LIGHTYELLOW_EX}Notice: You found the easter egg menu!")
                         S_reset()
-                        # sort by using non-sensical sorting algorithm such as bogosort
+                        # sort by using a slow/non-sensical sorting algorithm such as bogosort
                         easterInput = ""
                         WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very SLOW and may take a long time to sort the records...\nPlease use with CAUTION, especially if you have a large number of records..."
                         S_reset()

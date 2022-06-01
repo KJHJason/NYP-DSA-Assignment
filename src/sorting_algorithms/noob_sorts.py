@@ -223,8 +223,9 @@ def gnome_sort(arr, reverse=False):
     ⣿⣿⣿⣿⣯⠄⠄⡀⠈⠂⣀⠄⢀⠄⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿
     ⣿⣿⣿⣿⣿⣶⣄⣀⠐⢀⣸⣷⣶⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿
     
-    Gnome sort is a sorting algorithm that works by comparing the current element
-    with the previous element and starts swapping elements if they are not in order.
+    Gnome sort, also known as stupid sort, is a sorting algorithm that works by 
+    comparing the current element with the previous element and starts swapping elements 
+    if they are not in order.
     
     E.g. arr = [3, 2, 1], sorting in ascending order...
     First iteration: [2, 3, 1], i = 0 (swap 2 and 3)
