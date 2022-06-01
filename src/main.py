@@ -274,7 +274,7 @@ def main():
                         S_reset()
                         while (easterInput != "q"):
                             print_sub_menu(6)
-                            easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "5", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                            easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "5", "6", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
 
                             if (easterInput == "1"):
                                 # sort by customer name using stalin sort
@@ -304,6 +304,11 @@ def main():
                                 sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"), prints=WarningMessage)
                                 if (sortConfirmation == "y"):
                                     hotelDB.easter_egg_sorts(typeOfSort="sleepsort")
+                            elif (easterInput == "6"):
+                                # sort by package's number of pax using gnome sort
+                                sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                                if (sortConfirmation == "y"):
+                                    hotelDB.easter_egg_sorts(typeOfSort="gnomesort")
 
         elif (uInput == "5"):
             # delete options (newly added)

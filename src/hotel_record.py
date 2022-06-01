@@ -6,13 +6,13 @@ import re
 from math import ceil
 
 # import local python files
-from functions import get_input, S_reset, format_price, print_record_data, get_descending_flag, NOT_SORTED
+from functions import get_input, S_reset, format_price, print_record_data, get_descending_flag
 
 # import data structures (import local python files)
 from data_structures.AVLTree import AVLTree
 
 # import sorting algorithms (import local python files)
-from sorting_algorithms.noob_sorts import bogosort, stalinsort, slowsort, sleepsort
+from sorting_algorithms.noob_sorts import bogo_sort, stalin_sort, slow_sort, sleep_sort, gnome_sort
 from sorting_algorithms.radix_sort import radix_sort
 from sorting_algorithms.shellsort import shellsort
 from sorting_algorithms.heap_sort import heap_sort
@@ -33,6 +33,7 @@ COST_REGEX = re.compile(r"^\d+(\.\d+)?$")
 
 # header text for displaying records in a table and 
 # to indicate how the array is sorted by
+from functions import NOT_SORTED
 CUST_NAME = "Customer Name"
 PACKAGE_NAME  = "Package Name"
 PAX_NUM = "Number of Pax"
@@ -44,7 +45,8 @@ NOOB_SORTS_INFO_DICT = {
     "bozosort": PACKAGE_NAME,
     "stalinsort": CUST_NAME,
     "slowsort": COST_PER_PAX,
-    "sleepsort": PAX_NUM
+    "sleepsort": PAX_NUM,
+    "gnomesort": PAX_NUM,
 }
 
 class RecordData:
@@ -818,13 +820,15 @@ X. Exit
         Method to sort the database using different non-sensical sorts such as bogosort
         
         Requires 1 argument:
-        - typeOfSort (str) -> "bogosort", "bozosort", "stalinsort", "slowsort", "sleepsort"
+        - typeOfSort (str) -> "bogosort", "bozosort", "stalinsort", "slowsort", "sleepsort", "gnomesort"
         """
         if (not NOOB_SORTS_INFO_DICT.get(typeOfSort)):
             raise ValueError(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
 
-        if (NOOB_SORTS_INFO_DICT[typeOfSort] == self.__sort_order and self.__descending_order == False):
-            print(f"{F.LIGHTRED_EX}Error: The database is already sorted by {NOOB_SORTS_INFO_DICT[typeOfSort].lower()}...")
+        reverseOrder = get_descending_flag(nl=True)
+
+        if (NOOB_SORTS_INFO_DICT[typeOfSort] == self.__sort_order and self.__descending_order == reverseOrder):
+            print(f"{F.LIGHTRED_EX}Error: The database is already sorted by {NOOB_SORTS_INFO_DICT[typeOfSort].lower()} in {'an ascending' if (not reverseOrder) else 'a descending'} order...")
             S_reset()
             return
 
@@ -833,26 +837,36 @@ X. Exit
             sortByBozosort = True if (typeOfSort == "bozosort") else False
 
             print("\nSorting...", end="")
-            self.__db, iterNums = bogosort(self.__db, variant=sortByBozosort)
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name in an ascending order!")
-            S_reset(nl=True)
+            try:
+                iterNums = bogo_sort(self.__db, variant=sortByBozosort, reverse=reverseOrder)
+                print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+                S_reset(nl=True)
+            except (KeyboardInterrupt):
+                # ctrl + c to stop sorting by bogo sort/bozo sort as it can take 
+                # a very long time since it has no upper bound O(inf)
+                print(f"\r{F.LIGHTRED_EX}Cancelled sorting by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order...")
+                S_reset(nl=True)
+                return
         elif (typeOfSort == "stalinsort"):
             # sorts by customer name
-            self.__db = stalinsort(self.__db)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in an ascending order!")
+            self.__db = stalin_sort(self.__db, reverse=reverseOrder)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset()
         elif (typeOfSort == "slowsort"):
             # sorts by package cost per pax
-            slowsort(self.__db, 0, len(self.__db) - 1)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost in an ascending order!")
+            slow_sort(self.__db, 0, len(self.__db) - 1, reverse=reverseOrder)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset()
-        elif (typeOfSort == "sleepsort"):
+        elif (typeOfSort == "sleepsort" or typeOfSort == "gnomesort"):
             # sorts by pax number
-            self.__db = sleepsort(self.__db)
-            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax in an ascending order!")
+            if (typeOfSort == "sleepsort"):
+                self.__db = sleep_sort(self.__db, reverse=reverseOrder)
+            else:
+                gnome_sort(self.__db, reverse=reverseOrder)
+            print(f"{F.LIGHTGREEN_EX}The database has been sorted by the package's number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset()
 
-        self.__descending_order = False
+        self.__descending_order = reverseOrder
         self.__sort_order = NOOB_SORTS_INFO_DICT[typeOfSort]
 
     def get_array(self):

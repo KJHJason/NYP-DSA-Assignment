@@ -178,6 +178,7 @@ def print_sub_menu(typeOfMenu):
         print("3. Sort records by package name (bozo sort)")
         print("4. Sort records by package cost (slow sort)")
         print("5. Sort records by package's number of pax (sleep sort)")
+        print("6. Sort records by package's number of pax (gnome sort)")
         print("Q. Back to sort menu")
         print()
         print("-" * 45)
