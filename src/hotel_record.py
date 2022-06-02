@@ -20,13 +20,13 @@ from sorting_algorithms.insertion_sort import insertion_sort
 from sorting_algorithms.selection_sort import selection_sort
 from sorting_algorithms.bubble_sort import bubble_sort
 
-# import bad/slow sorting algorithms (import local python files)
-from slow_sorting_algorithms.bogo_sort import bogo_sort
-from slow_sorting_algorithms.stalin_sort import stalin_sort
-from slow_sorting_algorithms.slow_sort import slow_sort
-from slow_sorting_algorithms.sleep_sort import sleep_sort
-from slow_sorting_algorithms.gnome_sort import gnome_sort
-from slow_sorting_algorithms.pancake_sort import pancake_sort
+# import bad sorting algorithms (import local python files)
+from bad_sorting_algorithms.bogo_sort import bogo_sort
+from bad_sorting_algorithms.stalin_sort import stalin_sort
+from bad_sorting_algorithms.slow_sort import slow_sort
+from bad_sorting_algorithms.sleep_sort import sleep_sort
+from bad_sorting_algorithms.gnome_sort import gnome_sort
+from bad_sorting_algorithms.pancake_sort import pancake_sort
 
 # import searching algorithms (import local python files)
 from searching_algorithms.binary_search import binary_search_for_name, binary_search_for_range_of_cost
