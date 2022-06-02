@@ -315,7 +315,6 @@ def main():
                         # another menu for sorting all types of records using pancake sort
                         # since I named this program the "Waffle Hotel Staycation Booking...",
                         # hence adding a dedicated menu for pancake sort as a joke
-                        
                         print(f"\n{F.LIGHTYELLOW_EX}{PANCAKE_MENU_HEADER}")
                         print(f"{'Here we offer pancakes in Waffle Hotel!':^{len(PANCAKE_MENU_HEADER)}}")
                         S_reset()
