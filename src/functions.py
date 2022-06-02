@@ -112,7 +112,7 @@ def read_db_file(preintialiseData=False):
             if (newFilePath.is_file()):
                 newFilePath.unlink()
 
-            DB_FILE_PATH.rename(newFilePath) # rename the file to a new name
+            DB_FILE_PATH.rename(newFilePath) # rename the file to newFileName
             print(f"{F.LIGHTRED_EX}Error: SQLite3 database file is empty or has some errors.")
             print(f"Old sqlite3 database file will be renamed to {newFileName} (delete at your own risk and will)")
             print(f"and a new one will be created with {'10 pre-initialised records' if (preintialiseData) else 'no records pre-initialised'}.")
