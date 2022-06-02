@@ -14,14 +14,15 @@ from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
 DEBUG_FLAG = False
 PREINIT_TEN_RECORDS_FLAG = True
+PANCAKE_MENU_HEADER = "Notice: You have opened the pancake sort menu!"
 
 def main():
     hotelDB = read_db_file(preintialiseData=PREINIT_TEN_RECORDS_FLAG)
     uInput = ""
     while (uInput != "x"):
-        print_main_menu(len(hotelDB), sortOrder=hotelDB.sort_order())
+        print_main_menu(len(hotelDB), sortOrder=hotelDB.sort_order)
         uInput = get_input(prompt="Enter command: ", command=("1", "2", "3", "4", "5", "x"), warning="Invalid command input, please enter a valid command from the menu above...")
-        
+
         if (uInput == "x"): 
             save_db_file(hotelDB)
             shutdown()
@@ -235,7 +236,7 @@ def main():
                 subInput = ""
                 while (subInput != "f"):
                     print_sub_menu(4)
-                    subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "noob", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
+                    subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "noob", "pancake", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                     if (subInput == "1"):
                         # sort by customer name using bubble sort or tree sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
@@ -271,7 +272,6 @@ def main():
                         # sort by using a slow/non-sensical sorting algorithm such as bogosort
                         easterInput = ""
                         WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very SLOW and may take a long time to sort the records...\nPlease use with CAUTION, especially if you have a large number of records..."
-                        S_reset()
                         while (easterInput != "q"):
                             print_sub_menu(6)
                             easterInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "5", "6", "q"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
@@ -309,6 +309,42 @@ def main():
                                 sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"), prints=WarningMessage)
                                 if (sortConfirmation == "y"):
                                     hotelDB.easter_egg_sorts(typeOfSort="gnomesort")
+
+                    elif (subInput == "pancake"):
+                        # (newly added)
+                        # another menu for sorting all types of records using pancake sort
+                        # since I named this program the "Waffle Hotel Staycation Booking...",
+                        # hence adding a dedicated menu for pancake sort as a joke
+                        
+                        print(f"\n{F.LIGHTYELLOW_EX}{PANCAKE_MENU_HEADER}")
+                        print(f"{'Here we offer pancakes in Waffle Hotel!':^{len(PANCAKE_MENU_HEADER)}}")
+                        S_reset()
+
+                        WarningMessage = f"{F.LIGHTRED_EX}Warning: This sorting algorithm is very SLOW and may take a long time to sort the records...\nPlease use with CAUTION, especially if you have a large number of records..."
+                        pancakeInput = ""
+                        while (pancakeInput != "q"):
+                            print_sub_menu(7)
+                            pancakeInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "q"), warning="Invalid command input, please enter a valid pancake option from the sub-menu above...")
+                            if (pancakeInput == "1"):
+                                # sort by customer name using pancake sort
+                                sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                                if (sortConfirmation == "y"):
+                                    hotelDB.pancake_sort_records(mode="customerName")
+                            elif (pancakeInput == "2"):
+                                # sort by package name using pancake sort
+                                sortConfirmation = get_input(prompt="Do you want to sort the records by package name? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                                if (sortConfirmation == "y"):
+                                    hotelDB.pancake_sort_records(mode="packageName")
+                            elif (pancakeInput == "3"):
+                                # sort by package cost using pancake sort
+                                sortConfirmation = get_input(prompt="Do you want to sort the records by package cost? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                                if (sortConfirmation == "y"):
+                                    hotelDB.pancake_sort_records(mode="costPerPax")
+                            elif (pancakeInput == "4"):
+                                # sort by package's number of pax using pancake sort
+                                sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"), prints=WarningMessage)
+                                if (sortConfirmation == "y"):
+                                    hotelDB.pancake_sort_records(mode="paxNum")
 
         elif (uInput == "5"):
             # delete options (newly added)

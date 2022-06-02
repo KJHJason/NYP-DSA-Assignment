@@ -40,10 +40,10 @@ def cost_lower_index(arr, i, lowerRange, descendingOrder):
     Average time complexity: O(n)
     """
     if (not descendingOrder):
-        while (i > 0 and arr[i - 1].get_package_cost_per_pax() >= lowerRange):
+        while (i > 0 and arr[i - 1].get_cost_per_pax() >= lowerRange):
             i -= 1
     else:
-        while (i < len(arr) - 1 and arr[i + 1].get_package_cost_per_pax() >= lowerRange):
+        while (i < len(arr) - 1 and arr[i + 1].get_cost_per_pax() >= lowerRange):
             i += 1
     return i
 
@@ -63,9 +63,9 @@ def cost_upper_index(arr, i, upperRange, descendingOrder):
     Average time complexity: O(n)
     """
     if (not descendingOrder):
-        while (i < len(arr) - 1 and arr[i + 1].get_package_cost_per_pax() <= upperRange):
+        while (i < len(arr) - 1 and arr[i + 1].get_cost_per_pax() <= upperRange):
             i += 1
     else:
-        while (i > 0 and arr[i - 1].get_package_cost_per_pax() <= upperRange):
+        while (i > 0 and arr[i - 1].get_cost_per_pax() <= upperRange):
             i -= 1
     return i

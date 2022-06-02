@@ -3,7 +3,7 @@ from colorama import Fore as F
 from colorama import Style as S
 
 # import standard libraries
-import re, pathlib, logging, pickle
+import re, pathlib, logging, sqlite3
 from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
@@ -12,16 +12,21 @@ from random import randint, uniform, choice
 NOT_SORTED = "Not Sorted"
 
 # Welcome header message
-HEADER = "Welcome to Waffle Hotel's Booking Records"
+HEADER = "Welcome to Waffle Hotel's Staycation Booking"
 
 # regex for handling user inputs
 RANGE_INPUT_REGEX = re.compile(r"^\d+(\.\d+)?(-)\d+(\.\d+)?$|^\d+(\.\d+)?$")
 
 # to get the path of the directory that the python is being executed from
+# used for to get the path of the sqlite3 database file and the error log files
 FILE_PATH = pathlib.Path(__file__).parent.resolve()
 
-# for persistent storage of the records
-PICKLE_FILE_PATH = FILE_PATH.joinpath("hotel_records.pickle")
+# for persistent storage of the records (using sqlite3 to store the records ONLY)
+DB_FILE_PATH = FILE_PATH.joinpath("staycation_records.db")
+
+# used for the table name in sqlite3 database file
+STAYCATION_RECORDS_TABLE = "StaycationRecords"
+HOTEL_DATABASE_CONFIG_TABLE = "HotelDatabaseConfig"
 
 # a tuple of strings that indicates True used in this project
 USED_TRUE_CONDITIONS = ("y", "Y", "d") 
@@ -50,7 +55,7 @@ def check_if_db_file_exists():
     
     Used in this python script and in create_records.py
     """
-    return PICKLE_FILE_PATH.is_file()
+    return DB_FILE_PATH.is_file()
 
 def preintialise_data():
     """
@@ -66,24 +71,59 @@ def read_db_file(preintialiseData=False):
     - preintialiseData (bool): to preinitialise the database with 10 records 
                                if pickle file doesn't exist, defaults to False
     """
+    from hotel_record import HotelDatabase # import here to avoid circular imports
+    db = HotelDatabase()
+
     if (check_if_db_file_exists()):
         try:
-            with open(PICKLE_FILE_PATH, "rb") as f:
-                return pickle.load(f)
-        except (EOFError):
-            # if pickle file is empty or has some errors, delete it and call itself again
-            PICKLE_FILE_PATH.unlink()
-            print(f"{F.LIGHTRED_EX}Error: Pickle file is empty or has some errors.\nOld pickle file will be deleted and a new one will be created with {'10 pre-initialised records' if (preintialiseData) else 'no records pre-initialised'}.")
+            raise sqlite3.OperationalError("Database file already exists!")
+            con = sqlite3.connect(DB_FILE_PATH)
+            cur = con.cursor()
+            cur.execute(f"SELECT * FROM {STAYCATION_RECORDS_TABLE}")
+            records = cur.fetchall()
+            # load the HotelDatabase object's configuration from the sqlite3 database file
+            configTuple = cur.execute(f"SELECT * FROM {HOTEL_DATABASE_CONFIG_TABLE}").fetchone()
+
+            # load all sqlite3 database records into the HotelDatabase object
+            for record in records:
+                customerName = record[0]
+                packageName = record[1]
+                paxNum = record[2]
+                costPerPax = record[3] / 100 # since the cost is stored as an INTEGER
+                db.add_record(packageName, customerName, paxNum, costPerPax)
+
+            # set the config here since the HoteLDatabase object will reset the 
+            # sort order to NOT_SORTED when each record is added to the object.
+            # (if the config data is saved/exists)
+            if (configTuple[0] is not None):
+                db.sort_order = configTuple[0]
+
+            if (configTuple[1] is not None):
+                db.descending_flag = bool(configTuple[1])
+
+            return db
+        except (sqlite3.Error, sqlite3.IntegrityError, sqlite3.OperationalError):
+            # if the sqlite3 database file is empty (no tables) or has some errors, 
+            # delete it and call itself (the function) again
+            newFileName = datetime.now().strftime("corrupted-%d-%m-%Y_%H-%M-%S") + ".db"
+            newFilePath = FILE_PATH.joinpath(newFileName)
+
+            # in the event if the file is already exists, delete it
+            if (newFilePath.is_file()):
+                newFilePath.unlink()
+
+            DB_FILE_PATH.rename(newFilePath) # rename the file to a new name
+            print(f"{F.LIGHTRED_EX}Error: SQLite3 database file is empty or has some errors.")
+            print(f"Old sqlite3 database file will be renamed to {newFileName} (delete at your own risk and will)")
+            print(f"and a new one will be created with {'10 pre-initialised records' if (preintialiseData) else 'no records pre-initialised'}.")
             S_reset()
             return read_db_file(preintialiseData=preintialiseData)
 
-    from hotel_record import HotelDatabase
     numOfRecords = 0
     if (preintialiseData):
         numOfRecords = 10
 
     # pre-initialize the database with 10 records to satisfy basic function b
-    db = HotelDatabase()
     for _ in range(numOfRecords):
         randPackage, randCust = preintialise_data()
         db.add_record(randPackage, randCust, randint(1,9), uniform(50,1000))
@@ -97,8 +137,44 @@ def save_db_file(db, printSuccessMsg=True):
     - db (HotelDatabase)
     - printSuccessMsg (bool): to print a success message if True, defaults to True
     """
-    with open(PICKLE_FILE_PATH, "wb") as f:
-        pickle.dump(db, f)
+    con = sqlite3.connect(DB_FILE_PATH)
+    cur = con.cursor()
+
+    # saving the records to the sqlite3 database
+    # remove old table
+    cur.execute(f"DROP TABLE IF EXISTS {STAYCATION_RECORDS_TABLE}")
+    con.commit()
+
+    # create new table
+    cur.execute(f"""CREATE TABLE {STAYCATION_RECORDS_TABLE} (
+        customerName TEXT NOT NULL, 
+        packageName TEXT NOT NULL, 
+        paxNum INTEGER NOT NULL, 
+        costPerPax INTEGER NOT NULL -- Using INTEGER since REAL is not the best way to store price data
+                                    -- https://dba.stackexchange.com/questions/15729/storing-prices-in-sqlite-what-data-type-to-use
+        )""")
+    con.commit()
+
+    # add tuples to the new table
+    for record in db.get_array():
+        dataTuple = (
+                record.get_customer_name(), record.get_package_name(), 
+                record.get_pax_num(), int(record.get_cost_per_pax() * 100) # times 100 since it is in 2dp
+            )
+        cur.execute(f"INSERT INTO {STAYCATION_RECORDS_TABLE} VALUES (?, ?, ?, ?)", dataTuple)
+    con.commit()
+
+    # save the HotelDatabase object's configuration to the sqlite3 database file
+    # delete old HotelDatabase saved configuration (sorting order and descending flag)
+    cur.execute(f"DROP TABLE IF EXISTS {HOTEL_DATABASE_CONFIG_TABLE}")
+    con.commit()
+
+    # update the HotelDatabase saved configuration (sorting order and descending flag)
+    cur.execute(f"CREATE TABLE {HOTEL_DATABASE_CONFIG_TABLE} (sortingOrder TEXT, descendingFlag BOOLEAN)")
+    cur.execute(f"INSERT INTO {HOTEL_DATABASE_CONFIG_TABLE} VALUES (?, ?)", (db.sort_order, \
+                                                                             db.descending_flag))
+    con.commit()
+    con.close()
 
     if (printSuccessMsg):
         print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
@@ -114,7 +190,7 @@ def print_main_menu(numOfRecords, sortOrder=NOT_SORTED):
     print()
     print("*" * len(HEADER))
     print(f"{F.LIGHTYELLOW_EX}{HEADER}")
-    print(f"{'System':^{len(HEADER)}}")
+    print(f"{'Records System':^{len(HEADER)}}")
     S_reset()
     print("*" * len(HEADER))
     print()
@@ -146,7 +222,7 @@ def print_sub_menu(typeOfMenu):
         print("1. Display all records")
         print("2. Display records by cost (binary search + radix sort)")
         print("3. Display records by customer name (binary search tree)")
-        print("4. Display records by package name (fibonacci search + pancake sort)")
+        print("4. Display records by package name (fibonacci search + introsort)")
         print("F. Back to main menu")
         print()
         print("-" * 37)
@@ -169,7 +245,7 @@ def print_sub_menu(typeOfMenu):
         print("4. Sort records by package's number of pax (shellsort)")
         print("F. Back to main menu")
         print()
-        print("Noob. ???")
+        print("Noob/Pancake. ???")
         print()
         print("-" * 44)
     elif (typeOfMenu == 5):
@@ -194,6 +270,17 @@ def print_sub_menu(typeOfMenu):
         print("Q. Back to sort menu")
         print()
         print("-" * 45)
+    elif (typeOfMenu == 7):
+        print()
+        print("-" * 10, "Pancake Sort Menu Options", "-" * 10)
+        print()
+        print("1. Sort records by customer name")
+        print("2. Sort records by package name")
+        print("3. Sort records by package cost")
+        print("4. Sort records by package's number of pax")
+        print("Q. Back to sort menu")
+        print()
+        print("-" * 50)
     else:
         raise ValueError(f"Unknown type of sub-menu argument, {typeOfMenu}...")
 
@@ -323,6 +410,7 @@ def get_range(userInput):
     if (rangeList[0] > rangeList[1]):
         # If not, swap the values
         rangeList = [rangeList[1], rangeList[0]]
+        print(f"{F.LIGHTRED_EX}Alert: The minimum value is larger than the maximum value, the range will be reversed.", end=S_reset(nl=True))
     return rangeList
 
 def format_price(price):

@@ -12,14 +12,21 @@ from functions import get_input, S_reset, format_price, print_record_data, get_d
 from data_structures.AVLTree import AVLTree
 
 # import sorting algorithms (import local python files)
-from sorting_algorithms.noob_sorts import bogo_sort, stalin_sort, slow_sort, sleep_sort, gnome_sort
 from sorting_algorithms.radix_sort import radix_sort
 from sorting_algorithms.shellsort import shellsort
 from sorting_algorithms.heap_sort import heap_sort
-from sorting_algorithms.pancake_sort import pancake_sort
+from sorting_algorithms.intro_sort import intro_sort
 from sorting_algorithms.insertion_sort import insertion_sort
 from sorting_algorithms.selection_sort import selection_sort
 from sorting_algorithms.bubble_sort import bubble_sort
+
+# import bad/slow sorting algorithms (import local python files)
+from slow_sorting_algorithms.bogo_sort import bogo_sort
+from slow_sorting_algorithms.stalin_sort import stalin_sort
+from slow_sorting_algorithms.slow_sort import slow_sort
+from slow_sorting_algorithms.sleep_sort import sleep_sort
+from slow_sorting_algorithms.gnome_sort import gnome_sort
+from slow_sorting_algorithms.pancake_sort import pancake_sort
 
 # import searching algorithms (import local python files)
 from searching_algorithms.binary_search import binary_search_for_name, binary_search_for_range_of_cost
@@ -94,7 +101,7 @@ class RecordData:
             else:
                 confirmInput = get_input(prompt=f"Are you sure you want to change the package name to \"{newPackageName.title()}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
-                    self.__packageName = newPackageName.title()
+                    self.set_package_name(newPackageName)
                     print(f"{F.LIGHTGREEN_EX}Package name updated!")
                     S_reset()
                     return
@@ -119,7 +126,7 @@ class RecordData:
             else:
                 confirmInput = get_input(prompt=f"Are you sure you want to change the customer name to \"{newCustomerName.title()}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
-                    self.__customerName = newCustomerName.title()
+                    self.set_customer_name(newCustomerName)
                     print(f"{F.LIGHTGREEN_EX}Customer name updated!")
                     S_reset()
                     return
@@ -142,10 +149,9 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Invalid input, please enter a valid pax number of pax more than 0...")
                 S_reset()
             elif (int(newPaxNum) != self.__paxNum):
-                newPaxNum = int(newPaxNum)
                 confirmInput = get_input(prompt=f"Are you sure you want to change the number of pax to \"{newPaxNum}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
-                    self.__paxNum = newPaxNum
+                    self.set_pax_num(newPaxNum)
                     print(f"{F.LIGHTGREEN_EX}Number of pax updated!")
                     S_reset()
                     return
@@ -153,11 +159,11 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Number of pax cannot be the same as the current number of pax!")
                 S_reset()
 
-    def set_package_cost_per_pax(self, packageCostPerPax):
+    def set_cost_per_pax(self, packageCostPerPax):
         self.__packageCostPerPax = round(float(packageCostPerPax), 2)
-    def get_package_cost_per_pax(self):
+    def get_cost_per_pax(self):
         return self.__packageCostPerPax
-    def update_package_cost_per_pax(self):
+    def update_cost_per_pax(self):
         while (1):
             print()
             print(f"Current package cost per pax: {format_price(self.__packageCostPerPax)}")
@@ -171,10 +177,9 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Package cost per pax must be a valid price!")
                 S_reset()
             elif (round(float(newPackageCostPerPax), 2) != self.__packageCostPerPax):
-                newPackageCostPerPax = round(float(newPackageCostPerPax), 2)
                 confirmInput = get_input(prompt=f"Are you sure you want to change the package cost per pax to \"{format_price(newPackageCostPerPax)}\"? (Y/N): ", command=("y", "n"))
                 if (confirmInput == "y"):
-                    self.__packageCostPerPax = newPackageCostPerPax
+                    self.set_cost_per_pax(newPackageCostPerPax)
                     print(f"{F.LIGHTGREEN_EX}Package cost per pax updated!")
                     S_reset()
                     return
@@ -191,7 +196,7 @@ class RecordData:
             - "packageName"
             - "customerName"
             - "paxNum"
-            - "packageCostPerPax"
+            - "costPerPax"
         """
         if (attribute == "packageName"):
             return self.get_package_name()
@@ -199,8 +204,8 @@ class RecordData:
             return self.get_customer_name()
         elif (attribute == "paxNum"):
             return self.get_pax_num()
-        elif (attribute == "packageCostPerPax"):
-            return self.get_package_cost_per_pax()
+        elif (attribute == "costPerPax"):
+            return self.get_cost_per_pax()
         else:
             raise ValueError(f"Invalid attribute \"{attribute}\" in get_val in RecordData object!")
 
@@ -308,7 +313,7 @@ class HotelDatabase:
         elif (self.__sort_order == PAX_NUM):
             self.__sort_order = NOT_SORTED
 
-        res = record.update_package_cost_per_pax()
+        res = record.update_cost_per_pax()
         if (res == -1):
             return
         elif (self.__sort_order == COST_PER_PAX):
@@ -351,7 +356,7 @@ X. Exit
                     self.__sort_order = NOT_SORTED
 
             elif (whichToEdit == "4"):
-                res = record.update_package_cost_per_pax()
+                res = record.update_cost_per_pax()
                 if (res != -1 and self.__sort_order == COST_PER_PAX):
                     self.__sort_order = NOT_SORTED
 
@@ -620,7 +625,7 @@ X. Exit
             print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
             S_reset()
             if (mode == "Display"):
-                pancake_sort(self.__db, descendingOrder=reverseOrder)
+                intro_sort(self.__db, reverse=reverseOrder)
             else: # edit/delete
                 heap_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
@@ -759,7 +764,7 @@ X. Exit
                         print(f"| {i+1:^{noLen}}", end=" | ")
                         print(f"{record.get_customer_name():<{self.__table_len[0]}}", end=" | ")
                         print(f"{record.get_package_name():<{self.__table_len[1]}}", end=" | ")
-                        print(f"{format_price(record.get_package_cost_per_pax()):>{self.__table_len[2]}}", end=" | ")
+                        print(f"{format_price(record.get_cost_per_pax()):>{self.__table_len[2]}}", end=" | ")
                         print(f"{str(record.get_pax_num()):>{self.__table_len[3]}} |")
 
                         counter += 1
@@ -772,7 +777,7 @@ X. Exit
                         print(f"| {noLastPageArr[i]:^{noLen}}", end=" | ")
                         print(f"{record.get_customer_name():<{self.__table_len[0]}}", end=" | ")
                         print(f"{record.get_package_name():<{self.__table_len[1]}}", end=" | ")
-                        print(f"{format_price(record.get_package_cost_per_pax()):>{self.__table_len[2]}}", end=" | ")
+                        print(f"{format_price(record.get_cost_per_pax()):>{self.__table_len[2]}}", end=" | ")
                         print(f"{str(record.get_pax_num()):>{self.__table_len[3]}} |")
 
                     # calculate counter for the other pages, which will use positive indexing
@@ -834,7 +839,7 @@ X. Exit
         Method to sort the database using different non-sensical sorts such as bogosort
         
         Requires 1 argument:
-        - typeOfSort (str) -> "bogosort", "bozosort", "stalinsort", "slowsort", "sleepsort", "gnomesort"
+        - typeOfSort (str): "bogosort", "bozosort", "stalinsort", "slowsort", "sleepsort", "gnomesort"
         """
         if (not NOOB_SORTS_INFO_DICT.get(typeOfSort)):
             raise ValueError(f"Error: {typeOfSort} is not a valid sort type in easter_egg_sorts()")
@@ -893,6 +898,52 @@ X. Exit
         self.__descending_order = reverseOrder
         self.__sort_order = NOOB_SORTS_INFO_DICT[typeOfSort]
 
+    def pancake_sort_records(self, mode=None):
+        """
+        Method to sort the database using pancake sort
+        
+        Requires 1 argument:
+        - mode (str): "costPerPax", "paxNum", "packageName", "customerName
+        """
+        if (mode is None):
+            raise ValueError(f"Error: {mode} is not a valid mode type in pancake_sort_records()")
+
+        reverseOrder = get_descending_flag(nl=True)
+        print(f"\n{F.LIGHTYELLOW_EX}Sorting...", end="")
+        S_reset()
+        if (mode == "customerName"):
+            # sorts by customer name
+            pancake_sort(self.__db, reverse=reverseOrder, mode="customerName")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+
+            self.__sort_order = CUST_NAME
+
+        elif (mode == "packageName"):
+            # sorts by package name
+            pancake_sort(self.__db, reverse=reverseOrder, mode="packageName")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+
+            self.__sort_order = PACKAGE_NAME
+
+        elif (mode == "costPerPax"):
+            # sorts by package cost per pax
+            pancake_sort(self.__db, reverse=reverseOrder, mode="costPerPax")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+
+            self.__sort_order = COST_PER_PAX
+
+        elif (mode == "paxNum"):
+            # sorts by pax number
+            pancake_sort(self.__db, reverse=reverseOrder, mode="paxNum")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+
+            self.__sort_order = PAX_NUM
+
+        else:
+            raise ValueError(f"Error: {mode} is not a valid mode type in pancake_sort_records()")
+        S_reset()
+        self.__descending_order = reverseOrder
+
     def get_array(self):
         """
         Return the database array
@@ -902,14 +953,45 @@ X. Exit
         """
         return self.__db
 
+    @property
+    def descending_flag(self):
+        """
+        Return the descending order flag
+
+        Returns:
+        bool: get the descending order flag
+        """
+        return self.__descending_order
+
+    @descending_flag.setter
+    def descending_flag(self, descending_flag):
+        """
+        Set the descending order flag
+
+        Requires 1 argument:
+        - descending_flag (bool)
+        """
+        self.__descending_order = descending_flag
+
+    @property
     def sort_order(self):
         """
         Return the sort order of the current database
 
         Returns:
-        str: get the sort order
+        string: get the sort order
         """
         return self.__sort_order
+
+    @sort_order.setter
+    def sort_order(self, sort_order):
+        """
+        Set the sort order of the current database
+
+        Requires 1 argument:
+        - sort_order (string)
+        """
+        self.__sort_order = sort_order
 
     def __str__(self):
         self.print_from_array(self.__db)
@@ -922,8 +1004,7 @@ X. Exit
 if (__name__ == "__main__"):
     from random import randint, uniform
     h = HotelDatabase()
-    for i in range(1000):
-        h.add_record(f"Customer {i}", f"Package {randint(1, 9999)}", randint(1, 9), uniform(50, 9999))
-        
+    for i in range(100):
+        h.add_record(f"Package {i}", f"Customer {i}", randint(1, 9), uniform(50, 9999))
+
     # add main test code below
-    print(h)

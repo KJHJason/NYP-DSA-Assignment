@@ -12,37 +12,39 @@ def flip(arr, i):
         start += 1
         i -= 1
 
-def find_max_or_min(arr, n, descendingOrder=False):
+def find_max_or_min(arr, n, reverse=False, mode="packageName"):
     """
     To find the index of the maximum or minimum element in arr[0..n-1]
     
-    Requires 3 arguments:
+    Requires four arguments:
     - arr (list): The array of elements to find the maximum or minimum element in
     - n (int): The size of the array
-    - descendingOrder (bool): True if the list is to be sorted in descending order (Default: False)
+    - reverse (bool): True if the list is to be sorted in descending order (Default: False)
+    - mode (str): The mode of sorting (Default: "packageName")
     """
-    if (not descendingOrder):
+    if (not reverse):
         maxIdx = 0
         for i in range(0, n):
-            if (arr[i].get_package_name() > arr[maxIdx].get_package_name()):
+            if (arr[i].get_val(mode) > arr[maxIdx].get_val(mode)):
                 maxIdx = i
         return maxIdx
     else:
         minIdx = 0
         for i in range(0, n):
-            if (arr[i].get_package_name() < arr[minIdx].get_package_name()):
+            if (arr[i].get_val(mode) < arr[minIdx].get_val(mode)):
                 minIdx = i
         return minIdx
 
-def pancake_sort(arr, descendingOrder=False):
+def pancake_sort(arr, reverse=False, mode="packageName"):
     """
     Do a pancake sort on the database by package name.
     There will be O(n) number of flips performed to sort the array.
     In the worst case, there will be 2n-3 flips.
 
-    Requires 2 arguments:
+    Requires three arguments:
     - arr (list): The array of elements to sort by package name
-    - descendingOrder (bool): True if the list is to be sorted in descending order (Default: False)
+    - reverse (bool): True if the list is to be sorted in descending order (Default: False)
+    - mode (str): The mode of sorting (Default: "packageName")
     
     Best time complexity: O(n) when the array is already sorted and no flips are needed.
     Worst time complexity: O(n^2)
@@ -55,7 +57,7 @@ def pancake_sort(arr, descendingOrder=False):
     for currSize in range(len(arr)-1, 0, -1):
         # get the index of the maximum or minimum value from the array based on the descending order argument
         # in arr[0..currSize+1]
-        idxToFlip = find_max_or_min(arr, currSize+1, descendingOrder=descendingOrder)
+        idxToFlip = find_max_or_min(arr, currSize + 1, reverse=reverse, mode=mode)
         if (idxToFlip != currSize):
             # flip the maximum or minimum value to index 0
             flip(arr, idxToFlip)

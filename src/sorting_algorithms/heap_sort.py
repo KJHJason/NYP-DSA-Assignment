@@ -1,6 +1,6 @@
-def heapify(arr, n, i, reverse=False): 
+def heapify(arr, heapSize, idx, reverse=False): 
     """
-    To heapify subtree rooted at index i. 
+    To heapify subtree rooted at index idx. 
     
     Binary heap is a complete binary tree 
     (all levels are completely filled, except possibly the last level 
@@ -16,16 +16,16 @@ def heapify(arr, n, i, reverse=False):
     
     Requires 4 arguments:
     - arr (list): The array of elements to heapify
-    - n (int): the size of the array
-    - i (int): the index of the root of the subtree
+    - heapSize (int): the size of the array/heap
+    - idx (int): the index of the root of the subtree
     - reverse (bool): whether to make it a max-heap or a min-heap (Default: False)
     
     Best time complexity: O(log n)
     Worst time complexity: O(log n)
     Average time complexity: O(log n)
     """
-    l = (2 * i) + 1
-    r = (2 * i) + 2
+    l = (2 * idx) + 1 # left node
+    r = (2 * idx) + 2 # right node
 
     if (reverse):
         r"""
@@ -46,22 +46,22 @@ def heapify(arr, n, i, reverse=False):
         1   6                       3   6
         Reason: 1 is smaller than 3 which violates the min-heap property
         """
-        smallest = i # Initialise smallest as root
+        smallest = idx # Initialise smallest as root
 
         # if left child of root exists and is smaller than root 
-        if (l < n and arr[l].get_package_name() < arr[smallest].get_package_name()): 
+        if (l < heapSize and arr[l].get_package_name() < arr[smallest].get_package_name()): 
             smallest = l 
 
         # if right child of root exists and is smaller than smallest 
-        if (r < n and arr[r].get_package_name() < arr[smallest].get_package_name()): 
+        if (r < heapSize and arr[r].get_package_name() < arr[smallest].get_package_name()): 
             smallest = r
         
         # Change root if smallest is not root
-        if (smallest != i): 
-            arr[i], arr[smallest] = arr[smallest], arr[i] 
+        if (smallest != idx): 
+            arr[idx], arr[smallest] = arr[smallest], arr[idx] 
             
             # recursively heapify the affected sub-tree
-            heapify(arr, n, smallest, reverse)
+            heapify(arr, heapSize, smallest, reverse)
     else:
         r"""
         e.g. of valid max heap:
@@ -77,28 +77,28 @@ def heapify(arr, n, i, reverse=False):
         6                            5
         Reason: 6 is smaller than 5 which violates the max heap property
         """
-        largest = i # Initialise largest as root 
+        largest = idx # Initialise largest as root 
 
         # See if left child of root exists and is greater than root 
-        if (l < n and arr[largest].get_package_name() < arr[l].get_package_name()): 
+        if (l < heapSize and arr[largest].get_package_name() < arr[l].get_package_name()): 
             largest = l 
     
         # See if right child of root exists and is greater than largest 
-        if (r < n and arr[largest].get_package_name() < arr[r].get_package_name()): 
+        if (r < heapSize and arr[largest].get_package_name() < arr[r].get_package_name()): 
             largest = r 
     
         # Change root if largest is not root
-        if (largest != i): 
-            arr[i], arr[largest] = arr[largest],arr[i]
+        if (largest != idx): 
+            arr[idx], arr[largest] = arr[largest],arr[idx]
     
             # recursively heapify the affected sub-tree
-            heapify(arr, n, largest, reverse) 
+            heapify(arr, heapSize, largest, reverse) 
 
 def heap_sort(arr, reverse=False):
     """
     Do a heap sort on the database by package name
     
-    Requires 2 arguments:
+    Requires two arguments:
     - arr (list): The array of elements to sort by package name
     - reverse (bool): True if the list is to be sorted in descending order (Default: False)
     

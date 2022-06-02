@@ -73,7 +73,7 @@ def binary_search_for_range_of_cost(arr, lowRange, highRange, descendingOrder):
         mid = (l + r) // 2
         
         # return mid if the range is found in the subarray
-        if (arr[mid].get_package_cost_per_pax() >= lowRange and arr[mid].get_package_cost_per_pax() <= highRange):
+        if (arr[mid].get_cost_per_pax() >= lowRange and arr[mid].get_cost_per_pax() <= highRange):
             if (descendingOrder):
                 return cost_upper_index(arr, mid, highRange, descendingOrder),\
                     cost_lower_index(arr, mid, lowRange, descendingOrder)
@@ -83,14 +83,14 @@ def binary_search_for_range_of_cost(arr, lowRange, highRange, descendingOrder):
 
         if (not descendingOrder):
             # if the lower range to find is greater than mid, search the right half
-            if (arr[mid].get_package_cost_per_pax() < lowRange):
+            if (arr[mid].get_cost_per_pax() < lowRange):
                 l = mid + 1
             # if the upper range to find is less than mid, search the left half
             else:
                 r = mid - 1
         else:
             # if the upper range to find is greater than mid, search the right half
-            if (arr[mid].get_package_cost_per_pax() > highRange):
+            if (arr[mid].get_cost_per_pax() > highRange):
                 l = mid + 1
             # if the lower range to find is less than mid, search the left half
             else:

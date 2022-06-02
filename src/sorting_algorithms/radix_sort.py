@@ -20,7 +20,7 @@ def counting_sort_for_radix_sort(arr, place, reverse):
 
     # Calculate count of elements
     for i in range(n):
-        index = int(arr[i].get_package_cost_per_pax() * 100) // place
+        index = int(arr[i].get_cost_per_pax() * 100) // place
         countArr[index % 10] += 1
 
     # Calculate cumulative count...
@@ -36,7 +36,7 @@ def counting_sort_for_radix_sort(arr, place, reverse):
     for i in range(n-1, -1, -1):
         # finding the index of the element in the count array by calculating the cost divided by the 
         # place value modulo 10 to get the remainder as to avoid index out of range error
-        countArrIdx = (int(arr[i].get_package_cost_per_pax() * 100) // place) % 10
+        countArrIdx = (int(arr[i].get_cost_per_pax() * 100) // place) % 10
 
         # we will retrieve the element from the countArr using the countArrIdx we calculated above.
         # the retrieved element minus one (to account for indexing) will be the index of the element 
@@ -68,8 +68,8 @@ def radix_sort(arr, reverse=False):
     it is a float with a decimal place of 2
     """
     # Find the maximum number to know number of digits
-    maxCostEl = max(arr, key=lambda x : x.get_package_cost_per_pax())
-    maxCost = int(maxCostEl.get_package_cost_per_pax() * 100)
+    maxCostEl = max(arr, key=lambda x : x.get_cost_per_pax())
+    maxCost = int(maxCostEl.get_cost_per_pax() * 100)
 
     # Do counting sort for every digit based on palce value
     place = 1

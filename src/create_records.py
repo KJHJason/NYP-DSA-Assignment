@@ -42,29 +42,14 @@ def main():
             break
         elif (re.fullmatch(NUM_REGEX, numOfRecords)):
             numOfRecords = int(numOfRecords)
-            if (numOfRecords > 2000):
-                # more than that might hit the recursion depth limit
-                print(f"{F.LIGHTRED_EX}Notice: Number of records to generate must be smaller than or equal to 2000!")
-                S_reset(nl=True)
-            else:
-                break
+            break
         else:
             print(f"{F.LIGHTRED_EX}Invalid input. Please enter a number.")
             S_reset(nl=True)
 
-    addedFlag = False
     for _ in range(numOfRecords):
-        if (len(hotelDB) >= 2000):
-            if (not addedFlag):
-                print(f"{F.LIGHTRED_EX}Notice: Stopping addition of records to prevent recursion depth limit error.\nPlease remove some records to be less than 2000 records and try again!")
-                return
-
-            print(f"{F.LIGHTRED_EX}Notice: Some records has been added to the database. However, this program will stop adding records to prevent recursion depth limit error.\nPlease remove some records from the database to be less than 2000 records if you wish to use this program again.", end="\n\n")
-            break
-
         randPackage, randCust = preintialise_data()
         hotelDB.add_record(randPackage, randCust, randint(1,9), uniform(50,1000))
-        addedFlag = True
 
     save_db_file(hotelDB)
     return 0
