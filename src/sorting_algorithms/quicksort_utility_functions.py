@@ -14,12 +14,14 @@ def median_of_3(arr, firstIndex, middleIndex, lastIndex):
     """
     # if the first element is larger than the middle but smaller than the last element
     # or if the first element is smaller than the middle but larger than the last element
-    if ((arr[firstIndex].get_package_name() > arr[middleIndex].get_package_name()) != (arr[firstIndex].get_package_name() > arr[lastIndex].get_package_name())):
+    # Note: using the bitwise XOR operator
+    if ((arr[firstIndex].get_package_name() > arr[middleIndex].get_package_name()) ^ (arr[firstIndex].get_package_name() > arr[lastIndex].get_package_name())):
         return arr[firstIndex]
 
     # if the middle element is larger than the first element but smaller than the last element
     # or if the middle element is smaller than the last element but larger than the last element
-    if ((arr[middleIndex].get_package_name() > arr[firstIndex].get_package_name()) != (arr[middleIndex].get_package_name() > arr[lastIndex].get_package_name())):
+    # Note: using the bitwise XOR operator
+    if ((arr[middleIndex].get_package_name() > arr[firstIndex].get_package_name()) ^ (arr[middleIndex].get_package_name() > arr[lastIndex].get_package_name())):
         return arr[middleIndex]
 
     # if the last element is larger than the first element but smaller than the middle element
