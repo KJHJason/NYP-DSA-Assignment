@@ -107,7 +107,7 @@ def read_db_file(preintialiseData=False):
             newFileName = datetime.now().strftime("corrupted-%d-%m-%Y_%H-%M-%S") + ".db"
             newFilePath = FILE_PATH.joinpath(newFileName)
 
-            # in the event if the file is already exists, delete it
+            # in the event if the file already exists, delete it
             if (newFilePath.is_file()):
                 newFilePath.unlink()
 
