@@ -266,7 +266,7 @@ def main():
 
                     # easter egg menu (newly added)
                     elif (subInput == "noob"):
-                        print(f"\n{F.LIGHTYELLOW_EX}Notice: You found the easter egg menu!")
+                        print(f"\n{F.LIGHTYELLOW_EX}Notice: You have opened the easter egg menu!")
                         S_reset()
                         # sort by using a slow/non-sensical sorting algorithm such as bogosort
                         easterInput = ""
