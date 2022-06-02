@@ -22,7 +22,7 @@ def intro_sort(arr, reverse=False):
     Why not just use heap sort?
     - Quick sort is actually faster than heap sort in most cases.
     - The disadvantage of quick sort is its worst time complexity of O(n^2)
-    - Hence, introsort combines the efficiency of quick sort for its efficiency and 
+    - Hence, introsort combines quick sort for its efficiency and 
       heap sort to avoid quick sort's worst time complexity of O(n^2)
     
     Requires 2 arguments:
