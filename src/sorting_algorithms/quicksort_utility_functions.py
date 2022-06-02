@@ -1,4 +1,4 @@
-# used for introsort
+"""Functions in this python file is used for the introsort algorithm."""
 
 def median_of_3(arr, firstIndex, middleIndex, lastIndex):
     """
