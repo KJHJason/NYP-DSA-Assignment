@@ -61,7 +61,7 @@ def partition(arr, l, r, pivot, reverse=False):
             while (arr[j].get_package_name() < pivot):
                 j -= 1
 
-        # if the two pointers have crossed, anything that is smaller than the pivot,
+        # if the two pointers have crossed, return i
         if (i >= j):
             return i
 
