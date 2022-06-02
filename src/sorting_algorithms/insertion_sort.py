@@ -1,9 +1,7 @@
-from tracemalloc import start
-
-
 def insertion_sort(arr, reverse=False, startIdx=None, endIdx=None, mode="costPerPax"):
     """
-    Do a insertion sort by package cost per pax and package name
+    Do a insertion sort by package cost per pax, package name, and more.
+    However, this function is used in the program to sort by cost per pax and package name
     
     Requires 5 arguments:
     - arr (list): The array of elements to sort by package cost per pax
