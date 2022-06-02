@@ -76,7 +76,6 @@ def read_db_file(preintialiseData=False):
 
     if (check_if_db_file_exists()):
         try:
-            raise sqlite3.OperationalError("Database file already exists!")
             con = sqlite3.connect(DB_FILE_PATH)
             cur = con.cursor()
             cur.execute(f"SELECT * FROM {STAYCATION_RECORDS_TABLE}")
