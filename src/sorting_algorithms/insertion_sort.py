@@ -19,7 +19,7 @@ def insertion_sort(arr, reverse=False, startIdx=None, endIdx=None, mode="costPer
     Average time complexity: O(n^2)
     """
     if (startIdx is None and endIdx is None):
-        endIdx = endIdx or len(arr)
+        endIdx = len(arr)
         startIdx = 1
 
     for i in range(startIdx, endIdx):

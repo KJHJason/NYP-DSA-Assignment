@@ -33,8 +33,8 @@ USED_TRUE_CONDITIONS = ("y", "Y", "d")
 
 # presets used in preinitialising the database with records
 # by randomly selecting one element from each presets
-PACKAGE_NAME_PRESETS = ("Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package")
-CUSTOMER_NAME_PRESETS = ("John Smith", "Jane Doe", "Jack Black", "Jill Jackson", "Juanita Jones", "Eden Lai", "Calvin Goh", "Mr Waffles")
+PACKAGE_NAME_PRESETS = ("Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package", "Aqua Package", "Zodiac Package", "Jolly Package", "Romance Package", "Festival Package", "Merry Package", "Bold Package")
+CUSTOMER_NAME_PRESETS = ("Amelia", "Broad", "Calvin Goh", "Dan", "Eden Lai", "Hiroyuki", "Ina", "Jabriel", "Kong Heng", "Mr Waffles", "Natsuki", "Okiyasu" "Porter", "Royston", "Watame", "Yoshinori", "Zachary")
 
 def S_reset(nl=False):
     """
@@ -362,8 +362,7 @@ def countdown():
     input()
     for i in range(3, -1, -1):
         print(f"\rAutomatically shutting down in {i} seconds...", end="")
-        if (i != 0): 
-            sleep(1)
+        sleep(1)
 
 def shutdown(nl=False, program="Main", abrupt=False):
     """

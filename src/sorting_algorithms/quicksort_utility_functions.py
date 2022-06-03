@@ -42,14 +42,13 @@ def partition(arr, l, r, pivot, reverse=False):
     - reverse (bool): if True, the array will be sorted in a descending order (default: False)
     """
     i = l
-    j = r
+    j = r - 1 # - 1 to avoid the index out of range error
     while (1):
         if (not reverse):
             # find the first element in the array which is larger than the pivot
             while (arr[i].get_package_name() < pivot):
                 i += 1
 
-            j -= 1 # to account for the indexing of the array
             # find the first element in the array which is smaller than the pivot
             while (arr[j].get_package_name() > pivot):
                 j -= 1
@@ -58,7 +57,6 @@ def partition(arr, l, r, pivot, reverse=False):
             while (arr[i].get_package_name() > pivot):
                 i += 1
 
-            j -= 1 # to account for the indexing of the array
             # find the first element in the array which is smaller than the pivot
             while (arr[j].get_package_name() < pivot):
                 j -= 1
@@ -72,3 +70,4 @@ def partition(arr, l, r, pivot, reverse=False):
         # swap 5 and 2 and the array becomes [1, 2, 3, 5, 4]
         arr[i], arr[j] = arr[j], arr[i]
         i += 1
+        j -= 1

@@ -630,7 +630,7 @@ X. Exit
                 heap_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
             self.__sort_order = PACKAGE_NAME
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if reverseOrder else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
             S_reset(nl=True)
             return self.search_for_package(packageName, mode=mode)
         else:
@@ -690,7 +690,10 @@ X. Exit
         else:
             indexOne, indexTwo = binary_search_for_range_of_cost(self.__db, low, high, self.__descending_order)
             if (indexOne == -1 and indexTwo == -1):
-                print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
+                if (low == high):
+                    print(f"{F.LIGHTRED_EX}No packages found with the cost, {format_price(low)}!")
+                else:
+                    print(f"{F.LIGHTRED_EX}No packages found with a cost between {format_price(low)} and {format_price(high)}!")
                 S_reset()
             else:
                 foundRecordsStr = "One record"
