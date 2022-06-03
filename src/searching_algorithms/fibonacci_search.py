@@ -8,10 +8,10 @@ def fibonacci_search_for_package_name(arr, target, descendingOrder=False):
     using the fibonacci sequence.
     
     Advantages over binary search:
-    - More efficient on CPU where division is costly
-        - However, nowadays CPU are faster and the arithmetic performance differences 
-        between division and addition are negligible
-        - Hence, it was widely used in the old days where computers were quite slow.
+    - More efficient on CPU where divisions are costly
+        - However, nowadays CPUs are faster and the arithmetic performance differences 
+        among division, addition, and subtraction are negligible.
+        - Hence, it was widely used in the old days when computers were quite slow.
     
     Useful resources:   
     - Lecture 51A Fibonacci Search Data Structures Dec 01 2020 
