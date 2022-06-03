@@ -365,21 +365,26 @@ def countdown():
         if (i != 0): 
             sleep(1)
 
-def shutdown(nl=False, program="Main"):
+def shutdown(nl=False, program="Main", abrupt=False):
     """
     Print some messages before shutting down the program
 
-    Requires two arguments:
+    Requires three arguments:
     - nl (bool): Whether to print a newline before the shutdown messages. Defaults to False.
     - program (str): Print the corresponding program shutdown messages. Defaults to "Main".
+    - abrupt (bool): Whether to print the abrupt shutdown message only. Defaults to False.
     """
     if (nl): 
         print()
 
-    if (program.title() == "Main"): 
-        print(f"\n{F.LIGHTYELLOW_EX}Thank you for using Waffle Hotel's Booking Records System!")
+    if (abrupt):
+        print(f"{F.LIGHTRED_EX}Abruptly shutting down Waffle Hotel's Staycation Booking Records System...")
+        print("Note: All changes will be LOST.", end="\n\n")
     else:
-        print(f"\n{F.LIGHTRED_EX}Exiting program...")
+        if (program.title() == "Main"): 
+            print(f"\n{F.LIGHTYELLOW_EX}Thank you for using Waffle Hotel's Staycation Booking Records System!")
+        else:
+            print(f"\n{F.LIGHTRED_EX}Exiting program...")
 
     S_reset()
     countdown()

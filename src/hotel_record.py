@@ -721,7 +721,7 @@ X. Exit
             else:
                 noLen = len(noHeader)
 
-            header = f"| {noHeader:^{noLen}} | {'Customer Name':<{self.__table_len[0]}} | {'Package Name':<{self.__table_len[1]}} | {'Cost Per Pax':>{self.__table_len[2]}} | {'Number of Pax':>{self.__table_len[3]}} |"
+            header = f"| {noHeader:^{noLen}} | {'Customer Name':^{self.__table_len[0]}} | {'Package Name':^{self.__table_len[1]}} | {'Cost Per Pax':^{self.__table_len[2]}} | {'Number of Pax':^{self.__table_len[3]}} |"
 
             # default rows to print per page, change at own will
             rowsToPrint = 10

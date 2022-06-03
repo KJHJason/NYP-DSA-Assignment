@@ -403,10 +403,10 @@ if (__name__ == "__main__"):
         try:
             main()
         except (KeyboardInterrupt, EOFError):
-            shutdown(nl=True, program="Main")
+            shutdown(nl=True, abrupt=True)
         except:
             print()
-            print(f"{F.LIGHTRED_EX}Unexpected error caught:\n{exc_info()}")
+            print(f"{F.LIGHTRED_EX}Unexpected error caught and all changes will be LOST:\n{exc_info()}")
             print(f"Please refer to the generated error log file for more details...")
             S_reset()
             log_error()
