@@ -4,7 +4,8 @@ from colorama import Fore as F
 
 # import local python files
 from hotel_record import HotelDatabase, NUM_REGEX
-from functions import read_db_file, save_db_file, check_if_db_file_exists, get_input, shutdown, S_reset, preintialise_data
+from functions import read_db_file, save_db_file, check_if_db_file_exists, get_input, shutdown, S_reset,\
+                      preintialise_data, dbFileError
 
 # import standard libraries
 import re, platform, pathlib
@@ -64,7 +65,7 @@ if (__name__ == "__main__"):
         S_reset()
         print()
         main()
-    except (KeyboardInterrupt, EOFError):
+    except (KeyboardInterrupt, EOFError, dbFileError):
         pass
     except:
         print(f"{F.LIGHTRED_EX}Unexpected error caught: {exc_info()}")

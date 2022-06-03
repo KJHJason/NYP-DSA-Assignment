@@ -9,7 +9,8 @@ import re, platform
 
 # import local python files
 from functions import S_reset, read_db_file, print_main_menu, print_sub_menu, get_input, log_error, \
-                      countdown, shutdown, get_range, save_db_file, get_descending_flag, format_price
+                      countdown, shutdown, get_range, save_db_file, get_descending_flag, format_price, \
+                      dbFileError
 from hotel_record import print_record_data, NUM_REGEX, COST_REGEX
 
 DEBUG_FLAG = False
@@ -402,7 +403,7 @@ if (__name__ == "__main__"):
     if (not DEBUG_FLAG):
         try:
             main()
-        except (KeyboardInterrupt, EOFError):
+        except (KeyboardInterrupt, EOFError, dbFileError):
             shutdown(nl=True, abrupt=True)
         except:
             print()

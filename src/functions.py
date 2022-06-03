@@ -22,7 +22,8 @@ RANGE_INPUT_REGEX = re.compile(r"^\d+(\.\d+)?(-)\d+(\.\d+)?$|^\d+(\.\d+)?$")
 FILE_PATH = pathlib.Path(__file__).parent.resolve()
 
 # for persistent storage of the records (using sqlite3 to store the records ONLY)
-DB_FILE_PATH = FILE_PATH.joinpath("staycation_records.db")
+DB_FILE_NAME = "staycation_records.db"
+DB_FILE_PATH = FILE_PATH.joinpath(DB_FILE_NAME)
 
 # used for the table name in sqlite3 database file
 STAYCATION_RECORDS_TABLE = "StaycationRecords"
@@ -35,6 +36,14 @@ USED_TRUE_CONDITIONS = ("y", "Y", "d")
 # by randomly selecting one element from each presets
 PACKAGE_NAME_PRESETS = ("Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package", "Aqua Package", "Zodiac Package", "Jolly Package", "Romance Package", "Festival Package", "Merry Package", "Bold Package")
 CUSTOMER_NAME_PRESETS = ("Amelia", "Broad", "Calvin Goh", "Dan", "Eden Lai", "Hiroyuki", "Ina", "Jabriel", "Kong Heng", "Mr Waffles", "Natsuki", "Okiyasu" "Porter", "Royston", "Watame", "Yoshinori", "Zachary")
+
+# define custom errors
+class dbFileError(Exception):
+    """
+    Errors in the database file with regards to it being in used by other processes
+    or its file permissions which might have denied the program to manipulate it.
+    """
+    pass
 
 def S_reset(nl=False):
     """
@@ -107,16 +116,24 @@ def read_db_file(preintialiseData=False):
             newFileName = datetime.now().strftime("corrupted-%d-%m-%Y_%H-%M-%S") + ".db"
             newFilePath = FILE_PATH.joinpath(newFileName)
 
-            # in the event if the file already exists, delete it
-            if (newFilePath.is_file()):
-                newFilePath.unlink()
-
-            DB_FILE_PATH.rename(newFilePath) # rename the file to newFileName
             print(f"{F.LIGHTRED_EX}Error: SQLite3 database file is empty or has some errors.")
-            print(f"Old sqlite3 database file will be renamed to {newFileName} (delete at your own risk and will)")
+            print(f"Old sqlite3 database file will be renamed to \"{newFileName}\" (delete at your own risk and will)")
             print(f"and a new one will be created with {'10 pre-initialised records' if (preintialiseData) else 'no records pre-initialised'}.")
             S_reset()
-            return read_db_file(preintialiseData=preintialiseData)
+
+            try:
+                # in the unlikely event that the file already exists, delete it
+                if (newFilePath.is_file()):
+                    newFilePath.unlink()
+                DB_FILE_PATH.rename(newFilePath) # rename the file to newFileName
+                return read_db_file(preintialiseData=preintialiseData)
+            except (PermissionError): # if the file is in use or permission denied
+                print(f"\n{F.LIGHTRED_EX}File Permission Error: File access might be limited or file might be in use\nby other resources when renaming the corrupted database file to \"{newFileName}\".")
+                print(f"Please MANUALLY delete or rename the corrupted database file, \"{DB_FILE_NAME}\" to something else to use this program again!")
+                S_reset()
+
+                # raise error to shut down the program
+                raise dbFileError("File Permission error: Old corrupted SQLite3 file might in use or the program may have limited access to the file.")
 
     numOfRecords = 0
     if (preintialiseData):
