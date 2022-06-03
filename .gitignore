@@ -1,4 +1,4 @@
 *.pyc
-src/hotel_records.pickle
+src/*.db
 *.log
 test/*

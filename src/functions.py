@@ -78,7 +78,7 @@ def read_db_file(preintialiseData=False):
         try:
             con = sqlite3.connect(DB_FILE_PATH)
             cur = con.cursor()
-            cur.execute(f"SELECT * FROM {STAYCATION_RECORDS_TABLE}")
+            cur.execute(f"SELECT * FROM {STAYCATION_RECORDS_TABLE} ORDER BY ROWID ASC")
             records = cur.fetchall()
             # load the HotelDatabase object's configuration from the sqlite3 database file
             configTuple = cur.execute(f"SELECT * FROM {HOTEL_DATABASE_CONFIG_TABLE}").fetchone()
