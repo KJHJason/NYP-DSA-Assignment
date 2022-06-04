@@ -7,6 +7,7 @@ import re, pathlib, logging, sqlite3
 from datetime import datetime
 from time import sleep
 from random import randint, uniform, choice
+from typing import Union
 
 # String to indicate that the records are not sorted
 NOT_SORTED = "Not Sorted"
@@ -45,7 +46,7 @@ class dbFileError(Exception):
     """
     pass
 
-def S_reset(nl=False):
+def S_reset(nl:bool=False) -> None:
     """
     Function to reset colorama foreground, background colors and styles.
     
@@ -58,7 +59,7 @@ def S_reset(nl=False):
 
     print(f"{S.RESET_ALL}", end=end)
 
-def check_if_db_file_exists():
+def check_if_db_file_exists() -> bool:
     """
     Check if the db pickle file exists...
     
@@ -66,13 +67,13 @@ def check_if_db_file_exists():
     """
     return DB_FILE_PATH.is_file()
 
-def preintialise_data():
+def preintialise_data() -> tuple:
     """
     Randomly picks a package name and customer name from the list of packages and customers predefined in this function and returns them in a tuple.
     """
     return choice(PACKAGE_NAME_PRESETS), choice(CUSTOMER_NAME_PRESETS)
 
-def read_db_file(preintialiseData=False):
+def read_db_file(preintialiseData:bool=False):
     """
     Function to load the database file
     
@@ -154,7 +155,7 @@ def read_db_file(preintialiseData=False):
         db.add_record(randPackage, randCust, randint(1,9), uniform(50,1000))
     return db
 
-def save_db_file(db, printSuccessMsg=True):
+def save_db_file(db, printSuccessMsg:bool=True) -> None:
     """
     Function to save the database file for future runs
     
@@ -205,7 +206,7 @@ def save_db_file(db, printSuccessMsg=True):
         print(f"{F.LIGHTGREEN_EX}Database file saved successfully!")
         S_reset()
 
-def print_main_menu(numOfRecords, sortOrder=NOT_SORTED):
+def print_main_menu(numOfRecords:int, sortOrder:str=NOT_SORTED) -> None:
     """
     Print the menu for user to choose their next action
     
@@ -233,7 +234,7 @@ def print_main_menu(numOfRecords, sortOrder=NOT_SORTED):
     print()
     print("-" * 40)
 
-def print_sub_menu(typeOfMenu):
+def print_sub_menu(typeOfMenu:int) -> None:
     """
     Print the sub-menu based on the main menu option chosen by the user
     
@@ -309,7 +310,7 @@ def print_sub_menu(typeOfMenu):
     else:
         raise ValueError(f"Unknown type of sub-menu argument, {typeOfMenu}...")
 
-def get_input(prints=None, prompt=None, command=None, warning=None):
+def get_input(prints:Union[str, tuple]=None, prompt:str=None, command:Union[str, tuple]=None, warning:Union[str, tuple]=None) -> str:
     """
     Returns user's input based on the defined command paramater without 
     letting the user enter anything else besides the defined command parameter.
@@ -360,7 +361,7 @@ def get_input(prints=None, prompt=None, command=None, warning=None):
 
             S_reset(nl=True)
 
-def log_error():
+def log_error() -> None:
     """
     Logs an error message to the error log file
     """
@@ -380,7 +381,7 @@ def log_error():
     logging.basicConfig(filename=logFilePath, filemode="a", format="%(asctime)s - %(message)s")
     logging.error("Error Details: ", exc_info=True)
 
-def countdown():
+def countdown() -> None:
     """
     Prints a countdown message to the user before closing the application
     """
@@ -390,7 +391,7 @@ def countdown():
         print(f"\rAutomatically shutting down in {i} seconds...", end="")
         sleep(1)
 
-def shutdown(nl=False, program="Main", abrupt=False):
+def shutdown(nl:bool=False, program:str="Main", abrupt:bool=False) -> None:
     """
     Print some messages before shutting down the program
 
@@ -414,7 +415,7 @@ def shutdown(nl=False, program="Main", abrupt=False):
     S_reset()
     countdown()
 
-def get_range(userInput):
+def get_range(userInput) -> list:
     """
     Used for retreiving a range from the user's input.
     
@@ -432,6 +433,7 @@ def get_range(userInput):
     if ("-" not in userInput):
         numRange = round(float(userInput), 2)
         return [numRange, numRange]
+
     userInput = userInput.split("-")
     rangeList = [round(float(i), 2) for i in userInput]
 
@@ -440,9 +442,10 @@ def get_range(userInput):
         # If not, swap the values
         rangeList = [rangeList[1], rangeList[0]]
         print(f"{F.LIGHTRED_EX}Alert: The minimum value is larger than the maximum value, the range will be reversed.", end=S_reset(nl=True))
+
     return rangeList
 
-def format_price(price):
+def format_price(price) -> str:
     """
     Format the price to 2 decimal places and return a string
     
@@ -451,7 +454,7 @@ def format_price(price):
     """
     return f"${round(float(price), 2):.2f}"
 
-def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageCostPerPaxInput):
+def print_record_data(packageNameInput:str, customerNameInput:str, paxNumInput:int, packageCostPerPaxInput:float) -> str:
     """
     Function to print the record data in a readable format.
     
@@ -459,7 +462,7 @@ def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageC
     - packageNameInput (str): The package name
     - customerNameInput (str): The customer name
     - paxNumInput (int): The number of pax
-    - packageCostPerPaxInput (int/float): The package cost per pax
+    - packageCostPerPaxInput (float): The package cost per pax
     """
     header = "Record Data Displayed Below:"
     maxLen = len(header)
@@ -491,7 +494,7 @@ def print_record_data(packageNameInput, customerNameInput, paxNumInput, packageC
     print("-" * maxLen)
     return ""
 
-def convert_var_to_bool(var):
+def convert_var_to_bool(var) -> bool:
     """
     Convert a variable to a boolean
     
@@ -509,7 +512,7 @@ def convert_var_to_bool(var):
 
     return False
 
-def get_descending_flag(msg=None, nl=False):
+def get_descending_flag(msg:str=None, nl:bool=False) -> bool:
     """
     Asks the user if he/she wishes to sort in descending order...
     

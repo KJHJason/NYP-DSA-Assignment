@@ -13,7 +13,7 @@ from random import randint, uniform
 from sys import exit as sysExit
 from sys import exc_info
 
-def main():
+def main() -> int:
     """
     This program helps to generate nth number of records for testing purposes!
     """

@@ -1,4 +1,4 @@
-def stalin_sort(arr, reverse=False):
+def stalin_sort(arr:list, reverse:bool=False) -> list:
     """
     Sorts the array by removing any elements that are not in the correct order.
     

@@ -1,4 +1,4 @@
-def insertion_sort(arr, reverse=False, startIdx=None, endIdx=None, mode="costPerPax"):
+def insertion_sort(arr:list, reverse:bool=False, startIdx:int=None, endIdx:int=None, mode:str="costPerPax") -> None:
     """
     Do a insertion sort by package cost per pax, package name, and more.
     However, this function is used in the program to sort by cost per pax and package name

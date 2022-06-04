@@ -1,4 +1,4 @@
-def bubble_sort(arr, reverse=False):
+def bubble_sort(arr:list, reverse:bool=False) -> None:
     """
     Do a bubble sort (optimised ver) on the database by customer name
     

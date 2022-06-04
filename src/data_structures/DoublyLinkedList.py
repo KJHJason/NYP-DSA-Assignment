@@ -1,3 +1,6 @@
+# import standard libraries
+from typing import Union
+
 class Node:
     """
     Creates a node object with next and prev pointers
@@ -33,7 +36,7 @@ class DoublyLinkedList:
         self.tail = None
         self.size = 0
 
-    def add_to_back(self, data):
+    def add_to_back(self, data) -> None:
         """
         Add a node to the end of the linked list
 
@@ -55,7 +58,7 @@ class DoublyLinkedList:
         self.tail = self.tail.next
         self.size += 1
 
-    def remove_node(self, data):
+    def remove_node(self, data) -> Union[int, None]:
         """
         Remove a node from the linked list
         
@@ -103,13 +106,13 @@ class DoublyLinkedList:
 
         return -1 # return -1 if the node is not in the linked list
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """
         Returns True if the linked list is empty, False otherwise
         """
         return self.size == 0
 
-    def print_list(self):
+    def print_list(self) -> None:
         """
         Print the linked list object
         """
@@ -118,7 +121,7 @@ class DoublyLinkedList:
             print(current.data)
             current = current.next
 
-    def convert_to_array(self):
+    def convert_to_array(self) -> list:
         """
         Convert the linked list to an array/list
         """
@@ -129,10 +132,10 @@ class DoublyLinkedList:
             current = current.next
         return listOfNodes
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.size
 
-    def __str__(self):
+    def __str__(self) -> str:
         if (self.head is None):
             return "- []"
 

@@ -1,11 +1,11 @@
-def counting_sort_for_radix_sort(arr, place, reverse):
+def counting_sort_for_radix_sort(arr:list, place:int, reverse:bool=False) -> None:
     """
-    Counting sort for radix sort
+    Counting sort for radix sort.
     
     Requires 3 arguments:
     - arr (list): The array of elements to sort by package cost per pax
     - place (int): The current digit number
-    - reverse (bool): True if the list is to be sorted in descending order
+    - reverse (bool): True if the list is to be sorted in descending order (Default: False)
     
     Best time complexity: O(n+b)
     Worst time complexity: O(n+b)
@@ -50,7 +50,7 @@ def counting_sort_for_radix_sort(arr, place, reverse):
     for i in range(n):
         arr[i] = outputArr[i]
 
-def radix_sort(arr, reverse=False):
+def radix_sort(arr:list, reverse:bool=False) -> None:
     """
     Do a radix sort (base 10) on the database by cost per pax
 

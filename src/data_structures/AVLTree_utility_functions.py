@@ -23,7 +23,7 @@ class TreeNode:
 
         self.data.add_to_back(data)
 
-def get_height(node):
+def get_height(node:TreeNode) -> int:
     """
     Get the height of the tree from the node
     
@@ -35,7 +35,7 @@ def get_height(node):
 
     return node.height
 
-def get_balance(root):
+def get_balance(root:TreeNode) -> int:
     """
     Get the balance factor of the tree
     
@@ -54,7 +54,7 @@ def get_balance(root):
 
     return get_height(root.left) - get_height(root.right)
 
-def get_min_value(root):
+def get_min_value(root:TreeNode) -> TreeNode:
     """
     Find the minimum value node in the tree
     
@@ -70,7 +70,7 @@ def get_min_value(root):
 
     return current
 
-def left_rotate(x):
+def left_rotate(x:TreeNode) -> TreeNode:
     """
     To perform left rotation on the subtree rooted with x
     
@@ -90,7 +90,7 @@ def left_rotate(x):
 
     return y
 
-def right_rotate(y):
+def right_rotate(y:TreeNode) -> TreeNode:
     """
     To perform right rotation on the subtree rooted with y
     
@@ -110,7 +110,7 @@ def right_rotate(y):
 
     return x
 
-def search_node(root, target):
+def search_node(root:TreeNode, target:str) -> DoublyLinkedList:
     """
     Do a search on the tree
     
@@ -139,7 +139,7 @@ def search_node(root, target):
         # a linkedlist of hotel record objects
         return root.data 
 
-def insert_node(root, data):
+def insert_node(root:TreeNode, data) -> TreeNode:
     """
     Insert a node into the tree or append the data to the linkedlist in the node
     
@@ -295,7 +295,7 @@ def insert_node(root, data):
 
     return root
 
-def delete_node(root, data):
+def delete_node(root:TreeNode, data) -> TreeNode:
     """
     Delete a node from the tree and balance the tree if the node is deleted
     
@@ -407,3 +407,24 @@ def delete_node(root, data):
             return left_rotate(root)
 
     return root
+
+def inorder_return_node(root:TreeNode, arr:list, reverse:bool=False) -> list:
+    """
+    Traverse the tree in order and return the nodes by appending them to an array
+    
+    Requires two arguments:
+    - arr (list): The array to append the nodes to
+    - reverse (bool): Whether to return the nodes in ascending or descending order. 
+                      Defaults to False for ascending order.
+    """
+    if (not root):
+        return
+
+    if (reverse):
+        inorder_return_node(root.right, arr, reverse)
+        arr.append(root)
+        inorder_return_node(root.left, arr, reverse)
+    else:
+        inorder_return_node(root.left, arr, reverse)
+        arr.append(root)
+        inorder_return_node(root.right, arr, reverse)

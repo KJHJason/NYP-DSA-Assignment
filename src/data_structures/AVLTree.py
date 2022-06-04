@@ -1,8 +1,8 @@
 # import local python files
 if (__package__ is None or __package__ == ""):
-    from AVLTree_utility_functions import search_node, insert_node, delete_node
+    from AVLTree_utility_functions import search_node, insert_node, delete_node, inorder_return_node
 else:
-    from .AVLTree_utility_functions import search_node, insert_node, delete_node
+    from .AVLTree_utility_functions import search_node, insert_node, delete_node, inorder_return_node
 
 class AVLTree:
     """
@@ -19,31 +19,7 @@ class AVLTree:
     def __init__(self):
         self.root = None
 
-    def inorder_return_node(self, arr, reverse=False):
-        """
-        Traverse the tree in order and return the nodes by appending them to an array
-        
-        Requires two arguments:
-        - arr (list): The array to append the nodes to
-        - reverse (bool): Whether to return the nodes in ascending or descending order. 
-        Defaults to False for ascending order.
-        """
-        return self._inorder_return_node(self.root, arr, reverse)
-
-    def _inorder_return_node(self, root, arr, reverse=False):
-        if (not root):
-            return
-
-        if (reverse):
-            self._inorder_return_node(root.right, arr, reverse)
-            arr.append(root)
-            self._inorder_return_node(root.left, arr, reverse)
-        else:
-            self._inorder_return_node(root.left, arr, reverse)
-            arr.append(root)
-            self._inorder_return_node(root.right, arr, reverse)
-
-    def tree_sort(self, reverse=False):
+    def tree_sort(self, reverse:bool=False) -> list:
         """
         Returns a sorted array of the tree by customer name
         
@@ -56,8 +32,8 @@ class AVLTree:
         Hence, removing the need to insert the nodes into the tree when sorting using tree sort.
         
         Space complexity: O(m + n)
-        Where m is the number of nodes in the tree and 
-        n is the number of elements (inside all linkedlist) in the tree
+        Where m is the number of nodes in the tree (stored in arr) and 
+        n is the number of elements (inside all linkedlist) in the tree (stored in sortedArr)
         
         Requires one argument:
         - reverse (bool): Whether to return the nodes in ascending or descending order. Defaults to False
@@ -66,7 +42,7 @@ class AVLTree:
             return []
 
         arr = []
-        self.inorder_return_node(arr, reverse=reverse) # will return a list of linkedlist nodes
+        inorder_return_node(self.root, arr, reverse=reverse) # will return a list of linkedlist nodes
 
         # convert the list of linkedlist nodes into a list of RecordData objects
         sortedArr = []
@@ -78,7 +54,7 @@ class AVLTree:
         # return the sorted list of RecordData objects by customer name
         return sortedArr
 
-    def move_node(self, data):
+    def move_node(self, data) -> None:
         """
         Used when the user has changed the customer name in one of the nodes in the tree.
         Hence, there will be a need to delete the old data in the linkedlist that may result 
@@ -91,7 +67,7 @@ class AVLTree:
         self.delete(data)
         self.insert(data)
 
-    def search(self, target):
+    def search(self, target:str):
         return search_node(self.root, target)
 
     def insert(self, data):
@@ -100,7 +76,7 @@ class AVLTree:
     def delete(self, data):
         self.root = delete_node(self.root, data)
 
-    def visualise_tree(self, root, indent="", rightChildNode=1):
+    def visualise_tree(self, root, indent:str="", rightChildNode:bool=True) -> None:
         """
         Print the tree in a visual representation
         in a preorder traversal (Visit, Left, Right)
@@ -123,7 +99,7 @@ class AVLTree:
             self.visualise_tree(root.left, indent, False)
             self.visualise_tree(root.right, indent, True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         self.visualise_tree(self.root)
         return ""
 

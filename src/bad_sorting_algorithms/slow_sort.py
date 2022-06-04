@@ -1,4 +1,4 @@
-def slow_sort(arr, i, j, reverse=False):
+def slow_sort(arr:list, i:int, j:int, reverse:bool=False) -> None:
     """
     Based on the principle of multiply and surrender which is the opposite of divide and conquer.
     
@@ -35,7 +35,7 @@ def slow_sort(arr, i, j, reverse=False):
     slow_sort(arr, mid + 1, j, reverse=reverse)
 
     if (not reverse):
-         # swap the elements if jth element is greater than the mid element
+        # swap the elements if jth element is greater than the mid element
         if (arr[j].get_cost_per_pax() < arr[mid].get_cost_per_pax()):
             arr[j], arr[mid] = arr[mid], arr[j]
     else:

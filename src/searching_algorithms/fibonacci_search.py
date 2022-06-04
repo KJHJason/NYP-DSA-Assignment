@@ -1,6 +1,6 @@
 from .search_utility_functions import find_all_name_occurrences
 
-def fibonacci_search_for_package_name(arr, target, descendingOrder=False):
+def fibonacci_search_for_package_name(arr:list, target:str, descendingOrder:bool=False) -> tuple:
     """
     Fibonacci search algorithm works by using the Fibonacci numbers to
     determine the next index to check.

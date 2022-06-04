@@ -1,6 +1,6 @@
 """Functions in this python file is used for the introsort algorithm."""
 
-def median_of_3(arr, firstIndex, middleIndex, lastIndex):
+def median_of_3(arr:list, firstIndex:int, middleIndex:int, lastIndex:int) -> str:
     """
     Find the median of three elements in the array (comparing the first, middle, and last elements).
     
@@ -28,7 +28,7 @@ def median_of_3(arr, firstIndex, middleIndex, lastIndex):
     # or if the last element is smaller than the first element but larger than the middle element
     return arr[lastIndex]
 
-def partition(arr, l, r, pivot, reverse=False):
+def partition(arr:list, l:int, r:int, pivot:str, reverse:bool=False) -> int:
     """
     Partition the array into two parts using the pivot:
     - The elements smaller than the pivot will be on the left of the pivot
@@ -38,7 +38,7 @@ def partition(arr, l, r, pivot, reverse=False):
     - arr (list): the array to partition
     - l (int): the starting index of the array
     - r (int): the ending index of the array
-    - pivot (int): the index of the pivot element
+    - pivot (str): the package name to partition the array around
     - reverse (bool): if True, the array will be sorted in a descending order (default: False)
     """
     i = l

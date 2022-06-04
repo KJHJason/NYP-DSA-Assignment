@@ -1,4 +1,6 @@
-def linear_search_for_name(arr, target, typeOfSearch):
+from typing import Union
+
+def linear_search_for_name(arr:list, target:str, typeOfSearch:str) -> Union[int, tuple]:
     """
     Do a linear search on the database for the customer name
     

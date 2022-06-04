@@ -1,4 +1,4 @@
-# import python standard libraries
+# import standard libraries
 from math import floor, log2
 
 # import local python files
@@ -11,7 +11,7 @@ SIZE_THRESHOLD = 16 # if less than or equal to 16 elements, introsort will use i
                     # I used the integer 16 as the threshold because GNU Standard C++ library also uses it;
                     # https://gcc.gnu.org/onlinedocs/gcc-12.1.0/libstdc++/api/a00650_source.html#l01838
 
-def intro_sort(arr, reverse=False):
+def intro_sort(arr:list, reverse:bool=False) -> None:
     """
     Introsort or introspective sort is a hybrid sorting algorithm that consists of quick sort, 
     heap sort, and insertion sort.
@@ -53,7 +53,7 @@ def intro_sort(arr, reverse=False):
 
     intro_sort_process(arr, 0, len(arr), maxDepth, reverse=reverse)
 
-def intro_sort_process(arr, start, end, maxDepth, reverse=False):
+def intro_sort_process(arr:list, start:int, end:int, maxDepth:int, reverse:bool=False) -> None:
     """
     The main function that implements the introsort algorithm with reference to
     C++ Standard Library's std::sort();

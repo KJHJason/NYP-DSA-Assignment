@@ -1,7 +1,7 @@
 from .binary_search import binary_search_for_name
 from .search_utility_functions import find_all_name_occurrences
 
-def exponential_search_for_customer(arr, target, descendingOrder=False):
+def exponential_search_for_customer(arr:list, target:str, descendingOrder:bool=False) -> tuple:
     """
     Do an exponential search on the database for customer name.
     

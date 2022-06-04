@@ -2,7 +2,7 @@ from .search_utility_functions import find_all_name_occurrences, cost_upper_inde
 
 """---------------------- BINARY SEARCH FOR PACKAGE NAME ----------------------"""
 
-def binary_search_for_name(arr, target, descendingOrder, typeOfSearch, l=None, r=None):
+def binary_search_for_name(arr:list, target:str, descendingOrder:bool, typeOfSearch:str, l:int=None, r:int=None) -> tuple:
     """
     Do a binary search on the database for the package name
     
@@ -53,14 +53,14 @@ def binary_search_for_name(arr, target, descendingOrder, typeOfSearch, l=None, r
 
 """---------------------- BINARY SEARCH FOR PACKAGE COST PER PAX ----------------------"""
 
-def binary_search_for_range_of_cost(arr, lowRange, highRange, descendingOrder):
+def binary_search_for_range_of_cost(arr:list, lowRange:float, highRange:float, descendingOrder:bool) -> tuple:
     """
     Do a binary search on the database for the package name
     
     Requires 4 arguments:
     - arr (list): The array of elements to search
-    - lowRange (int/float)
-    - highRange (int/float)
+    - lowRange (float)
+    - highRange (float)
     - descendingOrder (bool): Indicates the order of the array (True if descending order)
     
     Best time complexity: O(1)

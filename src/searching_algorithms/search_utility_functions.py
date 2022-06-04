@@ -1,4 +1,4 @@
-def find_all_name_occurrences(arr, i, target, typeOfSearch):
+def find_all_name_occurrences(arr:list, i:int, target:str, typeOfSearch:str) -> tuple:
     """
     Search for all occurrences of the target name specified by the user starting from the index found from a search algorithm.
     Limitations: Array must sorted by target name type
@@ -24,7 +24,7 @@ def find_all_name_occurrences(arr, i, target, typeOfSearch):
 
     return iCopy, i
 
-def cost_lower_index(arr, i, lowerRange, descendingOrder):
+def cost_lower_index(arr:list, i:int, lowerRange:int, descendingOrder:bool) -> int:
     """
     Search for any records within the lowerRange of the cost specified by the user starting from the index found from a search algorithm.
     Limitations: Array must sorted by package cost per pax
@@ -47,7 +47,7 @@ def cost_lower_index(arr, i, lowerRange, descendingOrder):
             i += 1
     return i
 
-def cost_upper_index(arr, i, upperRange, descendingOrder):
+def cost_upper_index(arr:list, i:int, upperRange:int, descendingOrder:int) -> int:
     """
     Search for any records within the upperRange of the cost specified by the user starting from the index found from a search algorithm.
     Limitations: Array must sorted by package cost per pax

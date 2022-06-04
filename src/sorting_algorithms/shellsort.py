@@ -1,4 +1,4 @@
-def shellsort(arr, reverse=False):
+def shellsort(arr:list, reverse:bool=False) -> None:
     """
     Shellsort algorithm works like the insertion sort algorithm but
     shellsort will sort the elements that are far apart from each other,

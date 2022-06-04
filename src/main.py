@@ -17,7 +17,7 @@ DEBUG_FLAG = False
 PREINIT_TEN_RECORDS_FLAG = True
 PANCAKE_MENU_HEADER = "Notice: You have opened the pancake sort menu!"
 
-def main():
+def main() -> None:
     hotelDB = read_db_file(preintialiseData=PREINIT_TEN_RECORDS_FLAG)
     uInput = ""
     while (uInput != "x"):

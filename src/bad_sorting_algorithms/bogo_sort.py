@@ -1,7 +1,7 @@
 # import python standard libraries
 from random import randint, sample
 
-def is_sorted(arr, reverse=False):
+def is_sorted(arr:list, reverse:bool=False) -> bool:
     """
     Checks if the array is sorted.
     
@@ -18,7 +18,7 @@ def is_sorted(arr, reverse=False):
             return False
     return True
 
-def bogo_sort(arr, variant=False, reverse=False):
+def bogo_sort(arr:list, variant:bool=False, reverse:bool=False) -> int:
     """
     Randomly shuffles the array until it is sorted by package name.
     

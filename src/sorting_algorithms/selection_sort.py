@@ -1,4 +1,4 @@
-def selection_sort(arr, reverse=False):
+def selection_sort(arr:list, reverse:bool=False) -> None:
     """
     Do a selection sort by package name
     

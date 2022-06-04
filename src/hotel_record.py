@@ -4,6 +4,7 @@ from colorama import Fore as F
 # import standard library
 import re
 from math import ceil
+from typing import Union
 
 # import local python files
 from functions import get_input, S_reset, format_price, print_record_data, get_descending_flag
@@ -75,17 +76,17 @@ class RecordData:
     
     Note that paxNum and packageCostPerPax will be converted to integers and floats respectively.
     """
-    def __init__(self, packageName, customerName, paxNum, packageCostPerPax):
+    def __init__(self, packageName:str, customerName:str, paxNum:Union[str, int], packageCostPerPax:Union[str, int, float]) -> None:
         self.__packageName = packageName.title()
         self.__customerName = customerName.title()
         self.__paxNum = int(paxNum)
         self.__packageCostPerPax = round(float(packageCostPerPax), 2)
 
-    def set_package_name(self, packageName):
+    def set_package_name(self, packageName:str) -> None:
         self.__packageName = packageName.title()
-    def get_package_name(self):
+    def get_package_name(self) -> None:
         return self.__packageName
-    def update_package_name(self):
+    def update_package_name(self) -> None:
         while (1):
             print()
             print(f"Current package name: {self.__packageName}")
@@ -106,11 +107,11 @@ class RecordData:
                     S_reset()
                     return
 
-    def set_customer_name(self, customerName):
+    def set_customer_name(self, customerName:str) -> None:
         self.__customerName = customerName.title()
-    def get_customer_name(self):
+    def get_customer_name(self) -> None:
         return self.__customerName
-    def update_customer_name(self):
+    def update_customer_name(self) -> None:
         while (1):
             print()
             print(f"Current customer name: {self.__customerName}")
@@ -131,11 +132,11 @@ class RecordData:
                     S_reset()
                     return
 
-    def set_pax_num(self, paxNum):
+    def set_pax_num(self, paxNum:Union[int, str]) -> None:
         self.__paxNum = int(paxNum)
-    def get_pax_num(self):
+    def get_pax_num(self) -> None:
         return self.__paxNum
-    def update_pax_num(self):
+    def update_pax_num(self) -> None:
         while (1):
             print()
             print(f"Current number of pax: {self.__paxNum}")
@@ -159,11 +160,11 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Number of pax cannot be the same as the current number of pax!")
                 S_reset()
 
-    def set_cost_per_pax(self, packageCostPerPax):
+    def set_cost_per_pax(self, packageCostPerPax:Union[str, int, float]) -> None:
         self.__packageCostPerPax = round(float(packageCostPerPax), 2)
-    def get_cost_per_pax(self):
+    def get_cost_per_pax(self) -> None:
         return self.__packageCostPerPax
-    def update_cost_per_pax(self):
+    def update_cost_per_pax(self) -> None:
         while (1):
             print()
             print(f"Current package cost per pax: {format_price(self.__packageCostPerPax)}")
@@ -187,7 +188,7 @@ class RecordData:
                 print(f"{F.LIGHTRED_EX}Package cost per pax cannot be the same as the current package cost per pax!")
                 S_reset()
 
-    def get_val(self, attribute=None):
+    def get_val(self, attribute:str=None) -> Union[str, int, float]:
         """
         Returns the value of the specified attribute.
         
@@ -209,10 +210,10 @@ class RecordData:
         else:
             raise ValueError(f"Invalid attribute \"{attribute}\" in get_val in RecordData object!")
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "(" + f"{self.__packageName}, " + f"{self.__customerName}, " + f"{self.__paxNum} pax, " + format_price(self.__packageCostPerPax) + ")"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return print_record_data(self.__packageName, self.__customerName, self.__paxNum, self.__packageCostPerPax)
 
 class HotelDatabase:
@@ -242,7 +243,7 @@ class HotelDatabase:
         self.__table_len = [len(self.__table_headers[0]), len(self.__table_headers[1]), \
                             len(self.__table_headers[2]), len(self.__table_headers[3])] 
 
-    def delete_record(self, record=None, index=None):
+    def delete_record(self, record:RecordData=None, index:int=None) -> None:
         """
         Deletes a record from the database
         
@@ -257,7 +258,7 @@ class HotelDatabase:
         print(f"{F.LIGHTGREEN_EX}Record deleted!")
         S_reset()
 
-    def add_record(self, packageName, customerName, paxNum, packageCostPerPax):
+    def add_record(self, packageName:str, customerName:str, paxNum:Union[str, int], packageCostPerPax:Union[str, int, float]) -> None:
         """
         Add a record to the database
         
@@ -265,7 +266,7 @@ class HotelDatabase:
         1. Package Name (string)
         2. Customer Name (string)
         3. Number of Pax (int/string) -> will be converted to int if it's a string
-        4. Package Cost per Pax (float/string) -> will be converted to float if it's a string
+        4. Package Cost per Pax (int/float/string) -> will be converted to float if it's a string
         """
         if (len(customerName) > self.__table_len[0]):
             self.__table_len[0] = len(customerName)
@@ -285,7 +286,7 @@ class HotelDatabase:
         self.__db.append(recordData)
         self.__bst_root.insert(recordData)
 
-    def edit_all_details_of_record(self, record):
+    def edit_all_details_of_record(self, record:RecordData) -> None:
         """
         Edits all details of a record and updates the sorting order if necessary.
         
@@ -319,7 +320,7 @@ class HotelDatabase:
         elif (self.__sort_order == COST_PER_PAX):
             self.__sort_order = NOT_SORTED
 
-    def edit_record(self, record):
+    def edit_record(self, record:RecordData) -> None:
         """
         Edit a record's data
         
@@ -370,7 +371,7 @@ X. Exit
                 print(f"{F.LIGHTRED_EX}Invalid input...")
                 S_reset()
 
-    def sort_by_pax_num(self, reverse=False):
+    def sort_by_pax_num(self, reverse:bool=False) -> None:
         """
         Do a 3 way quicksort on the database by number of pax
         
@@ -388,14 +389,14 @@ X. Exit
             shellsort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PAX_NUM
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'ascending' if (not reverse) else 'descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
             print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
-    def sort_by_customer_name(self, reverse=False, typeOfSort="tree"):
+    def sort_by_customer_name(self, reverse:bool=False, typeOfSort:str="tree") -> None:
         """
         Do a bubble sort on the database by customer name to satisfy the basic function c.2. criteria
         
@@ -417,14 +418,14 @@ X. Exit
 
             self.__descending_order = reverse
             self.__sort_order = CUST_NAME
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'ascending' if (not reverse) else 'descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
             print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
-    def sort_by_package_name(self, reverse=False):
+    def sort_by_package_name(self, reverse:bool=False) -> None:
         """
         Do a selection sort on the database by package name to satisfy the basic function c.3. criteria
         
@@ -442,14 +443,14 @@ X. Exit
             selection_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = PACKAGE_NAME
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'ascending' if (not reverse) else 'descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
             print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
-    def sort_by_package_cost(self, reverse=False):
+    def sort_by_package_cost(self, reverse:bool=False) -> None:
         """
         Do a insertion sort on the database by package cost to satisfy the basic function c.4. criteria
         
@@ -467,14 +468,14 @@ X. Exit
             insertion_sort(self.__db, reverse=reverse)
             self.__descending_order = reverse
             self.__sort_order = COST_PER_PAX
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverse) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'ascending' if (not reverse) else 'descending'} order!")
         elif (len(self.__db) == 1):
             print(f"{F.LIGHTRED_EX}Notice: There is no need to sort the database as there is only one record!")
         else:
             print(f"{F.LIGHTRED_EX}Notice: There are no records to sort!")
         S_reset()
 
-    def get_index_from_list(self, data=-1, dataOrigIndex=[], mode=None, typeOfOperations=None, target=None):
+    def get_index_from_list(self, data:Union[list, int]=-1, dataOrigIndex:list=[], mode:str=None, typeOfOperations:str=None, target:str=None) -> tuple:
         """
         Function to get the index from a list of data.
         Used to when there is duplicate data in the search results.
@@ -536,7 +537,7 @@ X. Exit
                 print(f"{F.LIGHTRED_EX}Invalid input, please enter a number from the table \"No.\" column!")
                 S_reset(nl=True)
 
-    def search_for_customer(self, customerName, mode="Edit", bonus=False):
+    def search_for_customer(self, customerName:str, mode:str="Edit", bonus:bool=False) -> None:
         """
         Do a linear search on the database for the customer name to satisfy the basic function c.5. criteria
         or do a exponential search if bonus argument is True
@@ -579,14 +580,14 @@ X. Exit
                 self.__db = self.__bst_root.tree_sort(reverse=reverseOrder)
                 self.__descending_order = reverseOrder
 
-                print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+                print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'ascending' if (not reverseOrder) else 'descending'} order!")
                 S_reset(nl=True)
                 self.__sort_order = CUST_NAME
 
                 return self.search_for_customer(customerName, mode=mode, bonus=bonus)
 
             # if it's already sorted, do exponential search
-            lowIndex, highIndex = exponential_search_for_customer(self.__db, customerName, self.__descending_order)
+            lowIndex, highIndex = exponential_search_for_customer(self.__db, customerName, descendingOrder=self.__descending_order)
             data = self.__db[lowIndex:highIndex + 1]
             dataOrigIndex = list(range(lowIndex, highIndex + 1))
 
@@ -606,7 +607,7 @@ X. Exit
             self.delete_record(index=dbIndex)
             self.__bst_root.delete(data)
 
-    def search_for_package(self, packageName, mode="Edit"):
+    def search_for_package(self, packageName:str, mode:str="Edit") -> None:
         """
         Do a binary search on the database for the package name to satisfy the basic function c.6. criteria
         
@@ -630,7 +631,7 @@ X. Exit
                 heap_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
             self.__sort_order = PACKAGE_NAME
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'ascending' if (not reverseOrder) else 'descending'} order!")
             S_reset(nl=True)
             return self.search_for_package(packageName, mode=mode)
         else:
@@ -667,7 +668,7 @@ X. Exit
                 self.delete_record(index=dbIndex)
                 self.__bst_root.delete(record)
 
-    def search_for_range_of_cost(self, low, high):
+    def search_for_range_of_cost(self, low:int, high:int) -> None:
         """
         Do a binary search or a linear search on the database for the range of cost specified by the user to satisfy the basic function c.7. criteria
         
@@ -683,7 +684,7 @@ X. Exit
             radix_sort(self.__db, reverse=reverseOrder)
             self.__descending_order = reverseOrder
 
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost per pax in {'ascending' if (not reverseOrder) else 'descending'} order!")
             S_reset(nl=True)
             self.__sort_order = COST_PER_PAX
             return self.search_for_range_of_cost(low, high)
@@ -706,7 +707,7 @@ X. Exit
                 S_reset(nl=True)
                 self.print_from_index(indexOne, indexTwo)
 
-    def print_from_array(self, arr):
+    def print_from_array(self, arr:list) -> None:
         """
         Print records from the given array (to satisfy the basic function c.1. criteria)
         Pagination is an added feature.
@@ -826,7 +827,7 @@ X. Exit
             print(f"{F.LIGHTRED_EX}Notice: There are no records to display...")
             S_reset()
 
-    def print_from_index(self, startIndex, endIndex):
+    def print_from_index(self, startIndex:int, endIndex:int) -> None:
         """
         Print the records from the database from the startIndex to the endIndex
         
@@ -837,7 +838,7 @@ X. Exit
         self.print_from_array(self.__db[startIndex:endIndex + 1])
         print()
 
-    def easter_egg_sorts(self, typeOfSort=None):
+    def easter_egg_sorts(self, typeOfSort:str=None) -> None:
         """
         Method to sort the database using different non-sensical sorts such as bogosort
         
@@ -850,7 +851,7 @@ X. Exit
         reverseOrder = get_descending_flag(nl=True)
 
         if (NOOB_SORTS_INFO_DICT[typeOfSort] == self.__sort_order and self.__descending_order == reverseOrder):
-            print(f"{F.LIGHTRED_EX}Error: The database is already sorted by {NOOB_SORTS_INFO_DICT[typeOfSort].lower()} in {'an ascending' if (not reverseOrder) else 'a descending'} order...")
+            print(f"{F.LIGHTRED_EX}Error: The database is already sorted by {NOOB_SORTS_INFO_DICT[typeOfSort].lower()} in {'ascending' if (not reverseOrder) else 'descending'} order...")
             S_reset()
             return
 
@@ -862,23 +863,23 @@ X. Exit
 
             try:
                 iterNums = bogo_sort(self.__db, variant=sortByBozosort, reverse=reverseOrder)
-                print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+                print(f"\r{F.LIGHTGREEN_EX}The database has been sorted after {iterNums} iterations by package name in {'ascending' if (not reverseOrder) else 'descending'} order!")
                 S_reset(nl=True)
             except (KeyboardInterrupt):
                 # ctrl + c to stop sorting by bogo sort/bozo sort as it can take 
                 # a very long time since it has no upper bound O(inf)
-                print(f"\r{F.LIGHTRED_EX}Cancelled sorting by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order...")
+                print(f"\r{F.LIGHTRED_EX}Cancelled sorting by package name in {'ascending' if (not reverseOrder) else 'descending'} order...")
                 S_reset(nl=True)
                 return
         elif (typeOfSort == "stalinsort"):
             # sorts by customer name
             self.__db = stalin_sort(self.__db, reverse=reverseOrder)
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'ascending' if (not reverseOrder) else 'descending'} order!")
             S_reset()
         elif (typeOfSort == "slowsort"):
             # sorts by package cost per pax
             slow_sort(self.__db, 0, len(self.__db) - 1, reverse=reverseOrder)
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'ascending' if (not reverseOrder) else 'descending'} order!")
             S_reset()
         elif (typeOfSort == "sleepsort" or typeOfSort == "gnomesort"):
             # sorts by pax number
@@ -889,19 +890,19 @@ X. Exit
                     # ctrl + c to stop sorting by sleep sort as it can take 
                     # a very long time since its time complexity depends on 
                     # the maximum element in the array, i.e. O(max(arr))
-                    print(f"\r{F.LIGHTRED_EX}Cancelled sorting by number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order...")
+                    print(f"\r{F.LIGHTRED_EX}Cancelled sorting by number of pax in {'ascending' if (not reverseOrder) else 'descending'} order...")
                     S_reset(nl=True)
                     return
             else:
                 gnome_sort(self.__db, reverse=reverseOrder)
 
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'ascending' if (not reverseOrder) else 'descending'} order!")
             S_reset()
 
         self.__descending_order = reverseOrder
         self.__sort_order = NOOB_SORTS_INFO_DICT[typeOfSort]
 
-    def pancake_sort_records(self, mode=None):
+    def pancake_sort_records(self, mode:str=None) -> None:
         """
         Method to sort the database using pancake sort
         
@@ -917,28 +918,28 @@ X. Exit
         if (mode == "customerName"):
             # sorts by customer name
             pancake_sort(self.__db, reverse=reverseOrder, mode="customerName")
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by customer name in {'ascending' if (not reverseOrder) else 'descending'} order!")
 
             self.__sort_order = CUST_NAME
 
         elif (mode == "packageName"):
             # sorts by package name
             pancake_sort(self.__db, reverse=reverseOrder, mode="packageName")
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package name in {'ascending' if (not reverseOrder) else 'descending'} order!")
 
             self.__sort_order = PACKAGE_NAME
 
         elif (mode == "costPerPax"):
             # sorts by package cost per pax
             pancake_sort(self.__db, reverse=reverseOrder, mode="costPerPax")
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by package cost in {'ascending' if (not reverseOrder) else 'descending'} order!")
 
             self.__sort_order = COST_PER_PAX
 
         elif (mode == "paxNum"):
             # sorts by pax number
             pancake_sort(self.__db, reverse=reverseOrder, mode="paxNum")
-            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'an ascending' if (not reverseOrder) else 'a descending'} order!")
+            print(f"\r{F.LIGHTGREEN_EX}The database has been sorted by the number of pax in {'ascending' if (not reverseOrder) else 'descending'} order!")
 
             self.__sort_order = PAX_NUM
 
@@ -947,7 +948,7 @@ X. Exit
         S_reset()
         self.__descending_order = reverseOrder
 
-    def get_array(self):
+    def get_array(self) -> list:
         """
         Return the database array
 
@@ -957,7 +958,7 @@ X. Exit
         return self.__db
 
     @property
-    def descending_flag(self):
+    def descending_flag(self) -> bool:
         """
         Return the descending order flag
 
@@ -967,7 +968,7 @@ X. Exit
         return self.__descending_order
 
     @descending_flag.setter
-    def descending_flag(self, descending_flag):
+    def descending_flag(self, descending_flag) -> None:
         """
         Set the descending order flag
 
@@ -977,7 +978,7 @@ X. Exit
         self.__descending_order = descending_flag
 
     @property
-    def sort_order(self):
+    def sort_order(self) -> str:
         """
         Return the sort order of the current database
 
@@ -987,7 +988,7 @@ X. Exit
         return self.__sort_order
 
     @sort_order.setter
-    def sort_order(self, sort_order):
+    def sort_order(self, sort_order) -> None:
         """
         Set the sort order of the current database
 
@@ -996,11 +997,11 @@ X. Exit
         """
         self.__sort_order = sort_order
 
-    def __str__(self):
+    def __str__(self) -> str:
         self.print_from_array(self.__db)
         return ""
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.__db)
 
 # test codes

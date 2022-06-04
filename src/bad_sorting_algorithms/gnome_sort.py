@@ -1,4 +1,4 @@
-def gnome_sort(arr, reverse=False):
+def gnome_sort(arr:list, reverse:bool=False) -> None:
     """
     ⣿⣿⣿⣿⣿⠟⠉⠁⠄⠄⠄⠈⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
     ⣿⣿⣿⣿⠏⠄⠄⠄⠄⠄⠄⠄⠄⠄⠸⢿⣿⣿⣿⣿⣿⣿⣿⣿

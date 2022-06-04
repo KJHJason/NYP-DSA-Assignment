@@ -1,4 +1,4 @@
-def flip(arr, i):
+def flip(arr:list, i:int) -> None:
     """
     Flip the elements in the array (used to reverse arr[0..i])
     
@@ -12,7 +12,7 @@ def flip(arr, i):
         start += 1
         i -= 1
 
-def find_max_or_min(arr, n, reverse=False, mode="packageName"):
+def find_max_or_min(arr:list, n:int, reverse:bool=False, mode:str="packageName") -> int:
     """
     To find the index of the maximum or minimum element in arr[0..n-1]
     
@@ -35,7 +35,7 @@ def find_max_or_min(arr, n, reverse=False, mode="packageName"):
                 minIdx = i
         return minIdx
 
-def pancake_sort(arr, reverse=False, mode="packageName"):
+def pancake_sort(arr:list, reverse:bool=False, mode:str="packageName") -> None:
     """
     Do a pancake sort on the database by package name.
     There will be O(n) number of flips performed to sort the array.

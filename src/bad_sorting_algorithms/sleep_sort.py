@@ -1,8 +1,8 @@
-# import python standard libraries
+# import standard libraries
 from time import sleep
 from threading import Timer
 
-def add_to_list(el, arr):
+def add_to_list(el, arr:list) -> None:
     """
     Adds the element to the list.
     
@@ -14,7 +14,7 @@ def add_to_list(el, arr):
     """
     arr.append(el)
 
-def sleep_sort(arr, reverse=False):
+def sleep_sort(arr:list, reverse:bool=False) -> list:
     """
     Creates different threads for each elements and 
     each thread sleeps for an amount of time proportional to the element's value.

@@ -1,4 +1,4 @@
-def heapify(arr, heapSize, idx, reverse=False): 
+def heapify(arr:list, heapSize:int, idx:int, reverse:bool=False) -> None: 
     """
     To heapify subtree rooted at index idx. 
     
@@ -94,7 +94,7 @@ def heapify(arr, heapSize, idx, reverse=False):
             # recursively heapify the affected sub-tree
             heapify(arr, heapSize, largest, reverse) 
 
-def heap_sort(arr, reverse=False):
+def heap_sort(arr:list, reverse:bool=False) -> None:
     """
     Do a heap sort on the database by package name
     
