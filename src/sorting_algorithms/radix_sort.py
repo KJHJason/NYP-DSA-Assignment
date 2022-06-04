@@ -18,7 +18,7 @@ def counting_sort_for_radix_sort(arr:list, place:int, reverse:bool=False) -> Non
     outputArr = [0] * n
     countArr = [0] * 10
 
-    # Calculate count of elements
+    # Calculate the number of occurrences of each digit
     for i in range(n):
         index = int(arr[i].get_cost_per_pax() * 100) // place
         countArr[index % 10] += 1
