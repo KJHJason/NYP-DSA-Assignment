@@ -26,7 +26,7 @@ def binary_search_for_name(arr, target, descendingOrder, typeOfSearch, l=None, r
 
     while (l <= r):
         mid = (l + r) // 2
-        
+
         # return mid if the package name is found in the subarray
         if (arr[mid].get_val(typeOfSearch) == target):
             # will return the index of the first and last occurrence of the package name in a tuple
@@ -71,7 +71,7 @@ def binary_search_for_range_of_cost(arr, lowRange, highRange, descendingOrder):
     r = len(arr) - 1
     while (l <= r):
         mid = (l + r) // 2
-        
+
         # return mid if the range is found in the subarray
         if (arr[mid].get_cost_per_pax() >= lowRange and arr[mid].get_cost_per_pax() <= highRange):
             if (descendingOrder):

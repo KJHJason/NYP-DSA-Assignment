@@ -111,14 +111,14 @@ def heap_sort(arr, reverse=False):
     # Build a min or max heap depending on the reverse condition
     # if in ascending order, then build a max heap
     # if in descending order, then build a min heap
-    # The range starts from n//2-1 as it is the index of the non-leaf node
+    # The range starts from n//2 as it is the index of the non-leaf node
     # then perform a reverse level order traversal from the last non-leaf node
     # and heapify each node
-    for i in range((n // 2)-1, -1, -1): 
+    for i in range(n // 2, -1, -1): 
         heapify(arr, n, i, reverse=reverse) 
 
     # extract elements individually starting from the end of the heap
-    for i in range(n-1, -1, -1): 
+    for i in range(n-1, 0, -1): 
         # Move current root to end by swapping with last ith element
         # as the largest(max heap)/smallest(min heap) element in the heap is at the root of the heap,
         # Hence, move it to the last ith element and call heapify 

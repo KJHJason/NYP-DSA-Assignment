@@ -7,8 +7,9 @@ from .heap_sort import heap_sort
 from .quicksort_utility_functions import median_of_3, partition
 
 # define the maximum length of the array before using insertion sort
-SIZE_THRESHOLD = 16 # if less than 16 elements, introsort will use insertion sort 
-                    # use the integer 16 as the threshold as GNU Standard C++ library also uses this value
+SIZE_THRESHOLD = 16 # if less than or equal to 16 elements, introsort will use insertion sort 
+                    # use the integer 16 as the threshold because GNU Standard C++ library also uses it
+                    # https://gcc.gnu.org/onlinedocs/gcc-12.1.0/libstdc++/api/a00650_source.html#l01838
 
 def intro_sort(arr, reverse=False):
     """
@@ -36,6 +37,8 @@ def intro_sort(arr, reverse=False):
     Worst time complexity: O(n log n)
     Average time complexity: O(n log n)
     
+    Space complexity: O(logn) for the heap sort on a sub-array of the array
+    
     More details:
     - https://en.wikipedia.org/wiki/Introsort
     """
@@ -52,7 +55,9 @@ def intro_sort(arr, reverse=False):
 
 def intro_sort_process(arr, start, end, maxDepth, reverse=False):
     """
-    The main function that implements the introsort algorithm.
+    The main function that implements the introsort algorithm with reference to
+    C++ Standard Library's std::sort();
+    https://gcc.gnu.org/onlinedocs/gcc-12.1.0/libstdc++/api/a00650_source.html#l01908
     
     Requires 5 arguments:
     - arr (list): The array of elements to sort by package name
@@ -61,32 +66,38 @@ def intro_sort_process(arr, start, end, maxDepth, reverse=False):
     - maxDepth (int): The max recursion depth of the algorithm before using heap sort
     - reverse (bool): True if the list is to be sorted in descending order (Default: False)
     """
-    # if the array length is less than SIZE_THRESHOLD, 
-    if (end - start < SIZE_THRESHOLD):
-        # use insertion sort as it is faster for smaller arrays
-        insertion_sort(arr, startIdx=start, endIdx=end, reverse=reverse, mode="packageName")
-        return
+    while (end - start > SIZE_THRESHOLD):
+        if (maxDepth == 0):
+            # base case 1
+            # start using heap sort if the max recursion depth is 0 as to avoid
+            # the worst case of O(n^2) when using quick sort
+            arrCopy = arr[start:end+1]
+            heap_sort(arrCopy, reverse=reverse)
+            arr[start:end+1] = arrCopy
 
-    # if the max recursion depth has been reached, use heap sort
-    if (maxDepth == 0):
-        # usually happens for large arrays (to avoid quick sort's worst case complexity of O(n^2))
-        heap_sort(arr, reverse=reverse)
-        return
+            # explicitly delete the copy of the array for garbage collector to free up memory
+            del arrCopy
+            return
 
-    # get the pivot for quick sort using the median of three concept to optimise quick sort
-    # For the mid argument, I used the formula, mid = start + ((end - start) // 2) 
-    # to avoid overflow/index out of bounds
-    pivot = median_of_3(arr, start, start + ((end - start) // 2), end - 1).get_package_name()
+        maxDepth -= 1
 
-    # partition the array around the pivot
-    partitionRes = partition(arr, start, end, pivot, reverse=reverse)
+        # get the pivot for quick sort using the median of three concept
+        pivot = median_of_3(arr, start, start + ((end - start) // 2) + 1, end - 1).get_package_name()
 
-    # use the returned value from the partition function and recursively
-    # sort the RIGHT side of the array by changing the start argument
-    # to the returned value from the partition function
-    intro_sort_process(arr, partitionRes, end, maxDepth-1, reverse=reverse)
+        # partition the array around the pivot
+        partitionRes = partition(arr, start, end, pivot, reverse=reverse)
 
-    # use the returned value from the partition function and recursively
-    # sort the LEFT side of the array by changing the end argument
-    # to the returned value from the partition function
-    intro_sort_process(arr, start, partitionRes, maxDepth-1, reverse=reverse)
+        # recursive case:
+        # use the returned value from the partition function and recursively
+        # sort the RIGHT side of the array by changing the start argument
+        # to the returned value from the partition function
+        intro_sort_process(arr, partitionRes, end, maxDepth, reverse=reverse)
+
+        # change the end pointer to partitionRes after the recursive call process 
+        # of sorting the right side of the array to sort the LEFT side of the array
+        # in the next while loop iteration and start sorting the LEFT side of the array recursively
+        end = partitionRes
+
+    # base case 2
+    # use insertion sort to sort the array/sub-array for smaller arrays as it is faster
+    return insertion_sort(arr, startIdx=start, endIdx=end, reverse=reverse, mode="packageName")

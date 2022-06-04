@@ -1,6 +1,6 @@
 def bubble_sort(arr, reverse=False):
     """
-    Do a bubble sort(optimised) on the database by customer name
+    Do a bubble sort (optimised ver) on the database by customer name
     
     Requires 2 arguments:
     - arr (list): The array of elements to sort by customer name
