@@ -494,12 +494,12 @@ def print_record_data(packageNameInput:str, customerNameInput:str, paxNumInput:i
     print("-" * maxLen)
     return ""
 
-def convert_var_to_bool(var) -> bool:
+def convert_var_to_bool(var:Union[bool, int, str]) -> bool:
     """
     Convert a variable to a boolean
     
     Requires 1 argument:
-    - var (str/int/float/bool): The variable to be converted
+    - var (str/int/bool): The variable to be converted
     """
     if (isinstance(var, bool)):
         return var
