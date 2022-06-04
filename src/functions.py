@@ -87,32 +87,12 @@ def read_db_file(preintialiseData=False):
         try:
             con = sqlite3.connect(DB_FILE_PATH)
             cur = con.cursor()
-            cur.execute(f"SELECT * FROM {STAYCATION_RECORDS_TABLE} ORDER BY ROWID ASC")
-            records = cur.fetchall()
-            # load the HotelDatabase object's configuration from the sqlite3 database file
-            configTuple = cur.execute(f"SELECT * FROM {HOTEL_DATABASE_CONFIG_TABLE}").fetchone()
-
-            # load all sqlite3 database records into the HotelDatabase object
-            for record in records:
-                customerName = record[0]
-                packageName = record[1]
-                paxNum = record[2]
-                costPerPax = record[3] / 100 # since the cost is stored as an INTEGER
-                db.add_record(packageName, customerName, paxNum, costPerPax)
-
-            # set the config here since the HoteLDatabase object will reset the 
-            # sort order to NOT_SORTED when each record is added to the object.
-            # (if the config data is saved/exists)
-            if (configTuple[0] is not None):
-                db.sort_order = configTuple[0]
-
-            if (configTuple[1] is not None):
-                db.descending_flag = bool(configTuple[1])
-
-            return db
-        except (sqlite3.Error, sqlite3.IntegrityError, sqlite3.OperationalError):
+            records = cur.execute(f"SELECT * FROM {STAYCATION_RECORDS_TABLE} ORDER BY ROWID ASC").fetchall()
+        except (sqlite3.IntegrityError, sqlite3.OperationalError, sqlite3.DatabaseError):
             # if the sqlite3 database file is empty (no tables) or has some errors, 
             # delete it and call itself (the function) again
+            con.close() # close the connection to allow the program to rename the corrupted db file
+
             newFileName = datetime.now().strftime("corrupted-%d-%m-%Y_%H-%M-%S") + ".db"
             newFilePath = FILE_PATH.joinpath(newFileName)
 
@@ -126,7 +106,6 @@ def read_db_file(preintialiseData=False):
                 if (newFilePath.is_file()):
                     newFilePath.unlink()
                 DB_FILE_PATH.rename(newFilePath) # rename the file to newFileName
-                return read_db_file(preintialiseData=preintialiseData)
             except (PermissionError): # if the file is in use or permission denied
                 print(f"\n{F.LIGHTRED_EX}File Permission Error: File access might be limited or file might be in use\nby other resources when renaming the corrupted database file to \"{newFileName}\".")
                 print(f"Please MANUALLY delete or rename the corrupted database file, \"{DB_FILE_NAME}\" to something else to use this program again!")
@@ -134,6 +113,36 @@ def read_db_file(preintialiseData=False):
 
                 # raise error to shut down the program
                 raise dbFileError("File Permission error: Old corrupted SQLite3 file might in use or the program may have limited access to the file.")
+
+            return read_db_file(preintialiseData=preintialiseData)
+
+        # load the HotelDatabase object's configuration from the sqlite3 database file
+        try:
+            configTuple = cur.execute(f"SELECT * FROM {HOTEL_DATABASE_CONFIG_TABLE}").fetchone()
+        except (sqlite3.OperationalError):
+            configTuple = None # if the config table doesn't exist, then the configTuple will be None
+
+        con.close()
+
+        # load all sqlite3 database records into the HotelDatabase object
+        for record in records:
+            customerName = record[0]
+            packageName = record[1]
+            paxNum = record[2]
+            costPerPax = record[3] / 100 # since the cost is stored as an INTEGER
+            db.add_record(packageName, customerName, paxNum, costPerPax)
+
+        # set the config here since the HoteLDatabase object will reset the 
+        # sort order to NOT_SORTED when each record is added to the object.
+        # (if the config data is saved/exists)
+        if (configTuple):
+            if (configTuple[0] is not None):
+                db.sort_order = configTuple[0]
+
+            if (configTuple[1] is not None):
+                db.descending_flag = bool(configTuple[1])
+
+        return db
 
     numOfRecords = 0
     if (preintialiseData):
