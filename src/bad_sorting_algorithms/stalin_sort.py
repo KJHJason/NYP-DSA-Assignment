@@ -15,8 +15,9 @@ def stalin_sort(arr:list, reverse:bool=False) -> list:
     ⣿⣿⡿⠉⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⣷⣿⣿⣿⣿⣿\n
     ⡿⠛⠄⠄⠄⠙⢿⣷⣿⣭⣤⣬⡁⢉⣻⣿⣿⣿⣿⣿⣿⡟⠄⠹⣿⣿⣿⣿⣿\n
     
-    This sorting algorithm is meant as a joke as elements in the array can be LOST/DELETED
-    because it sorts the array by removing any elements that are not in the correct order.
+    This sorting algorithm is a popular joke/meme in the programming community as elements in the 
+    array can be LOST/DELETED because it sorts the array by removing any elements that 
+    are not in the correct order.
     
     Sorts by customer name.
     
