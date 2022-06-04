@@ -43,7 +43,7 @@ class DoublyLinkedList:
         data: the data to be added to the linked list
         """
         # case 1: if the linked list is empty
-        if (not self.head):
+        if (self.head is None):
             self.head = Node(data)
             self.tail = self.head
             self.size += 1
@@ -54,7 +54,6 @@ class DoublyLinkedList:
         self.tail.next.prev = self.tail
         self.tail = self.tail.next
         self.size += 1
-        return
 
     def remove_node(self, data):
         """
@@ -72,7 +71,7 @@ class DoublyLinkedList:
         data: the data to be removed from the linked list
         """
         # case 1: if the linked list is empty
-        if (not self.head):
+        if (self.head is None):
             return
 
         # case 2: if the node to be removed is the head
@@ -91,14 +90,14 @@ class DoublyLinkedList:
 
         # case 4: if the linked list has multiple nodes
         current = self.head.next
-        while (current):
+        while (current is not None):
             # check if the node to be removed is the current node
             if (current.data == data):
                 current.prev.next = current.next # if so, set the previous node's next to the current node's next
                 current.next.prev = current.prev # set the next node's previous to the current node's previous
                 self.size -= 1
                 return
-            
+
             # move to the next node
             current = current.next
 
@@ -115,7 +114,7 @@ class DoublyLinkedList:
         Print the linked list object
         """
         current = self.head
-        while (current):
+        while (current is not None):
             print(current.data)
             current = current.next
 
@@ -125,7 +124,7 @@ class DoublyLinkedList:
         """
         listOfNodes = []
         current = self.head
-        while (current):
+        while (current is not None):
             listOfNodes.append(current.data)
             current = current.next
         return listOfNodes
@@ -134,9 +133,9 @@ class DoublyLinkedList:
         return self.size
 
     def __str__(self):
-        if (not self.head):
+        if (self.head is None):
             return "- []"
-        
+
         arr = self.convert_to_array()
         arr = [repr(i) for i in arr]
         return f"- [{', '.join(arr)}]"
@@ -147,14 +146,17 @@ if (__name__ == "__main__"):
     for i in range(10):
         ll.add_to_back(i)
 
+    print("Original linked list:\n", ll)
     ll.remove_node(8)
-    print(ll)
+    print("\nAfter removing element, \"8\":\n", ll)
 
     ll.remove_node(0)
-    print(ll)
+    print("\nAfter removing element, \"0\":\n", ll)
 
     ll.remove_node(9)
-    print(ll)
+    print("\nAfter removing element, \"9\":\n", ll)
 
     ll.add_to_back(9)
-    print(ll)
+    print("\nAfter adding element, \"9\" to the back:\n", ll)
+
+    print("\nConvert to a python list:\n", ll.convert_to_array())
