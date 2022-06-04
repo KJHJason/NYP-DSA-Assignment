@@ -36,7 +36,7 @@ USED_TRUE_CONDITIONS = ("y", "Y", "d")
 # presets used in preinitialising the database with records
 # by randomly selecting one element from each presets
 PACKAGE_NAME_PRESETS = ("Budget Package", "Standard Package", "Premium Package", "Deluxe Package", "Luxury Package", "Ultimate Package", "Aqua Package", "Zodiac Package", "Jolly Package", "Romance Package", "Festival Package", "Merry Package", "Bold Package")
-CUSTOMER_NAME_PRESETS = ("Amelia", "Broad", "Calvin Goh", "Dan", "Eden Lai", "Hiroyuki", "Ina", "Jabriel", "Kong Heng", "Mr Waffles", "Natsuki", "Okiyasu", "Porter", "Royston", "Watame", "Yoshinori", "Zachary")
+CUSTOMER_NAME_PRESETS = ("Amelia", "Broad", "Calvin Goh", "Dan", "Eden Lai", "Hiroyuki", "Ina", "Jabriel", "Kako", "Mr Waffles", "Natsuki", "Okiyasu", "Porter", "Royston", "Watame", "Yoshinori", "Zachary")
 
 # define custom errors
 class dbFileError(Exception):
