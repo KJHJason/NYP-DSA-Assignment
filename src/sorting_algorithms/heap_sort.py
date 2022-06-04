@@ -56,7 +56,7 @@ def heapify(arr, heapSize, idx, reverse=False):
         if (r < heapSize and arr[r].get_package_name() < arr[smallest].get_package_name()): 
             smallest = r
         
-        # Change root if smallest is not root
+        # Swap with smallest element and continue heapifying if the root is not the smallest
         if (smallest != idx): 
             arr[idx], arr[smallest] = arr[smallest], arr[idx] 
             
@@ -87,7 +87,7 @@ def heapify(arr, heapSize, idx, reverse=False):
         if (r < heapSize and arr[largest].get_package_name() < arr[r].get_package_name()): 
             largest = r 
     
-        # Change root if largest is not root
+        # Swap with largest element and continue heapifying if the root is not the largest
         if (largest != idx): 
             arr[idx], arr[largest] = arr[largest],arr[idx]
     

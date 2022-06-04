@@ -31,7 +31,7 @@ def intro_sort(arr, reverse=False):
     
     Requires 2 arguments:
     - arr (list): The array of elements to sort by package name
-    - reverse (bool): True if the list is to be sorted in descending order (Default: False)
+    - reverse (bool): True if the array is to be sorted in descending order (Default: False)
     
     Best time complexity: O(n log n)
     Worst time complexity: O(n log n)
@@ -43,7 +43,7 @@ def intro_sort(arr, reverse=False):
     - https://en.wikipedia.org/wiki/Introsort
     """
     if (not arr):
-        # if list is empty, return
+        # if array is empty, return
         return
 
     # calculate the max recursion depth of the algorithm for quick sort 
