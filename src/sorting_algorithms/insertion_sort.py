@@ -9,7 +9,7 @@ def insertion_sort(arr, reverse=False, startIdx=None, endIdx=None, mode="costPer
         - Default: False
     - startIdx (int): The index of the first element to sort 
         - Default: 1
-    - endIdx (int): The index of the last element to sort 
+    - endIdx (int): The index to stop at when sorting (exclusive of endIdx, i.e. [startIdx...endIdx-1])
         - Default: len(arr)
     - mode (str): The mode of sorting. Can be "costPerPax" or "packageName", etc.
         - default: "costPerPax"
