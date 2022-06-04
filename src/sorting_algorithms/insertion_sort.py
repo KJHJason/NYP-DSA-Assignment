@@ -7,9 +7,9 @@ def insertion_sort(arr:list, reverse:bool=False, startIdx:int=None, endIdx:int=N
     - arr (list): The array of elements to sort by package cost per pax
     - reverse (bool): True if the list is to be sorted in descending order 
         - Default: False
-    - startIdx (int): The index of the first element to sort 
-        - Default: 1
-    - endIdx (int): The index to stop at when sorting (exclusive of endIdx, i.e. [startIdx...endIdx-1])
+    - startIdx (int): The index of the first element to sort
+        - Default: 0
+    - endIdx (int): The index to stop at when sorting (exclusive of endIdx, i.e. [...endIdx-1])
         - Default: len(arr)
     - mode (str): The mode of sorting. Can be "costPerPax" or "packageName", etc.
         - default: "costPerPax"
@@ -20,26 +20,30 @@ def insertion_sort(arr:list, reverse:bool=False, startIdx:int=None, endIdx:int=N
     """
     if (startIdx is None and endIdx is None):
         endIdx = len(arr)
-        startIdx = 1
+        startIdx = 0
 
     if (startIdx == endIdx):
         # nothing to sort, hence just return 
         # if starting and ending index are the same
         return
 
-    for i in range(startIdx, endIdx):
-        el = arr[i] # save the value to be positioned
+    for i in range(startIdx+1, endIdx):
+        el = arr[i] # save the element to be positioned
 
-        j = i - 1
-        if (reverse):
-            # Compare el with each element on the left of it and move the smaller element to the right ahead of their current position
-            while (j >= 0 and arr[j].get_val(attribute=mode) < el.get_val(attribute=mode)):
-                arr[j + 1] = arr[j]
+        # now find the position where el fits in the ordered part of the array
+        j = i
+        if (not reverse):
+            # Compare el with each element on the left of it and
+            # shift the bigger element to the right of their current position
+            while (j > startIdx and el.get_val(mode) < arr[j-1].get_val(mode)):
+                arr[j] = arr[j-1]
                 j -= 1
         else:
-            # Compare el with each element on the left of it and move the bigger element to the right ahead of their current position
-            while (j >= 0 and arr[j].get_val(attribute=mode) > el.get_val(attribute=mode)):
-                arr[j + 1] = arr[j]
+            # Compare el with each element on the left of it and
+            # shift the smaller element to the right of their current position
+            while (j > startIdx and el.get_val(mode) > arr[j-1].get_val(mode)):
+                arr[j] = arr[j-1]
                 j -= 1
 
-        arr[j + 1] = el
+        # Put the saved element into the open slot
+        arr[j] = el
