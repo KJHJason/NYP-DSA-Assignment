@@ -8,7 +8,7 @@ def insertion_sort(arr, reverse=False, startIdx=None, endIdx=None, mode="costPer
     - reverse (bool): True if the list is to be sorted in descending order 
         - Default: False
     - startIdx (int): The index of the first element to sort 
-        - Default: 0
+        - Default: 1
     - endIdx (int): The index of the last element to sort 
         - Default: len(arr)
     - mode (str): The mode of sorting. Can be "costPerPax" or "packageName", etc.
@@ -21,6 +21,11 @@ def insertion_sort(arr, reverse=False, startIdx=None, endIdx=None, mode="costPer
     if (startIdx is None and endIdx is None):
         endIdx = len(arr)
         startIdx = 1
+
+    if (startIdx == endIdx):
+        # nothing to sort, hence just return 
+        # if starting and ending index are the same
+        return
 
     for i in range(startIdx, endIdx):
         el = arr[i] # save the value to be positioned
