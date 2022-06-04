@@ -112,7 +112,8 @@ def heap_sort(arr:list, reverse:bool=False) -> None:
     # if in ascending order, then build a max heap
     # if in descending order, then build a min heap
     # The range starts from n//2 as it is the index of the non-leaf node
-    # then perform a reverse level order traversal from the last non-leaf node
+    # then perform a reverse level order traversal (visit the from lowest level to the top level)
+    # from the last non-leaf node
     # and heapify each node
     for i in range(n // 2, -1, -1): 
         heapify(arr, n, i, reverse=reverse) 
