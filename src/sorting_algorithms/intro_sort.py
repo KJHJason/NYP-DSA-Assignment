@@ -1,5 +1,5 @@
 # import python standard libraries
-from math import ceil, log2
+from math import floor, log2
 
 # import local python files
 from .insertion_sort import insertion_sort
@@ -49,7 +49,7 @@ def intro_sort(arr, reverse=False):
     # calculate the max recursion depth of the algorithm for quick sort 
     # as to use heap sort when the max recursion depth has been reached
     # to avoid the worse case complexity of O(n^2) when using quick sort
-    maxDepth = 2 * ceil(log2(len(arr)))
+    maxDepth = 2 * floor(log2(len(arr)))
 
     intro_sort_process(arr, 0, len(arr), maxDepth, reverse=reverse)
 
