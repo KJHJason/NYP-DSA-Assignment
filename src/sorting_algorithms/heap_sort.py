@@ -82,15 +82,15 @@ def heapify(arr, heapSize, idx, reverse=False):
         # See if left child of root exists and is greater than root 
         if (l < heapSize and arr[largest].get_package_name() < arr[l].get_package_name()): 
             largest = l 
-    
+
         # See if right child of root exists and is greater than largest 
         if (r < heapSize and arr[largest].get_package_name() < arr[r].get_package_name()): 
             largest = r 
-    
+
         # Swap with largest element and continue heapifying if the root is not the largest
         if (largest != idx): 
             arr[idx], arr[largest] = arr[largest],arr[idx]
-    
+
             # recursively heapify the affected sub-tree
             heapify(arr, heapSize, largest, reverse) 
 
