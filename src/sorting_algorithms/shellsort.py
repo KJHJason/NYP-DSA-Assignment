@@ -25,17 +25,18 @@ def shellsort(arr:list, reverse:bool=False) -> None:
 
             # rearrange the elements at n/2, n/4, n/8,... intervals
 
-            # if j is still greater or equal to the gap,
-            # checks if the value at j-gap is greater than temp,
-            # where j - gap is the element at the first element of the gap
-            while (not reverse and j >= gap and arr[j - gap].get_pax_num() > temp.get_pax_num()):
-                arr[j] = arr[j - gap] # if it is, replace the value at j with the value at j-gap
-                j -= gap
-
-            # same as the previous while loop, but checks if the value at j-gap is less than temp
-            while (reverse and j >= gap and arr[j - gap].get_pax_num() < temp.get_pax_num()):
-                arr[j] = arr[j - gap]
-                j -= gap
+            if (not reverse):
+                # if j is still greater or equal to the gap,
+                # checks if the value at j-gap is greater than temp,
+                # where j - gap is the element at the first element of the gap
+                while (j >= gap and arr[j - gap].get_pax_num() > temp.get_pax_num()):
+                    arr[j] = arr[j - gap] # if it is, replace the value at j with the value at j-gap
+                    j -= gap
+            else:
+                # same as the previous while loop, but checks if the value at j-gap is less than temp
+                while (j >= gap and arr[j - gap].get_pax_num() < temp.get_pax_num()):
+                    arr[j] = arr[j - gap]
+                    j -= gap
 
             # finally, replace the value at j with temp 
             # in the case where arr[j] was replaced by arr[j - gap]
