@@ -171,7 +171,7 @@ if (__name__ == "__main__"):
     # demo for the time complexity of the tree sort
     while (1):
         print("\nWill start a demo of tree sort on 1 million elements in an array...")
-        print("This will take a while and ensure you have around 0.4GB+ of free memory...")
+        print("This will take a while and ensure you have around 0.6GB+ of free memory...")
         confirmInput = input("Continue? (y/n): ").lower()
         if (confirmInput == "y"):
             # demo the time taken to sort the tree
@@ -182,7 +182,10 @@ if (__name__ == "__main__"):
                 newTree = AVLTree()
                 for el in arr:
                     newTree.insert(el)
-                newTree.tree_sort()
+                sortedArr = newTree.tree_sort()
+
+                # assert that the sorted array is sorted correctly
+                assert sortedArr == sorted(arr, key=lambda x: x.get_customer_name())
 
             print("Time taken:", timeit.timeit(lambda: test_tree_sort(arr), number=1))
             break
