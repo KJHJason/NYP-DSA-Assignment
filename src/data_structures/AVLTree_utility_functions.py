@@ -18,7 +18,7 @@ class TreeNode:
         self.key = data.get_customer_name()
         self.left = None
         self.right = None
-        self.height = 1
+        self.height = 1 # Initialise height to 1 since a node has a height of 1 by itself
         self.data = DoublyLinkedList() # to store data of the same customer name
 
         self.data.add_to_back(data)
