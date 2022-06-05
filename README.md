@@ -35,6 +35,14 @@ This assignment (40%) provided me the chance to implement the data structures an
     - Radix sort ([radix_sort.py](src/sorting_algorithms/radix_sort.py))
     - Shell sort ([shellsort.py](src/sorting_algorithms/shellsort.py))
 
+- Search Algorithms
+    - Fibonacci search ([fibonacci_search.py](src/searching_algorithms/fibonacci_search.py))
+    - Exponential Search ([exponential_search.py](src/searching_algorithms/exponential_search.py))
+
+- Data Structures
+    - AVL Tree ([AVLTree.py](src/data_structures/AVLTree.py))
+    - Doubly Linked List ([DoublyLinkedList.py](src/data_structures/DoublyLinkedList.py))
+
 - Bad Sorting Algorithms
     - Bogosort ([bogo_sort.py](src/bad_sorting_algorithms/bogo_sort.py))
     - Bozosort ([bogo_sort.py](src/bad_sorting_algorithms/bogo_sort.py))
@@ -43,11 +51,3 @@ This assignment (40%) provided me the chance to implement the data structures an
     - Sleep sort ([sleep_sort.py](src/bad_sorting_algorithms/sleep_sort.py))
     - Slow sort ([slow_sort.py](src/bad_sorting_algorithms/slow_sort.py))
     - Stalin sort ([stalin_sort.py](src/bad_sorting_algorithms/stalin_sort.py))
-
-- Search Algorithms
-    - Fibonacci search ([fibonacci_search.py](src/searching_algorithms/fibonacci_search.py))
-    - Exponential Search ([exponential_search.py](src/searching_algorithms/exponential_search.py))
-
-- Data Structures
-    - AVL Tree ([AVLTree.py](src/data_structures/AVLTree.py))
-    - Doubly Linked List ([DoublyLinkedList.py](src/data_structures/DoublyLinkedList.py))
