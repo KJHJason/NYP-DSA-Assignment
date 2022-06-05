@@ -18,7 +18,7 @@ class TreeNode:
         self.key = data.get_customer_name()
         self.left = None
         self.right = None
-        self.height = 1 # new node is initially added at leaf
+        self.height = 1
         self.data = DoublyLinkedList() # to store data of the same customer name
 
         self.data.add_to_back(data)
@@ -324,19 +324,15 @@ def delete_node(root:TreeNode, data) -> TreeNode:
             root.data.remove_node(data)
             return root
 
-        # if the node has no children (leaf node), return None to delete the node
-        if (root.left is None and root.right is None):
-            return None
-
-        # if the node has only one child, replace the node with its child
-        # and delete the child's parent (the node to be deleted from the tree)
+        # if the node has only one or no child, replace the node with its child or None
+        # and delete the node that is to be deleted from the tree
         if (root.left is None):
             temp = root.right
-            del root
+            del root # explicitly delete the node for garbage collection
             return temp
         elif (root.right is None):
             temp = root.left
-            del root
+            del root # explicitly delete the node for garbage collection
             return temp
 
         r"""

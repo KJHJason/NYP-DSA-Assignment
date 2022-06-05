@@ -103,43 +103,64 @@ class AVLTree:
         self.visualise_tree(self.root)
         return ""
 
+# demo codes below (with some explanations)
 if (__name__ == "__main__"):
     from uuid import uuid4
     class TestData:
         def __init__(self, name):
             self.__customer_name = name
             self.id = uuid4().hex
-        
+
         def get_customer_name(self):
             return self.__customer_name
-        
+
         def __repr__(self):
             return f"{self.__customer_name} ({self.id})"
 
     nodeList = []
     for i in range(0, 20, 4):
         for j in range(3):
-            nodeList.append(TestData(f"Customer {i}"))
+            # nodeList.append(TestData(f"Customer {i}"))
+            nodeList.append(TestData(i)) # using numbers instead of strings for easier understanding
 
     tree = AVLTree()
     for node in nodeList:
         tree.insert(node)
 
-    print("tree:")
+    print("Original tree:")
     print(tree)
-    
-    print("\nsearching")
-    print(tree.search(nodeList[0].get_customer_name()))
-    
+
+    print("\nsearching...")
+    print("Result:\n", tree.search(nodeList[0].get_customer_name()))
+
+    # doesn't delete any nodes from the tree but removes
+    # a node from the doubly linked list that stores data of the same key.
     tree.delete(nodeList[0])
     print("\ntree after deleting one data from the node:")
     print(tree)
-    
+
+    # After deleting the tree node, 0
+    #  4 (bf = -2)
+    #   \
+    #   12
+    #  / \
+    # 8  16
+    # tree becomes unbalanced (right heavy) and 
+    # requires rotations (right right case) to balance it.
+    # It will do a simple left rotation on node 4 which is the root
+    # After the rotation, the tree is balanced again with node 12 as the new root.
     for i in range(1, 3):
         tree.delete(nodeList[i])
-    print("\ntree after deleting the node twice:")
+    print("\ntree after deleting the tree node 0:")
     print(tree)
-    
-    print("\nTree sort by customer name:")
+
+    # When the customer 8 tree node is deleted from the AVL Tree
+    # No rebalancing is required.
+    for i in range(6, 9):
+        tree.delete(nodeList[i])
+    print("\ntree after deleting the tree node 8:")
+    print(tree)
+
+    print("\nTree sort by int:")
     arr = tree.tree_sort()
     [print(repr(x)) for x in arr]
