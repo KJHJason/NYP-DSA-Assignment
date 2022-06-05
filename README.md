@@ -6,8 +6,10 @@ This assignment (40%) provided me the chance to implement the data structures an
 1. Design a suitable data structure (e.g. by making use of Python list, dictionary, objects, etc.) to manage the staycation booking records. 
     - You are required to store the following staycation booking records. 
     - Each record has: Package Name, Customer Name, number of pax and Package Cost per pax.
+
 2. The data structure will store up to 10 records. 
     - All records are to be pre-initialized in the program.
+
 3. Design a menu for the application to allow the user to perform the following:
     - Display all records
     - Sort record by Customer Name using Bubble sort
@@ -17,11 +19,15 @@ This assignment (40%) provided me the chance to implement the data structures an
     - Search record by Package Name using Binary Search and update record
     - List records range from $X to $Y. e.g $100-200
     - Exit Application
+
 4. All sorting algorithms are in ascending order only. 
     - After sorting, the record will be stored as sorted order for next display.
+
 5. All search algorithms MUST ignore case sensitivity. 
     - Upon update, the updated record will be stored.
+
 6. Error handling is required.
+
 7. User friendly interface and design
 
 ---
