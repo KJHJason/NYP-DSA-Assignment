@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="assignment_brief/nanyang_polytechnic_logo.png" style="width: 50%; height: auto;" alt="NYP logo">
+    <img src="docs/nanyang_polytechnic_logo.png" style="width: 50%; height: auto;" alt="NYP logo">
     <br>
     NYP Data Structures & Algorithms Assignment
 </h1>
