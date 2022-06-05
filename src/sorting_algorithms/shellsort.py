@@ -3,6 +3,7 @@ def shellsort(arr:list, reverse:bool=False) -> None:
     Shellsort algorithm works like the insertion sort algorithm but
     shellsort will sort the elements that are far apart from each other,
     and progressively reduces the interval gap between the elements to be compared.
+    This effectively means that shellsort will do less shifting as compared to insertion sort.
     
     Sorts by pax number
     
@@ -13,6 +14,7 @@ def shellsort(arr:list, reverse:bool=False) -> None:
     Best Time Complexity: O(n log n)
     Average Time Complexity: O(n log n)
     Worst Time Complexity: O(n^2)
+    Note: That the time complexity depends on the intervals used in the algorithm
     """
     # initialise the gap by halving the array size first
     gap = len(arr) // 2
@@ -21,10 +23,9 @@ def shellsort(arr:list, reverse:bool=False) -> None:
         # loop through the elements in the array in intervals of the gap
         for i in range(gap, len(arr)):
             temp = arr[i] # save the current element as temp
-            j = i # initialise j to be the value of i
 
             # rearrange the elements at n/2, n/4, n/8,... intervals
-
+            j = i
             if (not reverse):
                 # if j is still greater or equal to the gap,
                 # checks if the element at j-gap is greater than temp,
