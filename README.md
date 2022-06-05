@@ -24,7 +24,7 @@ This assignment (40%) provided me the chance to implement the data structures an
 ### Additional Data Structures & Algorithms Implemented
 
 - Efficient Sorting Algorithms
-    - Introsort [intro_sort.py](src/sorting_algorithms/intro_sort.py)
+    - Introsort [(intro_sort.py)](src/sorting_algorithms/intro_sort.py)
     - Heap sort [heap_sort.py](src/sorting_algorithms/heap_sort.py)
     - Tree sort [tree_sort.py](src/data_structures/AVLTree.py)
     - Radix sort [radix_sort.py](src/sorting_algorithms/radix_sort.py)
