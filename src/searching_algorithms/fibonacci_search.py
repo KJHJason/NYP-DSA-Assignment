@@ -90,9 +90,10 @@ def fibonacci_search_for_package_name(arr:list, target:str, descendingOrder:bool
     # e.g. arr = [1, 2, 3, 4, 5], target = 5,
     # before loop,    fibM = 5, fibMm1 = 3, fibMm2 = 2, offset = -1, i = undefined
     # after 1st loop, fibM = 3, fibMm1 = 2, fibMm2 = 1, offset = 1, i = 1
-    # after 2nd loop, fibM = 2, fibMm1 = 1, fibMm2 = 0, offset = 2, i = 2
-    # After 3rd loop, fibM = 1, fibMm1 = 0, fibMm2 = -1, offset = 3, i = 3
-    # Since fibM is not more than 1, the loop stops and is unable to find the target in the last position
+    # after 2nd loop, fibM = 2, fibMm1 = 1, fibMm2 = 1, offset = 2, i = 2
+    # After 3rd loop, fibM = 1, fibMm1 = 1, fibMm2 = 0, offset = 3, i = 3 
+    # Break out of loop since fibM is not more than 1, the loop stops 
+    # and is unable to find the target in the last position
     # and thus the if statement below checks if the target is the last element
     if (fibMm1 and arr[n-1].get_package_name() == target):
         return find_all_name_occurrences(arr, n-1, target, "packageName")
