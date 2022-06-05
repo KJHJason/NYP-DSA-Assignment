@@ -65,7 +65,10 @@ def main() -> int:
 
 if (__name__ == "__main__"):
     if (platform.system() == "Windows"):
-        # colorama to escape the ANSI escape sequences for Windows systems
+        # colorama to escape the ANSI escape sequences for Windows systems.
+        # Remove this block of code if it does not escape the ASNI escape sequences
+        # as some Windows systems may have in-built support for it 
+        # which can interfere with the colorama initialise function
         coloramaInit(autoreset=False, convert=True)
 
     try:
