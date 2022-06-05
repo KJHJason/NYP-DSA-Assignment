@@ -3,7 +3,9 @@
 This assignment (40%) provided me the chance to implement the data structures and algorithms we learnt in class and also through personal research.
 
 ## Minimum Requirements
-1. Design a suitable data structure (e.g. by making use of Python list, dictionary, objects, etc.) to manage the staycation booking records. You are required to store the following staycation booking records. Each record has: Package Name, Customer Name, number of pax and Package Cost per pax.
+1. Design a suitable data structure (e.g. by making use of Python list, dictionary, objects, etc.) to manage the staycation booking records. 
+    - You are required to store the following staycation booking records. 
+    - Each record has: Package Name, Customer Name, number of pax and Package Cost per pax.
 2. The data structure will store up to 10 records. All records are to be pre-initialized in the program.
 3. Design a menu for the application to allow the user to perform the following:
     - Display all records
