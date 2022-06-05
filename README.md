@@ -1,6 +1,6 @@
 # NYP Data Structures & Algorithms Assignment
 
-This assignment (40%) provided me the chance to implement the data structures and algorithms we learnt in class and also through personal research.
+This assignment (40%) provided me the chance to implement the data structures and algorithms I've learnt in class and also through personal research.
 
 ## Minimum Requirements
 1. Design a suitable data structure (e.g. by making use of Python list, dictionary, objects, etc.) to manage the staycation booking records. 
