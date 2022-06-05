@@ -371,6 +371,8 @@ X. Exit
             elif (whichToEdit == "a"):
                 self.edit_all_details_of_record(record)
             elif (whichToEdit == "x"):
+                print(f"{F.LIGHTRED_EX}Exiting...", end="\n\n")
+                S_reset()
                 return
             else:
                 print(f"{F.LIGHTRED_EX}Invalid input...")
