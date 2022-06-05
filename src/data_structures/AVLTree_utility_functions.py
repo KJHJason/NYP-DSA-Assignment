@@ -1,3 +1,6 @@
+# import standard libraries
+from typing import Union
+
 # import local python files
 if (__package__ is None or __package__ == ""):
     from DoublyLinkedList import DoublyLinkedList
@@ -110,7 +113,7 @@ def right_rotate(y:TreeNode) -> TreeNode:
 
     return x
 
-def search_node(root:TreeNode, target:str) -> DoublyLinkedList:
+def search_node(root:TreeNode, target:str) -> Union[DoublyLinkedList, int]:
     """
     Do a search on the tree
     

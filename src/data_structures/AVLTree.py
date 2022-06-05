@@ -70,10 +70,10 @@ class AVLTree:
     def search(self, target:str):
         return search_node(self.root, target)
 
-    def insert(self, data):
+    def insert(self, data) -> None:
         self.root = insert_node(self.root, data)
 
-    def delete(self, data):
+    def delete(self, data) -> None:
         self.root = delete_node(self.root, data)
 
     def visualise_tree(self, root, indent:str="", rightChildNode:bool=True) -> None:
