@@ -177,59 +177,58 @@ def insert_node(root:TreeNode, data) -> TreeNode:
     if (balanceFactor > 1):
         # If the data key is less than the left child, rotate right
         if (data.get_customer_name() < root.left.key):
-            r"""
-            e.g. of left left case
-                        5 (bf:  2-0 = 2)
-                       /
-                      2 (bf: 1-0 = 1)
-                     /
-            (bf: 0) 1 
-            Afterwards, in this example, we will have to balance the tree with 
-            a right rotation on the subtree with root 5.
+            # e.g. of left left case
+            #             5 (bf:  2-0 = 2)
+            #            /
+            #           2 (bf: 1-0 = 1)
+            #          /
+            # (bf: 0) 1 
+            # Afterwards, in this example, we will have to balance the tree with 
+            # a right rotation on the subtree with root 5.
+            # 
+            # y = 5
+            # initialise x and childSubtree
+            # x = y.left (5.left = 2)
+            # childSubtree = x.right (2.right = None)
+            # 
+            # then we perform the rotation
+            # 2.right = y (5)
+            # 5.left = childSubtree (None)
+            # 
+            # return x node (2)
+            # 
+            # After doing a right rotation (clockwise rotation), the balanced tree will look like this:
+            #           2 (bf: 1-1 = 0)
+            #          / \
+            # (bf: 0) 1   5 (bf: 0)
 
-            y = 5
-            initialise x and childSubtree
-            x = y.left (5.left = 2)
-            childSubtree = x.right (2.right = None)
-            
-            then we perform the rotation
-            2.right = y (5)
-            5.left = childSubtree (None)
-            
-            return x node (2)
-
-            After doing a right rotation (clockwise rotation), the balanced tree will look like this:
-                      2 (bf: 1-1 = 0)
-                     / \
-            (bf: 0) 1   5 (bf: 0)
-            """
             return right_rotate(root)
         # If the data key is greater than the right child, rotate left and then rotate right
         else:
-            r"""
-            e.g. of left right case
-            
-              5 (bf:  2-0 = 2)
-             / 
-            2 (bf: 0-2 = -2)
-             \
-              3 (bf: 0-1 = -1)
+            # e.g. of left right case
+            # 
+            #   5 (bf:  2-0 = 2)
+            #  / 
+            # 2 (bf: 0-2 = -2)
+            #  \
+            #   3 (bf: 0-1 = -1)
+            # 
+            # Afterwards, in this example, we will have to balance the tree with a left rotation 
+            # and then a right rotation (left right case).
+            # 
+            # First left rotation (anti-clockwise rotation) on the 
+            # left child of the subtree rooted at node 2:
+            #     5 (bf:  2-0 = 2)
+            #    / 
+            #   3 (bf: 1-0 = 1) 
+            #  /
+            # 2 (bf: 0
+            # 
+            # Then right rotation (clockwise rotation) on the subtree rooted at node 5:
+            #           3 (bf:  1-1 = 0)
+            #          / \
+            # (bf: 0) 2   5 (bf: 0)
 
-            Afterwards, in this example, we will have to balance the tree with a left rotation 
-            and then a right rotation (left right case).
-            
-            First left rotation (anti-clockwise rotation) on the left child of the subtree rooted at node 2:
-                5 (bf:  2-0 = 2)
-               / 
-              3 (bf: 1-0 = 1) 
-             /
-            2 (bf: 0
-
-            Then right rotation (clockwise rotation) on the subtree rooted at node 5:
-                      3 (bf:  1-1 = 0)
-                     / \
-            (bf: 0) 2   5 (bf: 0)
-            """
             root.left = left_rotate(root.left)
             return right_rotate(root)
 
@@ -237,59 +236,58 @@ def insert_node(root:TreeNode, data) -> TreeNode:
     if (balanceFactor < -1):
         # If the data key is greater than the right child, rotate left
         if (data.get_customer_name() > root.right.key):
-            r"""
-            e.g. of right right case
-            5 (bf:  0-2 = -2)
-             \
-              6 (bf: 0-1 = -1)
-               \
-                8 (bf: 0)
-            Afterwards, in this example, we will have to balance the tree with a left rotation
-            on the subtree with root 5.
+            # e.g. of right right case
+            # 5 (bf:  0-2 = -2)
+            #  \
+            #   6 (bf: 0-1 = -1)
+            #    \
+            #     8 (bf: 0)
+            # Afterwards, in this example, we will have to balance the tree with a left rotation
+            # on the subtree with root 5.
+            # 
+            # x = 5
+            # initialise y and childSubtree
+            # y = x.right (5.right = 6)
+            # childSubtree = y.left (6.left = None)
+            # 
+            # then we perform the rotation
+            # 6.left = x (5)
+            # 5.right = childSubtree (None)
+            # 
+            # return y node (6)
+            # 
+            # After doing a left rotation (anti-clockwise rotation), 
+            # the balanced tree will look like this:
+            #           6 (bf: 1-1 = 0)
+            #          / \
+            # (bf: 0) 5   8 (bf: 0)
 
-            x = 5
-            initialise y and childSubtree
-            y = x.right (5.right = 6)
-            childSubtree = y.left (6.left = None)
-
-            then we perform the rotation
-            6.left = x (5)
-            5.right = childSubtree (None)
-
-            return y node (6)
-
-            After doing a left rotation (anti-clockwise rotation), the balanced tree will look like this:
-                      6 (bf: 1-1 = 0)
-                     / \
-            (bf: 0) 5   8 (bf: 0)
-            """
             return left_rotate(root)
         # If the data key is less than the left child, rotate right and then rotate left
         else:
-            r"""
-            e.g. of right left case
-            
-            1 (bf:  0-2 = -2)
-             \ 
-              3 (bf: 1-0 = 1)
-             /
-            2(bf: 0)
+            # e.g. of right left case
+            # 
+            # 1 (bf:  0-2 = -2)
+            #  \ 
+            #   3 (bf: 1-0 = 1)
+            #  /
+            # 2(bf: 0)
+            # 
+            # Afterwards, in this example, we will have to balance the tree with a right rotation
+            # and then a left rotation (right left case).
+            # 
+            # First right rotation (clockwise rotation) on the right child of the subtree rooted at node 3:
+            # 1 (bf:  0-2 = -2)
+            #  \
+            #   2 (bf: -1-0 = -1)
+            #    \
+            #     3 (bf: 0)
+            # 
+            # Then left rotation (anti-clockwise rotation) on the subtree rooted at node 1:
+            #           2 (bf:  1-1 = 0)
+            #          / \
+            # (bf: 0) 1   3 (bf: 0)
 
-            Afterwards, in this example, we will have to balance the tree with a right rotation
-            and then a left rotation (right left case).
-
-            First right rotation (clockwise rotation) on the right child of the subtree rooted at node 3:
-            1 (bf:  0-2 = -2)
-             \
-              2 (bf: -1-0 = -1)
-               \
-                3 (bf: 0)
-
-            Then left rotation (anti-clockwise rotation) on the subtree rooted at node 1:
-                      2 (bf:  1-1 = 0)
-                     / \
-            (bf: 0) 1   3 (bf: 0)
-            """
             root.right = right_rotate(root.right)
             return left_rotate(root)
 
@@ -335,29 +333,29 @@ def delete_node(root:TreeNode, data) -> TreeNode:
             del root # explicitly delete the node for garbage collection
             return temp
 
-        r"""
-        if the node has two childrens, find the inorder successor 
-        (smallest value in the right subtree/
-        the node with the smallest key greater than the key of the input node)
+        # if the node has two childrens, find the inorder successor 
+        # (smallest value in the right subtree/
+        # the node with the smallest key greater than the key of the input node)
+        # 
+        # e.g. 
+        #                 4 (bf: 2-1 = 1)
+        #                / \
+        # (bf: 1-1 = 0) 2   5 (bf: 0)
+        #              / \
+        #    (bf: 0) 1   3 (bf: 0)
+        # 
+        # If we want to delete the node with value 4, we will find 
+        # the inorder successor in the right subtree which will be the node with value 5.
+        # 
+        #             5 (inorder successor, bf: 2-0 = 2)
+        #            /
+        #           2 (bf: 1-1 = 0)
+        #          / \
+        # (bf: 0) 1   3 (bf: 0)
+        # 
+        # We will then replace the node that we wanted to delete 
+        # with the inorder successor as shown above.
 
-        e.g. 
-                        4 (bf: 2-1 = 1)
-                       / \
-        (bf: 1-1 = 0) 2   5 (bf: 0)
-                     / \
-            (bf: 0) 1   3 (bf: 0)
-
-        If we want to delete the node with value 4, we will find 
-        the inorder successor in the right subtree which will be the node with value 5.
-
-                    5 (inorder successor, bf: 2-0 = 2)
-                   /
-                  2 (bf: 1-1 = 0)
-                 / \
-        (bf: 0) 1   3 (bf: 0)
-
-        We will then replace the node that we wanted to delete with the inorder successor as shown above.
-        """
         temp = get_min_value(root.right)
 
         # Copy the inorder successor's content to this node

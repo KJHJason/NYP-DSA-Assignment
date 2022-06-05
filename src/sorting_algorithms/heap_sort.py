@@ -28,24 +28,23 @@ def heapify(arr:list, heapSize:int, idx:int, reverse:bool=False) -> None:
     r = (2 * idx) + 2 # right node
 
     if (reverse):
-        r"""
-        e.g. of valid min heap:
-          55
-         /  \
-        57  63
-        
-        e.g. of Invalid min heap:
-        8         
-         \
-          9 
-        Reason: It is not a complete binary tree
-        
-        e.g. of invalid min heap:
-          3                           1
-         / \   --> Correct version:  / \
-        1   6                       3   6
-        Reason: 1 is smaller than 3 which violates the min-heap property
-        """
+        # e.g. of valid min heap:
+        #   55
+        #  /  \
+        # 57  63
+        # 
+        # e.g. of Invalid min heap:
+        # 8         
+        #  \
+        #   9 
+        # Reason: It is not a complete binary tree
+        # 
+        # e.g. of invalid min heap:
+        #   3                           1
+        #  / \   --> Correct version:  / \
+        # 1   6                       3   6
+        # Reason: 1 is smaller than 3 which violates the min-heap property
+
         smallest = idx # Initialise smallest as root
 
         # if left child of root exists and is smaller than root 
@@ -63,20 +62,19 @@ def heapify(arr:list, heapSize:int, idx:int, reverse:bool=False) -> None:
             # recursively heapify the affected sub-tree
             heapify(arr, heapSize, smallest, reverse)
     else:
-        r"""
-        e.g. of valid max heap:
-          3
-         /  \
-        57  55
-        
-        e.g. of invalid max heap:
-            9                            9
-           / \                          / \
-          5   7  --> Correct version:  6   7
-         /                            /
-        6                            5
-        Reason: 6 is smaller than 5 which violates the max heap property
-        """
+        # e.g. of valid max heap:
+        #   3
+        #  /  \
+        # 57  55
+        # 
+        # e.g. of invalid max heap:
+        #     9                            9
+        #    / \                          / \
+        #   5   7  --> Correct version:  6   7
+        #  /                            /
+        # 6                            5
+        # Reason: 6 is smaller than 5 which violates the max heap property
+
         largest = idx # Initialise largest as root 
 
         # See if left child of root exists and is greater than root 
