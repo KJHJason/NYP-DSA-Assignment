@@ -245,7 +245,7 @@ def main() -> None:
                     print_sub_menu(4)
                     subInput = get_input(prompt="Enter option: ", command=("1", "2", "3", "4", "noob", "pancake", "f"), warning="Invalid command input, please enter a valid option from the sub-menu above...")
                     if (subInput == "1"):
-                        # sort by customer name using bubble sort or tree sort
+                        # sort by customer name using bubble sort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by customer name? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
                             # To satisfy basic function c.2
@@ -267,7 +267,7 @@ def main() -> None:
 
                     elif (subInput == "4"):
                         # newly added
-                        # sort by package's number of pax
+                        # sort by package's number of pax using shellsort
                         sortConfirmation = get_input(prompt="Do you want to sort the records by pax number? (y/n): ", command=("y", "n"))
                         if (sortConfirmation == "y"):
                             hotelDB.sort_by_pax_num(get_descending_flag(nl=True))

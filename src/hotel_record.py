@@ -380,7 +380,7 @@ X. Exit
 
     def sort_by_pax_num(self, reverse:bool=False) -> None:
         """
-        Do a 3 way quicksort on the database by number of pax
+        Do a shellsort on the database by number of pax
         
         Optional parameter:
         - reverse (bool)
