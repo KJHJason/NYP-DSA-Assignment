@@ -32,6 +32,10 @@ def stalin_sort(arr:list, reverse:bool=False) -> list:
     - reverse: if True, the array will be sorted in a descending order (default: False)
     
     Returns the new sorted array.
+    
+    References:
+    - Implementations of stalin sort
+        - https://github.com/gustavo-depaula/stalin-sort
     """
     if (len(arr) <= 1):
         return arr

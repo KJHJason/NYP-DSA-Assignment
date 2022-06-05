@@ -1,3 +1,8 @@
+"""
+This file contains the data structure implementation and its methods 
+for the hotel records in the main.py program.
+"""
+
 # import third party libraries
 from colorama import Fore as F
 
@@ -1011,4 +1016,5 @@ if (__name__ == "__main__"):
     for i in range(100):
         h.add_record(f"Package {i}", f"Customer {i}", randint(1, 9), uniform(50, 9999))
 
-    # add main test code below
+    # add main test code below (if any)
+    print(h)

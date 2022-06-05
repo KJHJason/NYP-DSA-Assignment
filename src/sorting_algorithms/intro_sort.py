@@ -41,6 +41,17 @@ def intro_sort(arr:list, reverse:bool=False) -> None:
     
     More details:
     - https://en.wikipedia.org/wiki/Introsort
+    
+    When implementing this algorithm, I used the following references:
+    Source code in C++:
+    - https://gcc.gnu.org/onlinedocs/gcc-12.1.0/libstdc++/api/a00650_source.html
+
+    Python implementation (which has some potential performance flaws):
+    - https://github.com/TheAlgorithms/Python/blob/master/sorts/intro_sort.py
+
+    Videos that explains the algorithm:
+    - What Happens When You Call sort()? | Introsort Algorithm Explained
+        - https://www.youtube.com/watch?v=MsvzXTXh0Jg&feature=youtu.be
     """
     if (not arr):
         # if array is empty, return
@@ -69,8 +80,8 @@ def intro_sort_process(arr:list, start:int, end:int, maxDepth:int, reverse:bool=
     while (end - start > SIZE_THRESHOLD):
         if (maxDepth == 0):
             # base case 1
-            # start using heap sort if the max recursion depth is 0 as to avoid
-            # the worst case of O(n^2) when using quick sort
+            # start using heap sort on the sub-array if the max recursion depth is 0
+            # as to avoid the worst case of O(n^2) when using quick sort
             arrCopy = arr[start:end+1]
             heap_sort(arrCopy, reverse=reverse)
             arr[start:end+1] = arrCopy

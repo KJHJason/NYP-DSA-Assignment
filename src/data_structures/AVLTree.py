@@ -8,13 +8,27 @@ class AVLTree:
     """
     This is an AVL tree that is a type of self-balancing binary search tree where
     the heights of the left and right subtrees of any node differ by less than or equal to 1.
+    Each node has a balance factor of -1, 0, or 1. Otherwise, the tree is not balanced which will
+    result in rotations in an effort to balance the tree.
     
-    Guarantees that insertion, deletion, and search are O(log n) operations.
+    The balancing of the tree help to guarantee that insertion, deletion, 
+    and search are O(log n) operations.
     
-    More details: 
+    References:
     - https://en.wikipedia.org/wiki/AVL_tree
-    - https://www.programiz.com/dsa/avl-tree
     - https://www.javatpoint.com/avl-tree
+    - https://favtutor.com/blogs/avl-tree-python
+    - AVL Trees & Rotations (Self-Balancing Binary Search Trees)
+        - https://www.youtube.com/watch?v=vRwi_UcZGjU&feature=youtu.be
+
+    Explanations and Python implementation:
+        - https://www.programiz.com/dsa/avl-tree
+        - AVL Tree: Background & Python Code
+            - https://www.youtube.com/watch?v=lxHF-mVdwK8&feature=youtu.be
+    
+    Useful websites that visualises the AVL tree rotations:
+    - https://www.cs.usfca.edu/%7Egalles/visualization/AVLtree.html
+    - https://visualgo.net/en/bst?mode=AVL
     """
     def __init__(self):
         self.root = None

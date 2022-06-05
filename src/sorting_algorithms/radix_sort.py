@@ -52,8 +52,16 @@ def counting_sort_for_radix_sort(arr:list, place:int, reverse:bool=False) -> Non
 
 def radix_sort(arr:list, reverse:bool=False) -> None:
     """
-    Do a radix sort (base 10) on the database by cost per pax
-
+    Do a radix sort (base 10) on the database by cost per pax.
+    
+    Radix sort is a type of non-comparison sort which is different from most sorting algorithms 
+    and uses the counting sort algorithm but solves the issue of 
+    counting sort’s space complexity of O(n+k) where k is the largest number in the array 
+    to O(n+b) where b is the base number 10.
+    
+    Its time complexity is linear in nature which can be significantly faster than other sorting
+    algorithms for larger arrays, but it is also slower for smaller arrays.
+    
     Requires 2 arguments:
     - arr (list): The array of elements to sort by package cost per pax
     - reverse (bool): True if the list is to be sorted in descending order (Default: False)
@@ -66,6 +74,10 @@ def radix_sort(arr:list, reverse:bool=False) -> None:
     
     Note that I multiplied the cost per pax by 100 as 
     it is a float with a decimal place of 2
+    
+    References:
+    - Radix Sort Algorithm Introduction in 5 Minutes
+        - https://www.youtube.com/watch?v=XiuSW_mEn7g&feature=youtu.be
     """
     # Find the maximum number to know number of digits
     maxCostEl = max(arr, key=lambda x : x.get_cost_per_pax())

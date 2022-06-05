@@ -7,6 +7,11 @@ if (__package__ is None or __package__ == ""):
 else:
     from .DoublyLinkedList import DoublyLinkedList
 
+"""
+This file contains the utility functions for the AVL tree
+and the class for the AVL tree nodes.
+"""
+
 class TreeNode:
     """
     Creates a TreeNode object with the given data

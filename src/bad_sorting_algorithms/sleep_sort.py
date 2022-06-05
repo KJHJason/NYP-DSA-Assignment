@@ -32,6 +32,10 @@ def sleep_sort(arr:list, reverse:bool=False) -> list:
     - reverse: if True, the array will be sorted in a descending order (default: False)
     
     Returns the new sorted array.
+    
+    References:
+    - Sleep Sort ( Craziest Sorting Algorithm ) in 1 Minute with Visualisation & Code 
+        - https://www.youtube.com/watch?v=Cp9mdJmVtvo&feature=youtu.be
     """
     newArr = []
 

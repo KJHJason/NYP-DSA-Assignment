@@ -1,3 +1,11 @@
+"""
+This file is not part of the main program.
+However, it is used to generate nth number of records for testing purposes.
+It can be used to see how long each sorting algorithm can take.
+
+Run this Python script if you want to generate nth number of records for testing purposes.
+"""
+
 # import third-party libraries
 from colorama import init as coloramaInit
 from colorama import Fore as F

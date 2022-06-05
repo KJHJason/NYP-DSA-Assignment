@@ -81,19 +81,20 @@ def binary_search_for_range_of_cost(arr:list, lowRange:float, highRange:float, d
                 return cost_lower_index(arr, mid, lowRange, descendingOrder), \
                     cost_upper_index(arr, mid, highRange, descendingOrder)
 
+        # decide which side of the sub-array to search based on the lower range
         if (not descendingOrder):
             # if the lower range to find is greater than mid, search the right half
             if (arr[mid].get_cost_per_pax() < lowRange):
                 l = mid + 1
-            # if the upper range to find is less than mid, search the left half
-            else:
+            # if the lower range to find is less than mid, search the left half
+            else: # arr[mid].get_cost_per_pax() > lowRange
                 r = mid - 1
         else:
-            # if the upper range to find is greater than mid, search the right half
-            if (arr[mid].get_cost_per_pax() > highRange):
+            # if the lower range to find is greater than mid, search the right half
+            if (arr[mid].get_cost_per_pax() > lowRange):
                 l = mid + 1
             # if the lower range to find is less than mid, search the left half
-            else:
+            else: # arr[mid].get_cost_per_pax() < lowRange
                 r = mid - 1
 
     return -1, -1 # return -1 if the package name is not found

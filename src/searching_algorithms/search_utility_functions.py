@@ -1,3 +1,9 @@
+"""
+This file contains the functions to handle duplicate records with the same name 
+or within the specified range of cost after the binary search algorithm has 
+been used to find the index of the target.
+"""
+
 def find_all_name_occurrences(arr:list, i:int, target:str, typeOfSearch:str) -> tuple:
     """
     Search for all occurrences of the target name specified by the user starting from the index found from a search algorithm.

@@ -18,6 +18,8 @@ def fibonacci_search_for_package_name(arr:list, target:str, descendingOrder:bool
         - https://youtu.be/K9n_mkLvRBs
     - https://iq.opengenus.org/fibonacci-search/
     - https://en.wikipedia.org/wiki/Fibonacci_search_technique
+    - Explanation and Python implementation
+        - https://www.codespeedy.com/fibonacci-search-algorithm-in-python/
     
     Requires 3 arguments:
     - arr (list): The array of elements to search
@@ -34,7 +36,7 @@ def fibonacci_search_for_package_name(arr:list, target:str, descendingOrder:bool
     fibM = fibMm2 + fibMm1 # fibM is the smallest fibonacci number greater than or equal to n
                            # calculated in the while loop below
 
-    # Calculate fib(m)
+    # Calculate fib(m) without using recursion
     while (fibM < n):
         fibMm2 = fibMm1
         fibMm1 = fibM

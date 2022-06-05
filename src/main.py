@@ -1,3 +1,9 @@
+"""
+The main Python script for the assignment.
+
+Run this file to run the main program!
+"""
+
 # import third-party libraries
 from colorama import init as coloramaInit
 from colorama import Fore as F

@@ -1,3 +1,7 @@
+"""
+This file contains functions used in main.py and create_records.py
+"""
+
 # import third-party libraries
 from colorama import Fore as F
 from colorama import Style as S

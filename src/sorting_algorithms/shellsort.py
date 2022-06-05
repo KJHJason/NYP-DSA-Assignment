@@ -15,6 +15,12 @@ def shellsort(arr:list, reverse:bool=False) -> None:
     Average Time Complexity: O(n log n)
     Worst Time Complexity: O(n^2)
     Note: That the time complexity depends on the intervals used in the algorithm
+    
+    Reference:
+    - Shell sort vs Insertion sort
+        - https://youtu.be/g06hNBhoS1k
+    - Explanation and Python implementation:
+        - https://www.programiz.com/dsa/shell-sort
     """
     # initialise the gap by halving the array size first
     gap = len(arr) // 2

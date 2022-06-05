@@ -21,6 +21,10 @@ def slow_sort(arr:list, i:int, j:int, reverse:bool=False) -> None:
     - i: the starting index of the array
     - j: the ending index of the array
     - reverse: if True, the array will be sorted in a descending order (default: False)
+    
+    References:
+    - Slow Sort Visualisation
+        - https://youtu.be/QbRoyhGdjnA
     """
     # base case
     if (i >= j):

@@ -103,6 +103,16 @@ def heap_sort(arr:list, reverse:bool=False) -> None:
     Best time complexity: O(n log n)
     Worst time complexity: O(n log n)
     Average time complexity: O(n log n)
+    
+    References:
+    - Heaps and Heap Sort
+        - https://www.youtube.com/watch?v=H5kAcmGOn4Q&feature=youtu.be
+    - Explanation and Python implementation by Programiz
+        - https://www.programiz.com/dsa/heap-sort
+    -  Heap sort in 4 minutes
+        - https://www.youtube.com/watch?v=2DmK_H7IdTo&feature=youtu.be
+    - Heaps and Heap Sort
+        - https://www.youtube.com/watch?v=H5kAcmGOn4Q&feature=youtu.be
     """
     n = len(arr) 
 

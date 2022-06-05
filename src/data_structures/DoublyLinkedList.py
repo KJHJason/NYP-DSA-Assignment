@@ -30,6 +30,10 @@ class DoublyLinkedList:
     More details: 
     - https://en.wikipedia.org/wiki/Doubly_linked_list
     - https://www.programiz.com/dsa/doubly-linked-list
+    
+    References:
+    - Introduction to Doubly Linked List
+        - https://youtu.be/e9NG_a6Z0mg
     """
     def __init__(self):
         self.head = None

@@ -16,6 +16,10 @@ def exponential_search_for_customer(arr:list, target:str, descendingOrder:bool=F
     Best time complexity: O(log(n))
     Worst time complexity: O(log(n))
     Average time complexity: O(log(n))
+    
+    References:
+    - Exponential Search - better than Binary search? (Explained)
+        - https://www.youtube.com/watch?v=BDVYtuWXgXE&feature=youtu.be
     """
     # if the array is empty
     if (len(arr) == 0):

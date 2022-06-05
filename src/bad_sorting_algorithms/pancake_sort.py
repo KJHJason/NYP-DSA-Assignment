@@ -51,7 +51,8 @@ def pancake_sort(arr:list, reverse:bool=False, mode:str="packageName") -> None:
     Average time complexity: O(n^2)
     
     Useful link for pancake sort visualisation:
-    - https://youtu.be/kk-_DDgoXfk
+    - Pancake sort algorithm, visualization with VTK
+        - https://youtu.be/kk-_DDgoXfk
     """
     # start from n-1 and slowly reduce the size of the array
     for currSize in range(len(arr)-1, 0, -1):

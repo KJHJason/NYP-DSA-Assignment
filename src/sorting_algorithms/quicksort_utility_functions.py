@@ -1,8 +1,15 @@
-"""Functions in this python file is used for the introsort algorithm."""
+"""
+Functions in this python file is used for the introsort algorithm.
+
+The functions here are basically functions for the quicksort algorithm to be used
+in the introsort algorithm.
+"""
 
 def median_of_3(arr:list, firstIndex:int, middleIndex:int, lastIndex:int) -> str:
     """
     Find the median of three elements in the array (comparing the first, middle, and last elements).
+    Helps to reduce the chance of picking a bad pivot to partition around which can make
+    quicksort slow.
     
     Requires four arguments:
     - arr (list): the array to find the median of three elements in
@@ -45,11 +52,11 @@ def partition(arr:list, l:int, r:int, pivot:str, reverse:bool=False) -> int:
     j = r - 1 # - 1 to avoid the index out of range error
     while (1):
         if (not reverse):
-            # find the first element in the array which is larger than the pivot
+            # find the first element in the array which is smaller than the pivot
             while (arr[i].get_package_name() < pivot):
                 i += 1
 
-            # find the first element in the array which is smaller than the pivot
+            # find the first element in the array which is larger than the pivot
             while (arr[j].get_package_name() > pivot):
                 j -= 1
         else:

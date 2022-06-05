@@ -33,6 +33,12 @@ def bogo_sort(arr:list, variant:bool=False, reverse:bool=False) -> int:
     - reverse: if True, the array will be sorted in a descending order (default: False)
     
     Returns the number of shuffling/swappings done to sort the array.
+    
+    References:
+    - Symbols, B. O. (2016, November 5). bozoSort
+        - https://www.youtube.com/watch?v=q5RuQpiUtAA&feature=youtu.be
+    - John, C. W. (2021, April 28). Worst Sorting Algorithm Ever - #shorts
+        - https://www.youtube.com/shorts/xsoJsd48lZQ?feature=share
     """
     c = 0
     while (not is_sorted(arr, reverse=reverse)):
