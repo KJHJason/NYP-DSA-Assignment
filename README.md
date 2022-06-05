@@ -1,6 +1,9 @@
-# NYP Data Structures & Algorithms Assignment
+<h1 align="center">
+    <img src="assignment_brief/nanyang_polytechnic_logo.png" style="width: 50%; height: auto;" alt="NYP logo">
+    NYP Data Structures & Algorithms Assignment
+</h1>
 
-This assignment (40%) provided me the chance to implement the data structures and algorithms I've learnt in class and also through personal research.
+This assignment (40%) provided me the chance to implement the data structures and algorithms I've learnt in class and also through my own research to implement algorithms and data structures not taught in the module.
 
 ## Minimum Requirements
 1. Design a suitable data structure (e.g. by making use of Python list, dictionary, objects, etc.) to manage the staycation booking records. 
