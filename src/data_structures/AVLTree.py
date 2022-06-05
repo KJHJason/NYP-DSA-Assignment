@@ -106,6 +106,7 @@ class AVLTree:
 # demo codes below (with some explanations)
 if (__name__ == "__main__"):
     from uuid import uuid4
+    import timeit, random
     class TestData:
         def __init__(self, name):
             self.__customer_name = name
@@ -164,3 +165,30 @@ if (__name__ == "__main__"):
     print("\nTree sort by int:")
     arr = tree.tree_sort()
     [print(repr(x)) for x in arr]
+
+    del tree # explicitly delete for garbage collection
+
+    # demo for the time complexity of the tree sort
+    while (1):
+        print("\nWill start a demo of tree sort on 1 million elements in an array...")
+        print("This will take a while and ensure you have around 0.4GB+ of free memory...")
+        confirmInput = input("Continue? (y/n): ").lower()
+        if (confirmInput == "y"):
+            # demo the time taken to sort the tree
+            print("\nTree sort with 1 million elements in an array...")
+            arr = [TestData(random.randint(0, 1000000)) for _ in range(1000000)]
+
+            def test_tree_sort(arr):
+                newTree = AVLTree()
+                for el in arr:
+                    newTree.insert(el)
+                newTree.tree_sort()
+
+            print("Time taken:", timeit.timeit(lambda: test_tree_sort(arr), number=1))
+            break
+        elif (confirmInput == "n"):
+            print("Aborting...")
+            break
+        else:
+            print("Invalid input. Try again.")
+            continue
