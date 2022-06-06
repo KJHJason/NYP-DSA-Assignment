@@ -93,7 +93,7 @@ def intro_sort_process(arr:list, start:int, end:int, maxDepth:int, reverse:bool=
         maxDepth -= 1
 
         # get the pivot for quick sort using the median of three concept
-        pivot = median_of_3(arr, start, start + ((end - start) // 2) + 1, end - 1).get_package_name()
+        pivot = median_of_3(arr, start, start + ((end - start) // 2), end - 1).get_package_name()
 
         # partition the array around the pivot
         partitionRes = partition(arr, start, end, pivot, reverse=reverse)
